@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v34.0 - Control Completo del Bebé</title>
+  <title>BabyCare v35.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -126,7 +126,7 @@
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS EN CALENDARIO (576px CON SUB-COLUMNAS PARALELAS) */
+    /* MATRIZ DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px Y TRUNCADA EN COTA INFERIOR) */
     .routine-24h-grid {
       display: grid;
       grid-template-columns: 36px repeat(7, 1fr);
@@ -143,10 +143,11 @@
     
     .grid-day-col {
       position: relative;
-      height: 576px;
+      height: 576px; /* 24h x 24px = 576px */
       background: rgba(0,0,0,0.02);
       border-radius: 4px;
       border-left: 1px dashed var(--border-color);
+      overflow: hidden; /* Garantiza que nada sobresalga fuera de la tarjeta de 24h */
     }
     
     .routine-block {
@@ -225,7 +226,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v34.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v35.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -238,7 +239,7 @@
       <button class="close-btn" onclick="closeDrawer()"><i data-lucide="x"></i></button>
     </div>
     <div class="drawer-item" onclick="closeDrawer(); openModal('profile');"><i data-lucide="user"></i><span id="txt-menu-profile">Perfil del Bebé</span></div>
-    <div class="drawer-item" onclick="closeDrawer(); openModal('qrShare');"><i data-lucide="qr-code"></i><span id="txt-menu-qr">Compartir datos (QR)</span></div>
+    <div class="drawer-item" onclick="closeDrawer(); openModal('qrShare');"><i data-lucide="qr-code"></i><span id="txt-menu-qr">Compartir datos (QR / Enlace)</span></div>
     <div class="drawer-item" onclick="closeDrawer(); openModal('qrScan');"><i data-lucide="scan"></i><span id="txt-menu-scan">Escanear QR de pareja</span></div>
     <div class="drawer-item" onclick="closeDrawer(); switchTab('manual');"><i data-lucide="book-open"></i><span id="txt-menu-manual">Manual de Uso</span></div>
     <div class="drawer-item" onclick="exportJSON()"><i data-lucide="download"></i><span id="txt-menu-export">Exportar Archivo JSON</span></div>
@@ -329,7 +330,7 @@
         <div class="calendar-grid" id="calendarGrid"></div>
       </div>
 
-      <!-- 2. Gráfica de Barras Interactivas con Desplegable de Perímetro Real (4 semanas / 6 meses) -->
+      <!-- 2. Gráfica de Barras Interactivas con Desplegable -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
           <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
@@ -479,8 +480,12 @@
 
   <div class="modal-overlay" id="qrShareModal">
     <div class="modal">
-      <div class="modal-header"><h3 id="txt-qr-title">Compartir por Código QR</h3><button class="close-btn" onclick="closeModal('qrShare')"><i data-lucide="x"></i></button></div>
-      <div id="qrContainer"><p style="text-align:center; font-size:0.88rem; color:var(--text-muted);" id="txt-qr-desc">Pide al otro progenitor que escanee este código desde 'Escanear QR'.</p><div id="qrcode">Generando código...</div></div>
+      <div class="modal-header"><h3 id="txt-qr-title">Compartir Datos de Sincronización</h3><button class="close-btn" onclick="closeModal('qrShare')"><i data-lucide="x"></i></button></div>
+      <div id="qrContainer">
+        <p style="text-align:center; font-size:0.88rem; color:var(--text-muted);" id="txt-qr-desc">Escanea el código QR o comparte el archivo directamente por WhatsApp/Email.</p>
+        <div id="qrcode">Generando código...</div>
+        <button onclick="shareDataDirectly()" style="background:var(--secondary); color:white; border:none; padding:0.6rem 1rem; border-radius:10px; font-weight:800; font-size:0.85rem; margin-top:8px; cursor:pointer; width:100%;">📲 Compartir archivo por WhatsApp / Email</button>
+      </div>
     </div>
   </div>
 
@@ -513,7 +518,7 @@
 
     const i18n = {
       es: {
-        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR / Enlace)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir Datos de Sincronización", qrDesc: "Escanea el código QR o comparte el archivo directamente por WhatsApp/Email.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche total", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
         mHeader: "Manual de Uso Paso a Paso Completo",
@@ -527,7 +532,7 @@
         ms8Title: "8. Copias de Seguridad e Idiomas", ms8Desc: "Desde el menú lateral puedes cambiar de idioma (Español 🇪🇸, Francés 🇫🇷, Inglés 🇬🇧), activar el Modo Oscuro o Exportar/Importar archivos JSON de respaldo."
       },
       fr: {
-        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données (QR)", menuScan: "Scanner le QR partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager par Code QR", qrDesc: "Ouvrez l'appareil photo de l'autre téléphone pour synchroniser.", scanTitle: "Scanner le QR du Partenaire", scanDesc: "Pointez la caméra sur le code QR affiché.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données (QR / Lien)", menuScan: "Scanner le QR partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager les Données", qrDesc: "Scannez le code QR ou partagez le fichier par WhatsApp.", scanTitle: "Scanner le QR du Partenaire", scanDesc: "Pointez la caméra sur le code QR affiché.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
         sumFeed: "🍼 Lait total", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
         mHeader: "Guide d'Utilisation Étape par Étape Complet",
@@ -541,7 +546,7 @@
         ms8Title: "8. Sauvegarde et Paramètres", ms8Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON."
       },
       en: {
-        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share via QR Code", qrDesc: "Open partner's camera to sync all data instantly.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the displayed QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR / Link)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share Synchronization Data", qrDesc: "Scan QR code or share file directly via WhatsApp/Email.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the displayed QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
         sumFeed: "🍼 Total Milk", sumSleep: "💤 Total Sleep", sumDiaper: "💦 Diapers",
         mHeader: "Complete Step-by-Step User Manual",
@@ -558,10 +563,18 @@
 
     const standardVaccines = [{ id: 'v1', age: '2 meses', name: 'Hexavalente (DTPa-VPI-Hib-HB) + Neumococo + Rotavirus' }, { id: 'v2', age: '4 meses', name: 'Hexavalente + Neumococo + Rotavirus + Meningococo B' }, { id: 'v3', age: '6 meses', name: 'Hexavalente + Rotavirus' }, { id: 'v4', age: '12 meses', name: 'Triple Vírica (SRP) + Neumococo + Meningococo C/ACWY' }];
 
+    function getLocalDateStr(dInput) {
+      const d = new Date(dInput);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v34', 'babycare_data_v33', 'babycare_data_v32', 'babycare_data_v30', 'babycare_data_v28', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v34', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v35', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -715,14 +728,14 @@
     function renderLogs() {
       const container = document.getElementById('logsContainer');
       container.innerHTML = '';
-      const targetKey = selectedDate.toISOString().slice(0,10);
-      const todayKey = new Date().toISOString().slice(0,10);
+      const targetKey = getLocalDateStr(selectedDate);
+      const todayKey = getLocalDateStr(new Date());
       const t = i18n[appState.lang] || i18n['es'];
 
       document.getElementById('currentDateText').innerText = selectedDate.toLocaleDateString(appState.lang === 'en' ? 'en-US' : (appState.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' });
       document.getElementById('todayTag').innerText = (targetKey === todayKey) ? t.today : (appState.lang === 'en' ? 'Go to Today' : 'Ir a Hoy');
 
-      const filtered = appState.logs.filter(l => l.timestamp.startsWith(targetKey)).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const filtered = appState.logs.filter(l => getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
       let totalMilkMl = 0;
       let totalSleepMins = 0;
@@ -793,7 +806,7 @@
       lucide.createIcons();
     }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS EN PESTAÑA CALENDARIO */
+    /* MATRIZ DE RUTINA DE 24 HORAS CON DIVISIÓN DE SIESTAS QUE CRUZAN MEDIANOCHE */
     function changeMatrixWeek(weeksOffset) {
       selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
       renderWeeklyMatrix24h();
@@ -819,12 +832,12 @@
       grid.innerHTML += `<div class="grid-header-cell"></div>`;
       const daysShort = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
       const weekDates = [];
-      const todayStr = new Date().toISOString().slice(0,10);
+      const todayStr = getLocalDateStr(new Date());
 
       for (let i = 0; i < 7; i++) {
         const d = new Date(mon);
         d.setDate(mon.getDate() + i);
-        const dateStr = d.toISOString().slice(0,10);
+        const dateStr = getLocalDateStr(d);
         weekDates.push(dateStr);
         const isToday = dateStr === todayStr;
 
@@ -843,34 +856,60 @@
       hoursColHtml += '</div>';
       grid.innerHTML += hoursColHtml;
 
-      weekDates.forEach(dateStr => {
-        const dayLogs = appState.logs.filter(l => l.timestamp.startsWith(dateStr)).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+      weekDates.forEach((dateStr, dayIdx) => {
         let colContent = `<div class="grid-day-col" style="height:576px;">`;
+        let dayBlocks = [];
 
-        dayLogs.forEach((log, idx) => {
-          const logDate = new Date(log.timestamp);
-          const hours = logDate.getHours() + (logDate.getMinutes() / 60);
-          const topPercent = (hours / 24) * 100;
-          
-          let heightPx = 12;
-          let className = 'feed';
+        appState.logs.forEach(log => {
+          let logDateStr = getLocalDateStr(log.timestamp);
 
-          if (log.type === 'sleep') {
-            className = 'sleep';
-            let durationMins = log.durationMins || 60;
-            heightPx = Math.max(12, (durationMins / (24 * 60)) * 576);
-          } else if (log.type === 'diaper') {
-            className = 'diaper';
-          } else if (log.type === 'bath') {
-            className = 'bath';
+          if (log.type === 'sleep' && log.startTimestamp && log.endTimestamp) {
+            const startD = new Date(log.startTimestamp);
+            const endD = new Date(log.endTimestamp);
+            const startStr = getLocalDateStr(startD);
+            const endStr = getLocalDateStr(endD);
+
+            if (startStr !== endStr) {
+              if (dateStr === startStr) {
+                const startMins = startD.getHours() * 60 + startD.getMinutes();
+                const dur1 = 1440 - startMins;
+                dayBlocks.push({ log, startMins, durationMins: dur1 });
+              } else if (dateStr === endStr) {
+                const endMins = endD.getHours() * 60 + endD.getMinutes();
+                dayBlocks.push({ log, startMins: 0, durationMins: endMins });
+              }
+            } else if (dateStr === startStr) {
+              const startMins = startD.getHours() * 60 + startD.getMinutes();
+              const dur = Math.max(15, (endD - startD) / 60000);
+              dayBlocks.push({ log, startMins, durationMins: dur });
+            }
+          } else if (logDateStr === dateStr) {
+            const d = new Date(log.timestamp);
+            const startMins = d.getHours() * 60 + d.getMinutes();
+            dayBlocks.push({ log, startMins, durationMins: 20 });
+          }
+        });
+
+        dayBlocks.sort((a,b) => a.startMins - b.startMins);
+
+        dayBlocks.forEach((blockItem, idx) => {
+          const log = blockItem.log;
+          const topPx = (blockItem.startMins / 1440) * 576;
+          let heightPx = (blockItem.durationMins / 1440) * 576;
+
+          if (topPx + heightPx > 576) {
+            heightPx = Math.max(8, 576 - topPx);
           }
 
+          let className = 'feed';
+          if (log.type === 'sleep') className = 'sleep';
+          else if (log.type === 'diaper') className = 'diaper';
+          else if (log.type === 'bath') className = 'bath';
+
           let lane = 0;
-          const concurrent = dayLogs.filter((other, oIdx) => {
+          const concurrent = dayBlocks.filter((other, oIdx) => {
             if (oIdx >= idx) return false;
-            const oDate = new Date(other.timestamp);
-            const oHours = oDate.getHours() + (oDate.getMinutes() / 60);
-            return Math.abs(oHours - hours) < 0.75;
+            return Math.abs(other.startMins - blockItem.startMins) < 45;
           });
           lane = concurrent.length % 3;
 
@@ -879,7 +918,7 @@
 
           colContent += `
             <div class="routine-block ${className}" 
-                 style="top:${topPercent}%; height:${heightPx}px; left:${leftPercent}%; width:${widthPercent}%; cursor:pointer;"
+                 style="top:${topPx}px; height:${heightPx}px; left:${leftPercent}%; width:${widthPercent}%; cursor:pointer;"
                  onclick="showMatrixBlockDetail('${log.id}')"
                  title="${log.detail || ''}">
             </div>
@@ -1084,8 +1123,8 @@
       const today = new Date();
 
       for (let day = 1; day <= totalDays; day++) {
-        const dateKey = new Date(year, month, day).toISOString().slice(0,10);
-        const dayLogs = appState.logs.filter(l => l.timestamp.startsWith(dateKey));
+        const dateKey = getLocalDateStr(new Date(year, month, day));
+        const dayLogs = appState.logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
         const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
         let dotsHtml = '';
         if (dayLogs.length > 0) {
@@ -1147,7 +1186,6 @@
       });
     }
 
-    /* CÁLCULO REAL DE DATOS PARA EL GRÁFICO DE BARRAS POR SEMANAS / MESES */
     function getBarChartRealData(range) {
       const today = new Date();
       let labels = [];
@@ -1200,11 +1238,11 @@
           const labelStr = `${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} - ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short'})}`;
           labels.push(labelStr);
 
-          const monStr = mon.toISOString().slice(0,10);
-          const sunStr = sun.toISOString().slice(0,10);
+          const monStr = getLocalDateStr(mon);
+          const sunStr = getLocalDateStr(sun);
 
           const weekLogs = appState.logs.filter(l => {
-            const dateStr = l.timestamp.slice(0,10);
+            const dateStr = getLocalDateStr(l.timestamp);
             return dateStr >= monStr && dateStr <= sunStr;
           });
 
@@ -1231,10 +1269,11 @@
     }
 
     function initBarChart() {
-      const ctxBar = document.getElementById('barRoutinesChart').getContext('2d');
+      const ctxBar = document.getElementById('barRoutinesChart');
+      if (!ctxBar) return;
       const realData = getBarChartRealData('4weeks');
 
-      barRoutinesChartInstance = new Chart(ctxBar, {
+      barRoutinesChartInstance = new Chart(ctxBar.getContext('2d'), {
         type: 'bar',
         data: {
           labels: realData.labels,
@@ -1248,11 +1287,7 @@
           responsive: true,
           plugins: {
             legend: { position: 'bottom' },
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false
-            }
+            tooltip: { enabled: true, mode: 'index', intersect: false }
           },
           interaction: { mode: 'nearest', axis: 'x', intersect: false }
         }
@@ -1300,76 +1335,80 @@
 
     function toggleVaccine(id) { appState.vaccines[id] = !appState.vaccines[id]; saveState(); renderVaccines(); }
 
-    /* GENERADOR DE CÓDIGO QR 100% GRÁFICO Y COMPATIBLE */
+    function shareDataDirectly() {
+      const dataStr = JSON.stringify(appState, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const file = new File([blob], `babycare_${appState.baby.name}.json`, { type: 'application/json' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({
+          files: [file],
+          title: `BabyCare - Datos de ${appState.baby.name}`,
+          text: `Sincronización de BabyCare para ${appState.baby.name}`
+        }).catch(err => {});
+      } else {
+        exportJSON();
+      }
+    }
+
     function generateQRCode() {
       const qrContainer = document.getElementById('qrcode');
       if (!qrContainer) return;
       qrContainer.innerHTML = '';
 
-      // Comprimir campos para que quepan en un QR estándar escaneable de alta densidad
-      const compactLogs = appState.logs.slice(-30).map(l => ({
-        i: l.id,
-        t: l.type,
-        d: l.detail,
-        ts: l.timestamp,
-        n: l.notes || ''
+      const compactLogs = appState.logs.slice(-20).map(l => ({
+        t: l.type === 'feeding' ? 0 : (l.type === 'diaper' ? 1 : (l.type === 'sleep' ? 2 : 3)),
+        d: l.detail ? l.detail.replace('Leche Materna Extraída', 'LME') : '',
+        s: Math.floor(new Date(l.timestamp).getTime() / 1000)
       }));
 
       const syncData = {
         n: appState.baby.name,
         b: appState.baby.dob,
-        g: appState.baby.gender,
+        g: appState.baby.gender === 'female' ? 1 : 0,
         l: compactLogs,
-        v: appState.vaccines
+        v: Object.keys(appState.vaccines).filter(k => appState.vaccines[k])
       };
 
       const payload = JSON.stringify(syncData);
 
-      let rendered = false;
-
-      // Intentar generación iterativa probando versiones de QR (1 a 40)
+      let success = false;
       if (typeof qrcode !== 'undefined') {
-        for (let typeNum = 1; typeNum <= 40; typeNum++) {
-          try {
-            const qr = qrcode(typeNum, 'L');
-            qr.addData(payload);
-            qr.make();
-            qrContainer.innerHTML = qr.createImgTag(5, 0);
-            const img = qrContainer.querySelector('img');
-            if (img) {
-              img.style.width = '220px';
-              img.style.height = '220px';
-              img.style.borderRadius = '12px';
-            }
-            rendered = true;
-            break;
-          } catch(e) {
-            continue;
-          }
-        }
-      }
-
-      // Si la carga útil excede la capacidad de un solo QR, se genera un QR con el enlace de sincronización e importación directa
-      if (!rendered) {
-        const fallbackPayload = JSON.stringify({
-          n: appState.baby.name,
-          b: appState.baby.dob,
-          g: appState.baby.gender,
-          l: compactLogs.slice(-15),
-          v: appState.vaccines
-        });
         try {
-          const qr = qrcode(10, 'L');
-          qr.addData(fallbackPayload);
-          qr.make();
-          qrContainer.innerHTML = qr.createImgTag(5, 0);
-          const img = qrContainer.querySelector('img');
-          if (img) {
-            img.style.width = '220px';
-            img.style.height = '220px';
-            img.style.borderRadius = '12px';
+          for (let typeNum = 1; typeNum <= 15; typeNum++) {
+            try {
+              const qr = qrcode(typeNum, 'L');
+              qr.addData(payload);
+              qr.make();
+              qrContainer.innerHTML = qr.createImgTag(5, 0);
+              const img = qrContainer.querySelector('img');
+              if (img) {
+                img.style.width = '220px';
+                img.style.height = '220px';
+                img.style.borderRadius = '12px';
+              }
+              success = true;
+              break;
+            } catch(e) { continue; }
           }
         } catch(e) {}
+      }
+
+      if (!success) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 220;
+        canvas.height = 220;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, 220, 220);
+        ctx.fillStyle = "#1E293B";
+        ctx.font = "bold 13px Nunito, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Sincronización BabyCare", 110, 100);
+        ctx.font = "11px Nunito, sans-serif";
+        ctx.fillStyle = "#64748B";
+        ctx.fillText("Use el botón inferior para enviar el archivo", 110, 125);
+        qrContainer.appendChild(canvas);
       }
     }
 
@@ -1388,11 +1427,11 @@
               appState.vaccines = imported.v || appState.vaccines;
               
               const unpackedLogs = imported.l.map(item => ({
-                id: item.i,
-                type: item.t,
-                detail: item.d,
-                timestamp: item.ts,
-                notes: item.n || ''
+                id: Date.now() + Math.random(),
+                type: item.t === 0 ? 'feeding' : (item.t === 1 ? 'diaper' : (item.t === 2 ? 'sleep' : 'growth')),
+                detail: item.d ? item.d.replace('LME', 'Leche Materna Extraída') : '',
+                timestamp: new Date(item.s * 1000).toISOString(),
+                notes: ''
               }));
               appState.logs = unpackedLogs;
             } else {
@@ -1411,7 +1450,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v33_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v35_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

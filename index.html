@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v16.0 - Control Completo del Bebé</title>
+  <title>BabyCare v17.0 - Control Completo del Bebé</title>
   
   <!-- Iconos PWA HD -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23FFB7B2'/><text y='.85em' x='8' font-size='75'>👶</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23FFB7B2'/><text y='.85em' x='8' font-size='75'>👶</text></svg>">
   
-  <!-- Manifest PWA Completo para compatibilidad total con Android/Chrome -->
+  <!-- Manifest PWA Completo -->
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Crect%20width%3D'100'%20height%3D'100'%20rx%3D'25'%20fill%3D'%23FFB7B2'%2F%3E%3Ctext%20y%3D'.85em'%20x%3D'8'%20font-size%3D'75'%3E%F0%9F%91%B6%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Crect%20width%3D'100'%20height%3D'100'%20rx%3D'25'%20fill%3D'%23FFB7B2'%2F%3E%3Ctext%20y%3D'.85em'%20x%3D'8'%20font-size%3D'75'%3E%F0%9F%91%B6%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -202,7 +202,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v16.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v17.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -221,7 +221,14 @@
     <div class="drawer-item" onclick="exportJSON()"><i data-lucide="download"></i><span id="txt-menu-export">Exportar Archivo JSON</span></div>
     <div class="drawer-item" onclick="document.getElementById('importInput').click()"><i data-lucide="upload"></i><span id="txt-menu-import">Importar Archivo JSON</span><input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)"></div>
     <hr style="border:none; border-top:1px solid var(--border-color); margin: 0.4rem 0;">
-    <div class="form-group"><label id="txt-lang-label">Idioma / Language</label><select class="form-control" id="langSelect" onchange="setLanguage(this.value)"><option value="es">Español 🇪🇸</option><option value="en">English 🇬🇧</option><option value="fr">Français 🇫🇷</option></select></div>
+    <div class="form-group">
+      <label id="txt-lang-label">Idioma / Language</label>
+      <select class="form-control" id="langSelect" onchange="setLanguage(this.value)">
+        <option value="es">Español 🇪🇸</option>
+        <option value="fr">Français 🇫🇷</option>
+        <option value="en">English 🇬🇧</option>
+      </select>
+    </div>
     <div class="form-group"><label id="txt-theme-label">Apariencia</label><button class="drawer-item" style="width:100%; justify-content:center;" onclick="toggleTheme()"><i data-lucide="moon"></i><span id="txt-theme-btn">Modo Claro/Oscuro</span></button></div>
   </div>
 
@@ -302,8 +309,8 @@
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Control Diario de Tomas y Pañales</h3>
         <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias normales recomendadas según etapa OMS:</p>
         <div class="who-indicator-card">
-          <p>🍼 <strong>Tomas/día:</strong> <span id="val-feed-count">0 hoy</span> (Rango OMS: 6 - 10 tomas en lactantes)</p>
-          <p style="margin-top:6px;">💦 <strong>Pañales/día:</strong> <span id="val-diaper-count">0 hoy</span> (Rango OMS: 4 - 8 pañales húmedos)</p>
+          <p id="lbl-who-feeds">🍼 <strong>Tomas/día:</strong> <span id="val-feed-count">0 hoy</span> (Rango OMS: 6 - 10 tomas en lactantes)</p>
+          <p style="margin-top:6px;" id="lbl-who-diapers">💦 <strong>Pañales/día:</strong> <span id="val-diaper-count">0 hoy</span> (Rango OMS: 4 - 8 pañales húmedos)</p>
         </div>
       </div>
     </div>
@@ -316,12 +323,60 @@
       </div>
     </div>
 
-    <!-- TAB 5: Manual -->
+    <!-- TAB 5: Manual Completo Traducido -->
     <div class="tab-content" id="tab-manual">
       <div class="card">
-        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header"><i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso</h3>
-        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar la foto y datos del Bebé</h4><p id="mstep1-desc">Pulsa directamente sobre el icono circular del bebé para subir su foto real.</p></div></div>
-        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registrar, Editar y Borrar Eventos</h4><p id="mstep2-desc">Usa los botones superiores para registrar tomas, pañales, sueño, baño y peso.</p></div></div>
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
+          <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
+        </h3>
+
+        <div class="manual-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4 id="mstep1-title">Personalizar foto y datos del Bebé</h4>
+            <p id="mstep1-desc">Pulsa directamente sobre la foto o avatar del bebé para subir su foto real. Pulsa en el icono del lápiz para configurar su nombre, fecha de nacimiento y género.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4 id="mstep2-title">Registrar Eventos de Forma Rápida</h4>
+            <p id="mstep2-desc">Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). La hora actual se preestablecerá automáticamente.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4 id="mstep3-title">Editar o Eliminar Registros</h4>
+            <p id="mstep3-desc">En la sección 'Actividad Reciente', navega día a día con las flechas. Cada registro cuenta con botones para editar ✏️ o eliminar 🗑️ los datos introducidos.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4 id="mstep4-title">Sincronización por Código QR</h4>
+            <p id="mstep4-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja' para leer la pantalla.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4 id="mstep5-title">Comparativas y Alertas OMS</h4>
+            <p id="mstep5-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50), además del conteo diario de tomas y pañales.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h4 id="mstep6-title">Copia de Seguridad y Configuración</h4>
+            <p id="mstep6-desc">Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -332,15 +387,14 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
-  <!-- Modales con Doble Botón Guardar (Cabecera Superior Fija + Pie Inferior) -->
+  <!-- Modales con Doble Botón Guardar -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
         <div class="modal-header">
           <h3 id="modalFormTitle">Nuevo Registro</h3>
           <div class="modal-header-actions">
-            <!-- Botón Guardar en la cabecera superior (100% visible siempre, incluso con teclado abierto) -->
-            <button type="submit" class="btn-header-save">✓ Guardar</button>
+            <button type="submit" class="btn-header-save" id="btn-save-header">✓ Guardar</button>
             <button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button>
           </div>
         </div>
@@ -372,14 +426,14 @@
         <div class="modal-header">
           <h3 id="txt-profile-title">Perfil del Bebé</h3>
           <div class="modal-header-actions">
-            <button type="submit" class="btn-header-save">✓ Guardar</button>
+            <button type="submit" class="btn-header-save" id="btn-save-prof-header">✓ Guardar</button>
             <button type="button" class="close-btn" onclick="closeModal('profile')"><i data-lucide="x"></i></button>
           </div>
         </div>
         <div class="modal-body">
           <div class="form-group"><label id="lbl-baby-name">Nombre del Bebé</label><input type="text" class="form-control" id="profName" required value="Léo"></div>
           <div class="form-group"><label id="lbl-baby-dob">Fecha de Nacimiento</label><input type="date" class="form-control" id="profDob" required value="2026-07-19"></div>
-          <div class="form-group"><label id="lbl-baby-gender">Género</label><select class="form-control" id="profGender"><option value="male">Niño 👦</option><option value="female">Niña 👧</option></select></div>
+          <div class="form-group"><label id="lbl-baby-gender">Género</label><select class="form-control" id="profGender"><option value="male" id="opt-male">Niño 👦</option><option value="female" id="opt-female">Niña 👧</option></select></div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn-submit" id="btn-save-profile">Actualizar Perfil</button>
@@ -403,7 +457,6 @@
     </div>
   </div>
 
-  <!-- Service Worker PWA de Registro Seguro -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -423,17 +476,47 @@
     let selectedDate = new Date();
 
     const i18n = {
-      es: { menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] },
-      en: { menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes", qrTitle: "Share via QR Code", qrDesc: "Scan code with partner's phone.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feed.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-      fr: { menuTitle: "Menu BabyCare", menuProfile: "Profil del Bébé", menuQR: "Partager (QR)", menuScan: "Scanner QR Partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Tétée/Biberon", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé/Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", vaccineTitle: "Calendrier Vacunal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Sync", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes", qrTitle: "Partager par Code QR", qrDesc: "Scannez ce code depuis l'autre téléphone.", scanTitle: "Scanner le Code QR", scanDesc: "Pointez la caméra sur le code QR.", alertFeed: "⚠️ Attention: Plus de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] }
+      es: {
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
+        mHeader: "Manual de Uso Paso a Paso",
+        ms1Title: "Personalizar foto y datos del Bebé", ms1Desc: "Pulsa directamente sobre la foto o avatar del bebé para subir su foto real. Pulsa en el icono del lápiz para configurar su nombre, fecha de nacimiento y género.",
+        ms2Title: "Registrar Eventos de Forma Rápida", ms2Desc: "Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). La hora actual se preestablecerá automáticamente.",
+        ms3Title: "Editar o Eliminar Registros", ms3Desc: "En la sección 'Actividad Reciente', navega día a día con las flechas. Cada registro cuenta con botones para editar ✏️ o eliminar 🗑️ los datos introducidos.",
+        ms4Title: "Sincronización por Código QR", ms4Desc: "Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja' para leer la pantalla.",
+        ms5Title: "Comparativas y Alertas OMS", ms5Desc: "En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50), además del conteo diario de tomas y pañales.",
+        ms6Title: "Copia de Seguridad y Configuración", ms6Desc: "Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo."
+      },
+      fr: {
+        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données (QR)", menuScan: "Scanner le QR partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager par Code QR", qrDesc: "Ouvrez l'appareil photo de l'autre téléphone pour synchroniser.", scanTitle: "Scanner le QR du Partenaire", scanDesc: "Pointez la caméra sur le code QR affiché.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
+        mHeader: "Guide d'Utilisation Étape par Étape",
+        ms1Title: "Personnaliser la photo et le profil", ms1Desc: "Appuyez sur la photo du bébé pour en télécharger une vraie. Cliquez sur le crayon pour modifier le nom, la date de naissance et le sexe.",
+        ms2Title: "Enregistrer rapidement des événements", ms2Desc: "Cliquez sur l'un des boutons supérieurs (Alimentation, Couche, Sommeil, Croissance, Santé, Bain). L'heure actuelle est réglée automatiquement.",
+        ms3Title: "Modifier ou Supprimer des Entrées", ms3Desc: "Dans la section 'Activité Récente', naviguez jour par jour avec les flèches. Chaque entrée a des boutons pour modifier ✏️ ou supprimer 🗑️.",
+        ms4Title: "Synchronisation par Code QR", ms4Desc: "Pour transférer des données : Sur le téléphone A, appuyez sur 'Sync' en bas. Sur le téléphone B, ouvrez le menu et appuyez sur 'Scanner QR partenaire'.",
+        ms5Title: "Comparaisons et Alertes OMS", ms5Desc: "Dans l'onglet 'Courbes OMS', observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS (P50), ainsi que le suivi des tétées et couches.",
+        ms6Title: "Sauvegarde et Paramètres", ms6Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON."
+      },
+      en: {
+        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share via QR Code", qrDesc: "Open partner's camera to sync all data instantly.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the displayed QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
+        mHeader: "Step-by-Step User Manual",
+        ms1Title: "Personalize Baby Photo & Details", ms1Desc: "Tap directly on the circular baby icon to upload a real photo. Click the pencil icon to modify the baby's name, birth date, and gender.",
+        ms2Title: "Quickly Log Events", ms2Desc: "Click any button in the top grid (Feeding, Diaper, Sleep, Growth, Health, Bath). Current time is set automatically.",
+        ms3Title: "Edit or Delete Log Entries", ms3Desc: "In the 'Recent Activity' section, navigate day by day with the arrows. Each entry has buttons to edit ✏️ or delete 🗑️ data.",
+        ms4Title: "Sync Between Phones with QR Code", ms4Desc: "To transfer data: On Phone A, tap 'Sync' in the bottom bar. On Phone B, open the menu and tap 'Scan Partner QR' to read the screen.",
+        ms5Title: "WHO Growth Charts & Alerts", ms5Desc: "Under the 'WHO Growth' tab, view weight, height, and head circumference charts compared to WHO median (P50), plus daily feed and diaper counts.",
+        ms6Title: "Backup & Settings", ms6Desc: "From the side menu you can change language (Spanish, French, English), toggle Dark Mode, or export/import JSON backup files."
+      }
     };
 
     const standardVaccines = [{ id: 'v1', age: '2 meses', name: 'Hexavalente (DTPa-VPI-Hib-HB) + Neumococo + Rotavirus' }, { id: 'v2', age: '4 meses', name: 'Hexavalente + Neumococo + Rotavirus + Meningococo B' }, { id: 'v3', age: '6 meses', name: 'Hexavalente + Rotavirus' }, { id: 'v4', age: '12 meses', name: 'Triple Vírica (SRP) + Neumococo + Meningococo C/ACWY' }];
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v16', 'babycare_data_v15', 'babycare_data_v14', 'babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v16', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v17', 'babycare_data_v16', 'babycare_data_v15', 'babycare_data_v14', 'babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v17', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -481,11 +564,51 @@
 
       document.getElementById('txt-recent-logs').innerText = t.recentLogs;
       document.getElementById('txt-weight-chart').innerText = t.weightChart;
+      document.getElementById('txt-height-chart').innerText = t.heightChart;
+      document.getElementById('txt-head-chart').innerText = t.headChart;
+      document.getElementById('txt-who-routines').innerText = t.whoRoutines;
+      document.getElementById('txt-who-routines-desc').innerText = t.whoRoutinesDesc;
       document.getElementById('txt-vaccine-title').innerText = t.vaccineTitle;
 
       document.getElementById('bnav-home').innerText = t.bnavHome;
       document.getElementById('bnav-add').innerText = t.bnavAdd;
       document.getElementById('bnav-share').innerText = t.bnavShare;
+
+      document.getElementById('btn-save-entry').innerText = `✓ ${t.saveEntry}`;
+      if (document.getElementById('btn-save-header')) document.getElementById('btn-save-header').innerText = `✓ ${t.saveEntry}`;
+      document.getElementById('btn-save-profile').innerText = t.saveProfile;
+      if (document.getElementById('btn-save-prof-header')) document.getElementById('btn-save-prof-header').innerText = `✓ ${t.saveEntry}`;
+      
+      document.getElementById('lbl-timestamp').innerText = t.lblTimestamp;
+      document.getElementById('lbl-notes').innerText = t.lblNotes;
+
+      document.getElementById('lbl-baby-name').innerText = t.lblBabyName;
+      document.getElementById('lbl-baby-dob').innerText = t.lblBabyDob;
+      document.getElementById('lbl-baby-gender').innerText = t.lblBabyGender;
+      document.getElementById('opt-male').innerText = t.optMale;
+      document.getElementById('opt-female').innerText = t.optFemale;
+
+      document.getElementById('txt-qr-title').innerText = t.qrTitle;
+      document.getElementById('txt-qr-desc').innerText = t.qrDesc;
+      document.getElementById('txt-scan-title').innerText = t.scanTitle;
+      document.getElementById('txt-scan-desc').innerText = t.scanDesc;
+
+      // Manual Translations
+      if (document.getElementById('txt-manual-header')) {
+        document.getElementById('txt-manual-header').innerHTML = `<i data-lucide="book-open" style="color:var(--primary);"></i> ${t.mHeader}`;
+        document.getElementById('mstep1-title').innerText = t.ms1Title;
+        document.getElementById('mstep1-desc').innerText = t.ms1Desc;
+        document.getElementById('mstep2-title').innerText = t.ms2Title;
+        document.getElementById('mstep2-desc').innerText = t.ms2Desc;
+        document.getElementById('mstep3-title').innerText = t.ms3Title;
+        document.getElementById('mstep3-desc').innerText = t.ms3Desc;
+        document.getElementById('mstep4-title').innerText = t.ms4Title;
+        document.getElementById('mstep4-desc').innerText = t.ms4Desc;
+        document.getElementById('mstep5-title').innerText = t.ms5Title;
+        document.getElementById('mstep5-desc').innerText = t.ms5Desc;
+        document.getElementById('mstep6-title').innerText = t.ms6Title;
+        document.getElementById('mstep6-desc').innerText = t.ms6Desc;
+      }
 
       document.getElementById('langSelect').value = lang;
       renderCalendar();
@@ -811,7 +934,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v16_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v17_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 
@@ -829,3 +952,4 @@
   </script>
 </body>
 </html>
+

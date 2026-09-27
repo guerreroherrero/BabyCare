@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v26.0 - Control Completo del Bebé</title>
+  <title>BabyCare v27.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -208,7 +208,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v26.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v27.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -312,7 +312,7 @@
         <div class="calendar-grid" id="calendarGrid"></div>
       </div>
 
-      <!-- 2. Gráfica de Barras Interactivas con Desplegable de Período -->
+      <!-- 2. Gráfica de Barras Interactivas con Desplegable de Perímetro Real (4 semanas / 6 meses) -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
           <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
@@ -491,7 +491,7 @@
 
     const i18n = {
       es: {
-        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs Percentil 50 OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs Percentil 50 OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código दिखाया.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche total", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
         mHeader: "Manual de Uso Paso a Paso",
@@ -523,8 +523,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v26', 'babycare_data_v25', 'babycare_data_v24', 'babycare_data_v23', 'babycare_data_v22', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v26', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v27', 'babycare_data_v26', 'babycare_data_v25', 'babycare_data_v24', 'babycare_data_v23', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v27', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -834,7 +834,8 @@
 
           colContent += `
             <div class="routine-block ${className}" 
-                 style="top:${topPercent}%; height:${heightPx}px;"
+                 style="top:${topPercent}%; height:${heightPx}px; cursor:pointer;"
+                 onclick="showMatrixBlockDetail('${log.id}')"
                  title="${log.detail || ''}">
             </div>
           `;
@@ -843,6 +844,22 @@
         colContent += `</div>`;
         grid.innerHTML += colContent;
       });
+    }
+
+    
+    function showMatrixBlockDetail(logId) {
+      const log = appState.logs.find(l => l.id == logId);
+      if (!log) return;
+      const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dateStr = new Date(log.timestamp).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+      
+      let typeTitle = "Alimentación 🍼";
+      if (log.type === 'sleep') typeTitle = "Sueño 💤";
+      if (log.type === 'diaper') typeTitle = "Pañal 💩";
+      if (log.type === 'growth') typeTitle = "Crecimiento 📏";
+      if (log.type === 'bath') typeTitle = "Baño 🧼";
+
+      alert(`${typeTitle}\n• Hora: ${timeStr} (${dateStr})\n• Detalle: ${log.detail || '-'}\n• Notas: ${log.notes || 'Sin observaciones'}`);
     }
 
     function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { appState.logs = appState.logs.filter(l => l.id !== id); saveState(); } }
@@ -1086,17 +1103,102 @@
       });
     }
 
-    /* Gráfico de Barras Interactivo con Desplegable (4 Semanas / 6 Meses) */
+    
+    /* CÁLCULO REAL DE DATOS PARA EL GRÁFICO DE BARRAS POR SEMANAS / MESES */
+    function getBarChartRealData(range) {
+      const today = new Date();
+      let labels = [];
+      let feedData = [];
+      let diaperData = [];
+      let sleepData = [];
+
+      if (range === '6months') {
+        const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+          const y = d.getFullYear();
+          const m = d.getMonth();
+          labels.push(monthNames[m]);
+
+          const monthLogs = appState.logs.filter(l => {
+            const ld = new Date(l.timestamp);
+            return ld.getFullYear() === y && ld.getMonth() === m;
+          });
+
+          let feeds = monthLogs.filter(l => l.type === 'feeding').length;
+          let diapers = monthLogs.filter(l => l.type === 'diaper').length;
+          let sleepMins = 0;
+          monthLogs.filter(l => l.type === 'sleep').forEach(l => {
+            if (l.durationMins) sleepMins += parseInt(l.durationMins);
+            else if (l.detail) {
+              const matchH = l.detail.match(/(\d+)\s*h/i);
+              const matchM = l.detail.match(/(\d+)\s*m/i);
+              if (matchH) sleepMins += parseInt(matchH[1]) * 60;
+              if (matchM) sleepMins += parseInt(matchM[1]);
+            }
+          });
+
+          feedData.push(feeds);
+          diaperData.push(diapers);
+          sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+        }
+      } else {
+        const currentDay = today.getDay();
+        const distToMon = (currentDay === 0 ? -6 : 1 - currentDay);
+        const thisMon = new Date(today);
+        thisMon.setDate(today.getDate() + distToMon);
+
+        for (let i = 3; i >= 0; i--) {
+          const mon = new Date(thisMon);
+          mon.setDate(thisMon.getDate() - (i * 7));
+          const sun = new Date(mon);
+          sun.setDate(mon.getDate() + 6);
+
+          const labelStr = `${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} - ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short'})}`;
+          labels.push(labelStr);
+
+          const monStr = mon.toISOString().slice(0,10);
+          const sunStr = sun.toISOString().slice(0,10);
+
+          const weekLogs = appState.logs.filter(l => {
+            const dateStr = l.timestamp.slice(0,10);
+            return dateStr >= monStr && dateStr <= sunStr;
+          });
+
+          let feeds = weekLogs.filter(l => l.type === 'feeding').length;
+          let diapers = weekLogs.filter(l => l.type === 'diaper').length;
+          let sleepMins = 0;
+          weekLogs.filter(l => l.type === 'sleep').forEach(l => {
+            if (l.durationMins) sleepMins += parseInt(l.durationMins);
+            else if (l.detail) {
+              const matchH = l.detail.match(/(\d+)\s*h/i);
+              const matchM = l.detail.match(/(\d+)\s*m/i);
+              if (matchH) sleepMins += parseInt(matchH[1]) * 60;
+              if (matchM) sleepMins += parseInt(matchM[1]);
+            }
+          });
+
+          feedData.push(feeds);
+          diaperData.push(diapers);
+          sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+        }
+      }
+
+      return { labels, feedData, diaperData, sleepData };
+    }
+
     function initBarChart() {
       const ctxBar = document.getElementById('barRoutinesChart').getContext('2d');
+      const realData = getBarChartRealData('4weeks');
+
       barRoutinesChartInstance = new Chart(ctxBar, {
         type: 'bar',
         data: {
-          labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+          labels: realData.labels,
           datasets: [
-            { label: 'Tomas 🍼', data: [52, 58, 54, 60], backgroundColor: '#FFE599', borderRadius: 6 },
-            { label: 'Pañales 💩', data: [42, 45, 40, 44], backgroundColor: '#C5E1A5', borderRadius: 6 },
-            { label: 'Sueño (h) 💤', data: [98, 102, 95, 100], backgroundColor: '#D7BCE8', borderRadius: 6 }
+            { label: 'Tomas 🍼', data: realData.feedData, backgroundColor: '#FFE599', borderRadius: 6 },
+            { label: 'Pañales 💩', data: realData.diaperData, backgroundColor: '#C5E1A5', borderRadius: 6 },
+            { label: 'Sueño (h) 💤', data: realData.sleepData, backgroundColor: '#D7BCE8', borderRadius: 6 }
           ]
         },
         options: {
@@ -1116,21 +1218,20 @@
 
     function updateBarChartRange(range) {
       if (!barRoutinesChartInstance) return;
-      if (range === '6months') {
-        barRoutinesChartInstance.data.labels = ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4', 'Mes 5', 'Mes 6'];
-        barRoutinesChartInstance.data.datasets[0].data = [210, 230, 220, 240, 225, 235];
-        barRoutinesChartInstance.data.datasets[1].data = [170, 180, 175, 185, 170, 180];
-        barRoutinesChartInstance.data.datasets[2].data = [420, 430, 410, 425, 415, 430];
-      } else {
-        barRoutinesChartInstance.data.labels = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
-        barRoutinesChartInstance.data.datasets[0].data = [52, 58, 54, 60];
-        barRoutinesChartInstance.data.datasets[1].data = [42, 45, 40, 44];
-        barRoutinesChartInstance.data.datasets[2].data = [98, 102, 95, 100];
-      }
+      const realData = getBarChartRealData(range);
+      barRoutinesChartInstance.data.labels = realData.labels;
+      barRoutinesChartInstance.data.datasets[0].data = realData.feedData;
+      barRoutinesChartInstance.data.datasets[1].data = realData.diaperData;
+      barRoutinesChartInstance.data.datasets[2].data = realData.sleepData;
       barRoutinesChartInstance.update();
     }
 
-    function updateBarChart() {}
+    function updateBarChart() {
+      if (barRoutinesChartInstance) {
+        const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '4weeks';
+        updateBarChartRange(selectVal);
+      }
+    }
 
     function updateChart() {
       if (!weightChartInstance) return;
@@ -1187,7 +1288,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v26_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v27_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

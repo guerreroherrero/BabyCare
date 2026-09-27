@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v20.0 - Control del Bebé</title>
+  <title>BabyCare v21.0 - Control Completo del Bebé</title>
   
-  <!-- Iconos PNG HD para Android e iOS (Compatibles 100% con instalador PWA de Chrome) -->
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   
-  <!-- Manifest Web App Oficial -->
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -106,15 +104,91 @@
     .date-display { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; }
     .today-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
 
-    .log-item { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 0; border-bottom: 1px solid var(--border-color); }
-    .log-item:last-child { border-bottom: none; }
-    .log-left { display: flex; align-items: center; gap: 12px; }
-    .log-badge { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .log-info h4 { font-size: 0.9rem; font-weight: 800; }
-    .log-info p { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
-    
-    .time-ago-badge {
+    /* Resumen diario acumulado */
+    .daily-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .summary-card {
       background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 0.6rem;
+      text-align: center;
+    }
+    .summary-card h5 {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+    .summary-card p {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--text-color);
+    }
+
+    /* Timeline Diario Estructurado */
+    .timeline-container {
+      position: relative;
+      padding-left: 1rem;
+      margin-top: 0.8rem;
+    }
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 15px;
+      bottom: 15px;
+      width: 2px;
+      background: var(--border-color);
+    }
+
+    .timeline-item {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 0.6rem 0;
+    }
+
+    .timeline-point {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid var(--card-bg);
+      box-shadow: 0 0 0 2px var(--primary);
+      z-index: 2;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 0.7rem 0.9rem;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .timeline-main-info h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+    .timeline-main-info p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .time-ago-badge {
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
       padding: 2px 6px;
       border-radius: 8px;
@@ -138,7 +212,7 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
-    /* Modal Fijo en Cabecera */
+    /* Modal */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -160,12 +234,11 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 0.4rem 0.9rem;
+      padding: 0.35rem 0.8rem;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(255, 183, 178, 0.5);
     }
 
     .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; -webkit-overflow-scrolling: touch; }
@@ -203,7 +276,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v20.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v21.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -264,7 +337,7 @@
       <button class="tab-btn" onclick="switchTab('vaccinesList')" id="tab-vac-btn">Vacunas</button>
     </div>
 
-    <!-- TAB 1: Diario -->
+    <!-- TAB 1: Diario & Timeline -->
     <div class="tab-content active" id="tab-logs">
       <div class="card">
         <div class="section-title"><span id="txt-recent-logs">Actividad Reciente</span></div>
@@ -273,7 +346,25 @@
           <div class="date-display"><span id="currentDateText">27 Sep 2026</span><span class="today-tag" id="todayTag" onclick="resetToToday()">Hoy</span></div>
           <button class="date-nav-btn" onclick="changeSelectedDate(1)"><i data-lucide="chevron-right"></i></button>
         </div>
-        <div id="logsContainer"></div>
+
+        <!-- Resumen diario acumulado -->
+        <div class="daily-summary-grid">
+          <div class="summary-card">
+            <h5 id="lbl-sum-feed">🍼 Leche total</h5>
+            <p id="val-sum-feed">0 ml</p>
+          </div>
+          <div class="summary-card">
+            <h5 id="lbl-sum-sleep">💤 Sueño total</h5>
+            <p id="val-sum-sleep">0h 0m</p>
+          </div>
+          <div class="summary-card">
+            <h5 id="lbl-sum-diaper">💦 Pañales</h5>
+            <p id="val-sum-diaper">0 t</p>
+          </div>
+        </div>
+
+        <!-- Timeline Diario -->
+        <div id="logsContainer" class="timeline-container"></div>
       </div>
     </div>
 
@@ -343,15 +434,15 @@
           <div class="step-number">2</div>
           <div class="step-content">
             <h4 id="mstep2-title">Registrar Eventos de Forma Rápida</h4>
-            <p id="mstep2-desc">Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). La hora actual se preestablecerá automáticamente.</p>
+            <p id="mstep2-desc">Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner hora inicio y fin.</p>
           </div>
         </div>
 
         <div class="manual-step">
           <div class="step-number">3</div>
           <div class="step-content">
-            <h4 id="mstep3-title">Editar o Eliminar Registros</h4>
-            <p id="mstep3-desc">En la sección 'Actividad Reciente', navega día a día con las flechas. Cada registro cuenta con botones para editar ✏️ o eliminar 🗑️ los datos introducidos.</p>
+            <h4 id="mstep3-title">Timeline Diario y Resumen Acumulado</h4>
+            <p id="mstep3-desc">Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta del día.</p>
           </div>
         </div>
 
@@ -359,7 +450,7 @@
           <div class="step-number">4</div>
           <div class="step-content">
             <h4 id="mstep4-title">Sincronización por Código QR</h4>
-            <p id="mstep4-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja' para leer la pantalla.</p>
+            <p id="mstep4-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.</p>
           </div>
         </div>
 
@@ -367,7 +458,7 @@
           <div class="step-number">5</div>
           <div class="step-content">
             <h4 id="mstep5-title">Comparativas y Alertas OMS</h4>
-            <p id="mstep5-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50), además del conteo diario de tomas y pañales.</p>
+            <p id="mstep5-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).</p>
           </div>
         </div>
 
@@ -388,14 +479,13 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
-  <!-- Modales con Botón Guardar en la Cabecera Superior (100% Inamovible) -->
+  <!-- Modales con Doble Botón Guardar -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
         <div class="modal-header">
           <h3 id="modalFormTitle">Nuevo Registro</h3>
           <div class="modal-header-actions">
-            <!-- Botón Guardar en la cabecera superior (siempre visible incluso con teclado abierto) -->
             <button type="submit" class="btn-header-save" id="btn-save-header">✓ Guardar</button>
             <button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button>
           </div>
@@ -405,7 +495,7 @@
         
         <div class="modal-body" id="formModalBody">
           <div id="dynamicFormFields"></div>
-          <div class="form-group">
+          <div class="form-group" id="groupTimestampMain">
             <label id="lbl-timestamp">Fecha y Hora</label>
             <input type="datetime-local" class="form-control" id="entryTimestamp" required>
           </div>
@@ -459,7 +549,6 @@
     </div>
   </div>
 
-  <!-- Service Worker PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -475,41 +564,44 @@
   </script>
 
   <script>
-    let appState = { lang: 'es', theme: 'light', baby: { name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null }, logs: [{ id: 1, type: 'feeding', detail: 'Pecho Izquierdo (15m)', timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false } };
+    let appState = { lang: 'es', theme: 'light', baby: { name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null }, logs: [{ id: 1, type: 'feeding', detail: 'Leche Materna Extraída (110 ml)', amount: 110, timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false } };
     let selectedDate = new Date();
 
     const i18n = {
       es: {
         menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
+        sumFeed: "🍼 Leche total", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
         mHeader: "Manual de Uso Paso a Paso",
         ms1Title: "Personalizar foto y datos del Bebé", ms1Desc: "Pulsa directamente sobre la foto o avatar del bebé para subir su foto real. Pulsa en el icono del lápiz para configurar su nombre, fecha de nacimiento y género.",
-        ms2Title: "Registrar Eventos de Forma Rápida", ms2Desc: "Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). La hora actual se preestablecerá automáticamente.",
-        ms3Title: "Editar o Eliminar Registros", ms3Desc: "En la sección 'Actividad Reciente', navega día a día con las flechas. Cada registro cuenta con botones para editar ✏️ o eliminar 🗑️ los datos introducidos.",
-        ms4Title: "Sincronización por Código QR", ms4Desc: "Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja' para leer la pantalla.",
-        ms5Title: "Comparativas y Alertas OMS", ms5Desc: "En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50), además del conteo diario de tomas y pañales.",
+        ms2Title: "Registrar Eventos de Forma Rápida", ms2Desc: "Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner hora inicio y fin.",
+        ms3Title: "Timeline Diario y Resumen Acumulado", ms3Desc: "Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta del día.",
+        ms4Title: "Sincronización por Código QR", ms4Desc: "Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.",
+        ms5Title: "Comparativas y Alertas OMS", ms5Desc: "En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).",
         ms6Title: "Copia de Seguridad y Configuración", ms6Desc: "Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo."
       },
       fr: {
         menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données (QR)", menuScan: "Scanner le QR partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager par Code QR", qrDesc: "Ouvrez l'appareil photo de l'autre téléphone pour synchroniser.", scanTitle: "Scanner le QR du Partenaire", scanDesc: "Pointez la caméra sur le code QR affiché.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
+        sumFeed: "🍼 Lait total", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
         mHeader: "Guide d'Utilisation Étape par Étape",
         ms1Title: "Personnaliser la photo et le profil", ms1Desc: "Appuyez sur la photo du bébé pour en télécharger une vraie. Cliquez sur le crayon pour modifier le nom, la date de naissance et le sexe.",
-        ms2Title: "Enregistrer rapidement des événements", ms2Desc: "Cliquez sur l'un des boutons supérieurs (Alimentation, Couche, Sommeil, Croissance, Santé, Bain). L'heure actuelle est réglée automatiquement.",
-        ms3Title: "Modifier ou Supprimer des Entrées", ms3Desc: "Dans la section 'Activité Récente', naviguez jour par jour avec les flèches. Chaque entrée a des boutons pour modifier ✏️ ou supprimer 🗑️.",
-        ms4Title: "Synchronisation par Code QR", ms4Desc: "Pour transférer des données : Sur le téléphone A, appuyez sur 'Sync' en bas. Sur le téléphone B, ouvrez le menu et appuyez sur 'Scanner QR partenaire'.",
-        ms5Title: "Comparaisons et Alertes OMS", ms5Desc: "Dans l'onglet 'Courbes OMS', observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS (P50), ainsi que le suivi des tétées et couches.",
+        ms2Title: "Enregistrer rapidement des événements", ms2Desc: "Cliquez sur l'un des boutons supérieurs (Alimentation, Couche, Sommeil, Croissance, Santé, Bain). Le lait tiré est sélectionné par défaut.",
+        ms3Title: "Chronologie quotidienne et résumé", ms3Desc: "Consultez en un coup d'œil la quantité de lait, le sommeil total et les couches de chaque journée sur une frise chronologique.",
+        ms4Title: "Synchronisation par Code QR", ms4Desc: "Pour transférer des données : Sur le téléphone A, appuyez sur 'Sync'. Sur le téléphone B, ouvrez le menu et appuyez sur 'Scanner QR partenaire'.",
+        ms5Title: "Comparaisons et Alertes OMS", ms5Desc: "Dans l'onglet 'Courbes OMS', observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS (P50).",
         ms6Title: "Sauvegarde et Paramètres", ms6Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON."
       },
       en: {
         menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share via QR Code", qrDesc: "Open partner's camera to sync all data instantly.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the displayed QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
+        sumFeed: "🍼 Total Milk", sumSleep: "💤 Total Sleep", sumDiaper: "💦 Diapers",
         mHeader: "Step-by-Step User Manual",
         ms1Title: "Personalize Baby Photo & Details", ms1Desc: "Tap directly on the circular baby icon to upload a real photo. Click the pencil icon to modify the baby's name, birth date, and gender.",
-        ms2Title: "Quickly Log Events", ms2Desc: "Click any button in the top grid (Feeding, Diaper, Sleep, Growth, Health, Bath). Current time is set automatically.",
-        ms3Title: "Edit or Delete Log Entries", ms3Desc: "In the 'Recent Activity' section, navigate day by day with the arrows. Each entry has buttons to edit ✏️ or delete 🗑️ data.",
+        ms2Title: "Quickly Log Events", ms2Desc: "Click any button in the top grid (Feeding, Diaper, Sleep, Growth, Health, Bath). Expressed Milk is set by default.",
+        ms3Title: "Daily Timeline & Summary", ms3Desc: "Check total milk intake, total sleep, and diaper counts at a glance with a visual chronological timeline.",
         ms4Title: "Sync Between Phones with QR Code", ms4Desc: "To transfer data: On Phone A, tap 'Sync' in the bottom bar. On Phone B, open the menu and tap 'Scan Partner QR' to read the screen.",
-        ms5Title: "WHO Growth Charts & Alerts", ms5Desc: "Under the 'WHO Growth' tab, view weight, height, and head circumference charts compared to WHO median (P50), plus daily feed and diaper counts.",
+        ms5Title: "WHO Growth Charts & Alerts", ms5Desc: "Under the 'WHO Growth' tab, view weight, height, and head circumference charts compared to WHO median (P50).",
         ms6Title: "Backup & Settings", ms6Desc: "From the side menu you can change language (Spanish, French, English), toggle Dark Mode, or export/import JSON backup files."
       }
     };
@@ -518,8 +610,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data_v16', 'babycare_data_v15', 'babycare_data_v14', 'babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v20', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v21', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v21', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -564,6 +656,10 @@
       document.getElementById('tab-cal-btn').innerText = t.tabCal;
       document.getElementById('tab-chart-btn').innerText = t.tabCharts;
       document.getElementById('tab-vac-btn').innerText = t.tabVac;
+
+      document.getElementById('lbl-sum-feed').innerText = t.sumFeed;
+      document.getElementById('lbl-sum-sleep').innerText = t.sumSleep;
+      document.getElementById('lbl-sum-diaper').innerText = t.sumDiaper;
 
       document.getElementById('txt-recent-logs').innerText = t.recentLogs;
       document.getElementById('txt-weight-chart').innerText = t.weightChart;
@@ -666,6 +762,7 @@
       return `Hace ${days}d`;
     }
 
+    /* Renderizador del Timeline Diario y Acumulados */
     function renderLogs() {
       const container = document.getElementById('logsContainer');
       container.innerHTML = '';
@@ -676,8 +773,47 @@
       document.getElementById('currentDateText').innerText = selectedDate.toLocaleDateString(appState.lang === 'en' ? 'en-US' : (appState.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' });
       document.getElementById('todayTag').innerText = (targetKey === todayKey) ? t.today : (appState.lang === 'en' ? 'Go to Today' : 'Ir a Hoy');
 
+      // Filtrar registros del día seleccionado
       const filtered = appState.logs.filter(l => l.timestamp.startsWith(targetKey)).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
+      // 1. CÁLCULO DE ACUMULADOS DIARIOS
+      let totalMilkMl = 0;
+      let totalSleepMins = 0;
+      let totalDiapersCount = 0;
+
+      filtered.forEach(log => {
+        if (log.type === 'feeding') {
+          // Extraer ml si existen en el texto o propiedad
+          if (log.amount) {
+            totalMilkMl += parseFloat(log.amount);
+          } else if (log.detail) {
+            const match = log.detail.match(/(\d+)\s*ml/i);
+            if (match) totalMilkMl += parseInt(match[1]);
+          }
+        } else if (log.type === 'sleep') {
+          if (log.durationMins) {
+            totalSleepMins += parseInt(log.durationMins);
+          } else if (log.detail) {
+            const matchH = log.detail.match(/(\d+)\s*h/i);
+            const matchM = log.detail.match(/(\d+)\s*m/i);
+            let mins = 0;
+            if (matchH) mins += parseInt(matchH[1]) * 60;
+            if (matchM) mins += parseInt(matchM[1]);
+            totalSleepMins += mins;
+          }
+        } else if (log.type === 'diaper') {
+          totalDiapersCount++;
+        }
+      });
+
+      // Actualizar tarjetas de resumen del día
+      const sleepHours = Math.floor(totalSleepMins / 60);
+      const sleepMinsRem = totalSleepMins % 60;
+      document.getElementById('val-sum-feed').innerText = `${totalMilkMl} ml`;
+      document.getElementById('val-sum-sleep').innerText = `${sleepHours}h ${sleepMinsRem}m`;
+      document.getElementById('val-sum-diaper').innerText = `${totalDiapersCount} t`;
+
+      // Actualizar contadores OMS de hoy
       const todayFeedings = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'feeding').length;
       const todayDiapers = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'diaper').length;
       if (document.getElementById('val-feed-count')) {
@@ -685,8 +821,12 @@
         document.getElementById('val-diaper-count').innerText = `${todayDiapers} hoy`;
       }
 
-      if (filtered.length === 0) { container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`; return; }
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`;
+        return;
+      }
 
+      // 2. TIMELINE DIARIO CRONOLÓGICO VISUAL
       filtered.forEach(log => {
         const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const timeAgo = getTimeAgoString(log.timestamp);
@@ -699,21 +839,19 @@
         if (log.type === 'bath') { icon = 'shower-head'; bg = '#D7BCE8'; title = 'Baño / Ducha'; }
 
         container.innerHTML += `
-          <div class="log-item">
-            <div class="log-left">
-              <div class="log-badge" style="background:${bg};">
-                <i data-lucide="${icon}" style="width:20px; height:20px;"></i>
-              </div>
-              <div class="log-info">
+          <div class="timeline-item">
+            <div class="timeline-point" style="background:${bg}; border-color:${bg};"></div>
+            <div class="timeline-content">
+              <div class="timeline-main-info">
                 <h4>${title} - ${log.detail || ''}</h4>
                 <p>${log.notes || ''}</p>
               </div>
-            </div>
-            <div class="log-actions">
-              <span class="log-time">${timeStr}</span>
-              ${timeAgo ? `<span class="time-ago-badge">${timeAgo}</span>` : ''}
-              <button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button>
-              <button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button>
+              <div class="log-actions">
+                <span class="log-time">${timeStr}</span>
+                ${timeAgo ? `<span class="time-ago-badge">${timeAgo}</span>` : ''}
+                <button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button>
+                <button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button>
+              </div>
             </div>
           </div>
         `;
@@ -724,6 +862,7 @@
     function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { appState.logs = appState.logs.filter(l => l.id !== id); saveState(); } }
     function editLog(id) { const log = appState.logs.find(l => l.id === id); if (log) openFormModal(log.type, log); }
 
+    /* Modal Form Generator */
     function openFormModal(type, existingLog = null) {
       document.getElementById('entryType').value = type;
       document.getElementById('editingLogId').value = existingLog ? existingLog.id : '';
@@ -735,9 +874,58 @@
       document.getElementById('entryTimestamp').value = localIsoStr;
       document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
 
+      // Mostrar/Ocultar campo de Timestamp general
+      document.getElementById('groupTimestampMain').style.display = (type === 'sleep') ? 'none' : 'block';
+
       if (type === 'feeding') {
         title.innerText = existingLog ? "Editar Toma / Leche 🍼" : "Registrar Toma / Leche 🍼";
-        fields.innerHTML = `<div class="form-group"><label>Tipo de Alimentación</label><select class="form-control" id="fType"><option value="Pecho">Pecho 🤱</option><option value="Biberón Fórmula">Biberón Fórmula 🍼</option><option value="Leche Materna Extraída">Leche Extraída 🍼</option><option value="Sólidos / Papilla">Sólidos 🥣</option></select></div><div class="form-group"><label>Detalle / Cantidad (ml o min)</label><input type="text" class="form-control" id="fDetail" placeholder="Ej: 120 ml o 15 min Pecho Izquierdo"></div>`;
+        fields.innerHTML = `
+          <div class="form-group">
+            <label>Tipo de Alimentación</label>
+            <select class="form-control" id="fType">
+              <option value="Leche Materna Extraída" selected>Leche Extraída 🍼</option>
+              <option value="Pecho">Pecho 🤱</option>
+              <option value="Biberón Fórmula">Biberón Fórmula 🍼</option>
+              <option value="Sólidos / Papilla">Sólidos 🥣</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cantidad (ml)</label>
+            <input type="number" class="form-control" id="fAmount" placeholder="Ej: 110">
+          </div>
+        `;
+        if (existingLog) {
+          if (existingLog.amount) document.getElementById('fAmount').value = existingLog.amount;
+        } else {
+          document.getElementById('fAmount').value = '110';
+        }
+      } else if (type === 'sleep') {
+        title.innerText = existingLog ? "Editar Sueño 💤" : "Registrar Sueño 💤";
+        
+        let startTime = localIsoStr;
+        let endTime = localIsoStr;
+        if (existingLog && existingLog.startTimestamp && existingLog.endTimestamp) {
+          startTime = new Date(new Date(existingLog.startTimestamp).getTime() - (new Date(existingLog.startTimestamp).getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+          endTime = new Date(new Date(existingLog.endTimestamp).getTime() - (new Date(existingLog.endTimestamp).getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+        }
+
+        fields.innerHTML = `
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Hora Inicio</label>
+              <input type="datetime-local" class="form-control" id="fSleepStart" value="${startTime}" onchange="calcSleepDuration()">
+            </div>
+            <div class="form-group">
+              <label>Hora Fin</label>
+              <input type="datetime-local" class="form-control" id="fSleepEnd" value="${endTime}" onchange="calcSleepDuration()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Duración Calculada</label>
+            <input type="text" class="form-control" id="fSleepDurationDisplay" readonly placeholder="Calculando..." style="background:#f0f0f0;">
+          </div>
+        `;
+        setTimeout(calcSleepDuration, 100);
       } else if (type === 'growth') {
         title.innerText = existingLog ? "Editar Crecimiento 📏" : "Registrar Crecimiento 📏";
         fields.innerHTML = `<div class="form-grid-2"><div class="form-group"><label>Peso (Kg)</label><input type="number" step="0.01" class="form-control" id="fWeight" placeholder="Ej: 5.45"></div><div class="form-group"><label>Talla (cm)</label><input type="number" step="0.1" class="form-control" id="fHeight" placeholder="Ej: 58.5"></div></div><div class="form-group"><label>Perímetro Cefálico (cm)</label><input type="number" step="0.1" class="form-control" id="fHead" placeholder="Ej: 38.0"></div>`;
@@ -757,6 +945,22 @@
       document.getElementById('formModal').classList.add('open');
     }
 
+    function calcSleepDuration() {
+      const startVal = document.getElementById('fSleepStart').value;
+      const endVal = document.getElementById('fSleepEnd').value;
+      if (!startVal || !endVal) return;
+
+      const diffMs = new Date(endVal) - new Date(startVal);
+      if (diffMs < 0) {
+        document.getElementById('fSleepDurationDisplay').value = "Hora de fin anterior al inicio";
+        return;
+      }
+      const totalMins = Math.floor(diffMs / (1000 * 60));
+      const hours = Math.floor(totalMins / 60);
+      const mins = totalMins % 60;
+      document.getElementById('fSleepDurationDisplay').value = `${hours}h ${mins}m (${totalMins} mins)`;
+    }
+
     function closeFormModal() { document.getElementById('formModal').classList.remove('open'); }
 
     function saveLogEntry(e) {
@@ -767,26 +971,41 @@
       const notes = document.getElementById('entryNotes').value;
 
       let detail = ''; let weight = null; let height = null; let head = null;
+      let amount = null; let startTimestamp = null; let endTimestamp = null; let durationMins = null;
+      let isoTimestamp = new Date(timestampInput).toISOString();
 
-      if (type === 'growth') {
+      if (type === 'feeding') {
+        const ft = document.getElementById('fType').value;
+        const am = document.getElementById('fAmount').value;
+        amount = am ? parseFloat(am) : null;
+        detail = `${ft} (${am ? am + ' ml' : ''})`;
+      } else if (type === 'sleep') {
+        const sVal = document.getElementById('fSleepStart').value;
+        const eVal = document.getElementById('fSleepEnd').value;
+        startTimestamp = new Date(sVal).toISOString();
+        endTimestamp = new Date(eVal).toISOString();
+        isoTimestamp = endTimestamp;
+
+        const diffMs = new Date(eVal) - new Date(sVal);
+        durationMins = Math.max(0, Math.floor(diffMs / (1000 * 60)));
+        const hours = Math.floor(durationMins / 60);
+        const mins = durationMins % 60;
+        detail = `Siesta (${hours}h ${mins}m)`;
+      } else if (type === 'growth') {
         const w = document.getElementById('fWeight').value;
         const h = document.getElementById('fHeight').value;
         const hd = document.getElementById('fHead').value;
         detail = `Peso: ${w}kg, Talla: ${h}cm, Cabeza: ${hd}cm`;
         weight = parseFloat(w); height = parseFloat(h); head = parseFloat(hd);
-      } else if (type === 'feeding') {
-        detail = `${document.getElementById('fType').value} (${document.getElementById('fDetail').value})`;
       } else {
         detail = document.getElementById('fDetail').value;
       }
 
-      const isoTimestamp = new Date(timestampInput).toISOString();
-
       if (editingId) {
         const idx = appState.logs.findIndex(l => l.id == editingId);
-        if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: isoTimestamp, notes, weight, height, head };
+        if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins };
       } else {
-        appState.logs.push({ id: Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head });
+        appState.logs.push({ id: Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins });
       }
       saveState(); closeFormModal();
     }
@@ -937,7 +1156,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v20_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v21_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

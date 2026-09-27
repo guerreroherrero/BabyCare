@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v21.0 - Control Completo del Bebé</title>
+  <title>BabyCare v22.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -276,7 +276,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v21.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v22.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -319,7 +319,7 @@
 
     <div class="alert-banner" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText">Atención: Se recomienda verificar la toma de leche.</span></div>
 
-    <!-- Acciones Rápidas -->
+    <!-- Acciones Rápidas con color azul agua distintivo para Baño / Ducha -->
     <div class="section-title"><span id="txt-quick-actions">Registrar Evento</span></div>
     <div class="grid-actions">
       <div class="action-btn" onclick="openFormModal('feeding')"><div class="action-icon" style="background: #FFE599; color: #B45309;"><i data-lucide="baby"></i></div><span id="act-feed">Toma / Leche</span></div>
@@ -327,7 +327,7 @@
       <div class="action-btn" onclick="openFormModal('sleep')"><div class="action-icon" style="background: #D7BCE8; color: #6B21A8;"><i data-lucide="moon"></i></div><span id="act-sleep">Sueño</span></div>
       <div class="action-btn" onclick="openFormModal('growth')"><div class="action-icon" style="background: #AEC6CF; color: #1E3A8A;"><i data-lucide="ruler"></i></div><span id="act-growth">Crecimiento</span></div>
       <div class="action-btn" onclick="openFormModal('health')"><div class="action-icon" style="background: #FFB3BA; color: #991B1B;"><i data-lucide="thermometer"></i></div><span id="act-health">Salud / Temp</span></div>
-      <div class="action-btn" onclick="openFormModal('bath')"><div class="action-icon" style="background: #D7BCE8; color: #4A4E69;"><i data-lucide="shower-head"></i></div><span id="act-bath">Baño / Ducha</span></div>
+      <div class="action-btn" onclick="openFormModal('bath')"><div class="action-icon" style="background: #B2EBF2; color: #006064;"><i data-lucide="shower-head"></i></div><span id="act-bath">Baño / Ducha</span></div>
     </div>
 
     <div class="tabs-nav">
@@ -610,8 +610,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v21', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v21', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v22', 'babycare_data_v21', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v22', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -783,7 +783,6 @@
 
       filtered.forEach(log => {
         if (log.type === 'feeding') {
-          // Extraer ml si existen en el texto o propiedad
           if (log.amount) {
             totalMilkMl += parseFloat(log.amount);
           } else if (log.detail) {
@@ -836,7 +835,7 @@
         if (log.type === 'sleep') { icon = 'moon'; bg = '#D7BCE8'; title = 'Sueño'; }
         if (log.type === 'growth') { icon = 'ruler'; bg = '#AEC6CF'; title = 'Crecimiento'; }
         if (log.type === 'health') { icon = 'thermometer'; bg = '#FFB3BA'; title = 'Salud'; }
-        if (log.type === 'bath') { icon = 'shower-head'; bg = '#D7BCE8'; title = 'Baño / Ducha'; }
+        if (log.type === 'bath') { icon = 'shower-head'; bg = '#B2EBF2'; title = 'Baño / Ducha'; }
 
         container.innerHTML += `
           <div class="timeline-item">
@@ -874,7 +873,6 @@
       document.getElementById('entryTimestamp').value = localIsoStr;
       document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
 
-      // Mostrar/Ocultar campo de Timestamp general
       document.getElementById('groupTimestampMain').style.display = (type === 'sleep') ? 'none' : 'block';
 
       if (type === 'feeding') {
@@ -1156,7 +1154,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v21_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v22_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

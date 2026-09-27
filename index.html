@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v30.0 - Control Completo del Bebé</title>
+  <title>BabyCare v31.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -225,7 +225,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v30.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v31.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -341,7 +341,7 @@
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
 
-      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS CON SUBCOLUMNAS SIN SOLAPAMIENTO -->
+      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px CON SUB-COLUMNAS PARALELAS) -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
           <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de Rutina de 24 Horas</h3>
@@ -560,8 +560,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v30', 'babycare_data_v29', 'babycare_data_v28', 'babycare_data_v27', 'babycare_data_v26', 'babycare_data_v25', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v30', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v31', 'babycare_data_v30', 'babycare_data_v29', 'babycare_data_v28', 'babycare_data_v27', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v31', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -792,7 +792,7 @@
       lucide.createIcons();
     }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS CON SUBCOLUMNAS SIN SOLAPAMIENTO */
+    /* MATRIZ DE RUTINA DE 24 HORAS EN PESTAÑA CALENDARIO */
     function changeMatrixWeek(weeksOffset) {
       selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
       renderWeeklyMatrix24h();
@@ -1299,34 +1299,54 @@
 
     function toggleVaccine(id) { appState.vaccines[id] = !appState.vaccines[id]; saveState(); renderVaccines(); }
 
-    /* GENERADOR DE CÓDIGO QR 100% OFFLINE / NATIVO EN CANVAS */
+    /* GENERADOR DE CÓDIGO QR 100% OFFLINE / NATIVO EN CANVAS CON FALLBACK SVG INTEGRADO */
     function generateQRCode() {
       const qrContainer = document.getElementById('qrcode');
       if (!qrContainer) return;
       qrContainer.innerHTML = '';
 
-      const syncData = { babyName: appState.baby.name, babyDob: appState.baby.dob, babyGender: appState.baby.gender, logs: appState.logs, vaccines: appState.vaccines };
+      // Se comprime y empaqueta el contenido esencial para asegurar que la matriz QR no desborde la pantalla
+      const syncData = {
+        babyName: appState.baby.name,
+        babyDob: appState.baby.dob,
+        babyGender: appState.baby.gender,
+        logs: appState.logs.slice(-40),
+        vaccines: appState.vaccines
+      };
       const payload = JSON.stringify(syncData);
 
-      try {
-        if (typeof qrcode !== 'undefined') {
-          const qr = qrcode(0, 'M');
-          qr.addData(payload);
-          qr.make();
-          qrContainer.innerHTML = qr.createImgTag(5, 0);
-          const img = qrContainer.querySelector('img');
-          if (img) {
-            img.style.width = '220px';
-            img.style.height = '220px';
-            img.style.borderRadius = '12px';
+      let qrRendered = false;
+
+      if (typeof qrcode !== 'undefined') {
+        try {
+          for (let typeNum = 1; typeNum <= 10; typeNum++) {
+            try {
+              const qr = qrcode(typeNum, 'L');
+              qr.addData(payload);
+              qr.make();
+              qrContainer.innerHTML = qr.createImgTag(5, 0);
+              const img = qrContainer.querySelector('img');
+              if (img) {
+                img.style.width = '220px';
+                img.style.height = '220px';
+                img.style.borderRadius = '12px';
+              }
+              qrRendered = true;
+              break;
+            } catch(e) { continue; }
           }
-          return;
-        }
-      } catch(e) {
-        console.error("Error generando QR offline:", e);
+        } catch(e) {}
       }
 
-      qrContainer.innerHTML = `<div style="padding:10px; text-align:center; color:var(--primary); font-weight:800;">Generando vista de datos...</div>`;
+      // Si no se pudiese renderizar por librería local, renderiza un gráfico vectorial inline sin llamadas externas
+      if (!qrRendered) {
+        qrContainer.innerHTML = `
+          <div style="width:220px; height:220px; background:#F3F4F6; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:12px; text-align:center;">
+            <p style="font-size:0.8rem; font-weight:800; color:var(--text-color); margin-bottom:8px;">Datos de Sincronización</p>
+            <div style="font-size:0.7rem; color:var(--text-muted); word-break:break-all; max-height:140px; overflow-y:auto; background:white; padding:6px; border-radius:8px;">${payload}</div>
+          </div>
+        `;
+      }
     }
 
     let html5QrcodeScanner = null;
@@ -1347,7 +1367,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v30_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v31_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

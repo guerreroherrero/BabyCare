@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v13.0 - Control Completo del Bebé</title>
+  <title>BabyCare v14.0 - Control Completo del Bebé</title>
   
-  <!-- Icono oficial de Bebé 👶 en PNG transparente vectorial para forzar actualización de caché -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFB7B2'/><text y='.85em' x='5' font-size='80'>👶</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFB7B2'/><text y='.85em' x='5' font-size='80'>👶</text></svg>">
   
-  <!-- Web App Manifest con icono de Bebé 👶 HD sin referencias anteriores -->
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Crect%20width%3D'100'%20height%3D'100'%20rx%3D'20'%20fill%3D'%23FFB7B2'%2F%3E%3Ctext%20y%3D'.85em'%20x%3D'5'%20font-size%3D'80'%3E%F0%9F%91%B6%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -57,7 +55,7 @@
     body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; padding-bottom: 90px; }
 
     header {
-      display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.25rem;
+      display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem;
       background: linear-gradient(135deg, rgba(255, 183, 178, 0.85), rgba(215, 188, 232, 0.85)), 
                   url('https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
       border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); border-radius: 0 0 20px 20px;
@@ -138,22 +136,33 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
+    /* Modales Estructurados sin Scroll (Flexbox) */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 24px 24px 0 0; padding: 1.1rem 1.2rem; max-height: 95vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; }
+    
+    .modal {
+      background: var(--card-bg); width: 100%; max-width: 550px;
+      border-radius: 24px 24px 0 0; padding: 1rem 1.2rem;
+      max-height: 85vh; display: flex; flex-direction: column;
+      transform: translateY(100%); transition: transform 0.3s;
+    }
     @media(min-width: 600px) { .modal { border-radius: 24px; transform: translateY(20px); } }
     .modal-overlay.open .modal { transform: translateY(0); }
     
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-shrink: 0; }
     .modal-header h3 { font-size: 1.1rem; font-weight: 800; }
     
-    .form-group { margin-bottom: 0.6rem; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 0.2rem; }
-    .form-control { width: 100%; padding: 0.5rem 0.8rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.9rem; font-weight: 600; outline: none; }
-    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; }
+    .modal-footer { flex-shrink: 0; padding-top: 0.4rem; }
+    
+    /* Formulario ultra compacto */
+    .form-group { margin-bottom: 0.4rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.15rem; }
+    .form-control { width: 100%; padding: 0.42rem 0.7rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
 
-    .btn-submit { width: 100%; padding: 0.75rem; border-radius: 12px; border: none; background: var(--primary); color: white; font-size: 0.95rem; font-weight: 800; cursor: pointer; margin-top: 0.6rem; }
+    .btn-submit { width: 100%; padding: 0.7rem; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 0.95rem; font-weight: 800; cursor: pointer; }
 
     #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; gap: 0.8rem; }
     #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 200px; min-height: 200px; display: flex; align-items: center; justify-content: center; }
@@ -180,7 +189,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v13.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v14.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -310,28 +319,50 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
-  <!-- Modales compactos -->
+  <!-- Modales Estructurados con Botón Fijo en Pie de Pantalla -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
-      <div class="modal-header"><h3 id="modalFormTitle">Nuevo Registro</h3><button class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button></div>
-      <form id="logForm" onsubmit="saveLogEntry(event)">
+      <div class="modal-header">
+        <h3 id="modalFormTitle">Nuevo Registro</h3>
+        <button class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button>
+      </div>
+      <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; flex-grow:1; overflow:hidden;">
         <input type="hidden" id="editingLogId"><input type="hidden" id="entryType">
-        <div id="dynamicFormFields"></div>
-        <div class="form-group"><label id="lbl-timestamp">Fecha y Hora</label><input type="datetime-local" class="form-control" id="entryTimestamp" required></div>
-        <div class="form-group"><label id="lbl-notes">Notas / Observaciones</label><input type="text" class="form-control" id="entryNotes" placeholder="Ej: Agitado al inicio..."></div>
-        <button type="submit" class="btn-submit" id="btn-save-entry">Guardar Registro</button>
+        
+        <div class="modal-body">
+          <div id="dynamicFormFields"></div>
+          <div class="form-group">
+            <label id="lbl-timestamp">Fecha y Hora</label>
+            <input type="datetime-local" class="form-control" id="entryTimestamp" required>
+          </div>
+          <div class="form-group">
+            <label id="lbl-notes">Notas / Observaciones</label>
+            <input type="text" class="form-control" id="entryNotes" placeholder="Ej: Agitado al inicio...">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn-submit" id="btn-save-entry">Guardar Registro</button>
+        </div>
       </form>
     </div>
   </div>
 
   <div class="modal-overlay" id="profileModal">
     <div class="modal">
-      <div class="modal-header"><h3 id="txt-profile-title">Perfil del Bebé</h3><button class="close-btn" onclick="closeModal('profile')"><i data-lucide="x"></i></button></div>
-      <form onsubmit="saveProfile(event)">
-        <div class="form-group"><label id="lbl-baby-name">Nombre del Bebé</label><input type="text" class="form-control" id="profName" required value="Léo"></div>
-        <div class="form-group"><label id="lbl-baby-dob">Fecha de Nacimiento</label><input type="date" class="form-control" id="profDob" required value="2026-07-19"></div>
-        <div class="form-group"><label id="lbl-baby-gender">Género</label><select class="form-control" id="profGender"><option value="male">Niño 👦</option><option value="female">Niña 👧</option></select></div>
-        <button type="submit" class="btn-submit" id="btn-save-profile">Actualizar Perfil</button>
+      <div class="modal-header">
+        <h3 id="txt-profile-title">Perfil del Bebé</h3>
+        <button class="close-btn" onclick="closeModal('profile')"><i data-lucide="x"></i></button>
+      </div>
+      <form onsubmit="saveProfile(event)" style="display:flex; flex-direction:column; flex-grow:1; overflow:hidden;">
+        <div class="modal-body">
+          <div class="form-group"><label id="lbl-baby-name">Nombre del Bebé</label><input type="text" class="form-control" id="profName" required value="Léo"></div>
+          <div class="form-group"><label id="lbl-baby-dob">Fecha de Nacimiento</label><input type="date" class="form-control" id="profDob" required value="2026-07-19"></div>
+          <div class="form-group"><label id="lbl-baby-gender">Género</label><select class="form-control" id="profGender"><option value="male">Niño 👦</option><option value="female">Niña 👧</option></select></div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-submit" id="btn-save-profile">Actualizar Perfil</button>
+        </div>
       </form>
     </div>
   </div>
@@ -378,8 +409,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data_v10', 'babycare_data_v9', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v13', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v14', 'babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data_v10', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v14', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -704,7 +735,7 @@
 
     function updateChart() {
       if (!weightChartInstance) return;
-      const growthLogs = appState.logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(a.timestamp));
+      const growthLogs = appState.logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
       if (growthLogs.length > 0) {
         const weights = growthLogs.map(l => l.weight).filter(w => w);
         const heights = growthLogs.map(l => l.height).filter(h => h);
@@ -757,7 +788,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v13_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v14_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

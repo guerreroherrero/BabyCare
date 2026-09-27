@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v35.0 - Control Completo del Bebé</title>
+  <title>BabyCare v36.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -13,8 +13,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     :root {
       --bg-color: #FDFBF7;
@@ -126,7 +124,7 @@
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px Y TRUNCADA EN COTA INFERIOR) */
+    /* MATRIZ DE RUTINA DE 24 HORAS EN CALENDARIO */
     .routine-24h-grid {
       display: grid;
       grid-template-columns: 36px repeat(7, 1fr);
@@ -143,11 +141,11 @@
     
     .grid-day-col {
       position: relative;
-      height: 576px; /* 24h x 24px = 576px */
+      height: 576px;
       background: rgba(0,0,0,0.02);
       border-radius: 4px;
       border-left: 1px dashed var(--border-color);
-      overflow: hidden; /* Garantiza que nada sobresalga fuera de la tarjeta de 24h */
+      overflow: hidden;
     }
     
     .routine-block {
@@ -201,10 +199,6 @@
 
     .btn-submit { width: 100%; padding: 0.65rem; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 0.9rem; font-weight: 800; cursor: pointer; }
 
-    #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; gap: 0.8rem; min-height: 240px; }
-    #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 230px; min-height: 230px; display: flex; align-items: center; justify-content: center; }
-    #qr-reader { width: 100%; border-radius: 16px; overflow: hidden; }
-
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; }
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 800; cursor: pointer; text-decoration: none; }
     .nav-item.active { color: var(--primary); }
@@ -226,7 +220,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v35.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v36.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -239,8 +233,7 @@
       <button class="close-btn" onclick="closeDrawer()"><i data-lucide="x"></i></button>
     </div>
     <div class="drawer-item" onclick="closeDrawer(); openModal('profile');"><i data-lucide="user"></i><span id="txt-menu-profile">Perfil del Bebé</span></div>
-    <div class="drawer-item" onclick="closeDrawer(); openModal('qrShare');"><i data-lucide="qr-code"></i><span id="txt-menu-qr">Compartir datos (QR / Enlace)</span></div>
-    <div class="drawer-item" onclick="closeDrawer(); openModal('qrScan');"><i data-lucide="scan"></i><span id="txt-menu-scan">Escanear QR de pareja</span></div>
+    <div class="drawer-item" onclick="closeDrawer(); openModal('syncModal');"><i data-lucide="share-2"></i><span id="txt-menu-sync">Sincronizar con Pareja</span></div>
     <div class="drawer-item" onclick="closeDrawer(); switchTab('manual');"><i data-lucide="book-open"></i><span id="txt-menu-manual">Manual de Uso</span></div>
     <div class="drawer-item" onclick="exportJSON()"><i data-lucide="download"></i><span id="txt-menu-export">Exportar Archivo JSON</span></div>
     <div class="drawer-item" onclick="document.getElementById('importInput').click()"><i data-lucide="upload"></i><span id="txt-menu-import">Importar Archivo JSON</span><input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)"></div>
@@ -330,7 +323,7 @@
         <div class="calendar-grid" id="calendarGrid"></div>
       </div>
 
-      <!-- 2. Gráfica de Barras Interactivas con Desplegable -->
+      <!-- 2. Gráfica de Barras Interactivas con Desplegable de Perímetro Real (4 semanas / 6 meses) -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
           <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
@@ -411,7 +404,7 @@
         <div class="manual-step"><div class="step-number">4</div><div class="step-content"><h4 id="mstep4-title">Diario, Timeline y Totales Acumulados</h4><p id="mstep4-desc">Navega con las flechas día a día para consultar la secuencia cronológica de eventos. En la parte superior verás el resumen acumulado del día.</p></div></div>
         <div class="manual-step"><div class="step-number">5</div><div class="step-content"><h4 id="mstep5-title">Calendario, Gráfico de Barras y Matriz 24h</h4><p id="mstep5-desc">En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa (con filtro de 4 semanas o 6 meses) y la matriz visual de 24 horas.</p></div></div>
         <div class="manual-step"><div class="step-number">6</div><div class="step-content"><h4 id="mstep6-title">Gráficas de Crecimiento y Percentiles OMS</h4><p id="mstep6-desc">En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la mediana P50 de la OMS.</p></div></div>
-        <div class="manual-step"><div class="step-number">7</div><div class="step-content"><h4 id="mstep7-title">Sincronización QR entre dos Móviles</h4><p id="mstep7-desc">Para pasar todos los datos al otro progenitor: En el móvil A pulsa 'Sincronizar'. En el móvil B abre el menú lateral y selecciona 'Escanear QR de pareja'.</p></div></div>
+        <div class="manual-step"><div class="step-number">7</div><div class="step-content"><h4 id="mstep7-title">Sincronización entre dos Móviles</h4><p id="mstep7-desc">Para pasar todos los datos al otro progenitor: Pulsa 'Sincronizar' y envía el archivo por WhatsApp. En el otro móvil, pulsa 'Cargar Archivo Recibido'.</p></div></div>
         <div class="manual-step"><div class="step-number">8</div><div class="step-content"><h4 id="mstep8-title">Copias de Seguridad e Idiomas</h4><p id="mstep8-desc">Desde el menú lateral puedes cambiar de idioma (Español 🇪🇸, Francés 🇫🇷, Inglés 🇬🇧), activar el Modo Oscuro o Exportar/Importar archivos JSON de respaldo.</p></div></div>
       </div>
     </div>
@@ -420,7 +413,7 @@
   <nav class="bottom-nav">
     <div class="nav-item active" id="bnav-item-home" onclick="switchTab('logs')"><i data-lucide="list"></i><span id="bnav-home">Inicio</span></div>
     <div class="nav-item" onclick="openFormModal('feeding')"><i data-lucide="plus-circle" style="width:28px; height:28px; color:var(--primary);"></i><span id="bnav-add">Añadir</span></div>
-    <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
+    <div class="nav-item" id="bnav-item-sync" onclick="openModal('syncModal')"><i data-lucide="share-2"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
   <!-- Modales con Doble Botón Guardar -->
@@ -478,22 +471,33 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="qrShareModal">
+  <!-- Modal Único de Sincronización Directa por WhatsApp / Archivo -->
+  <div class="modal-overlay" id="syncModalModal">
     <div class="modal">
-      <div class="modal-header"><h3 id="txt-qr-title">Compartir Datos de Sincronización</h3><button class="close-btn" onclick="closeModal('qrShare')"><i data-lucide="x"></i></button></div>
-      <div id="qrContainer">
-        <p style="text-align:center; font-size:0.88rem; color:var(--text-muted);" id="txt-qr-desc">Escanea el código QR o comparte el archivo directamente por WhatsApp/Email.</p>
-        <div id="qrcode">Generando código...</div>
-        <button onclick="shareDataDirectly()" style="background:var(--secondary); color:white; border:none; padding:0.6rem 1rem; border-radius:10px; font-weight:800; font-size:0.85rem; margin-top:8px; cursor:pointer; width:100%;">📲 Compartir archivo por WhatsApp / Email</button>
+      <div class="modal-header">
+        <h3 id="txt-sync-title">Sincronizar con Pareja</h3>
+        <button class="close-btn" onclick="closeModal('syncModal')"><i data-lucide="x"></i></button>
       </div>
-    </div>
-  </div>
+      <div class="modal-body" style="padding:0.8rem 0.2rem;">
+        <p style="font-size:0.88rem; color:var(--text-color); margin-bottom:1.2rem; text-align:center; line-height:1.4;" id="txt-sync-desc">
+          Comparte los datos actualizados de tu bebé de forma instantánea mediante WhatsApp o guardando el archivo de respaldo.
+        </p>
 
-  <div class="modal-overlay" id="qrScanModal">
-    <div class="modal">
-      <div class="modal-header"><h3 id="txt-scan-title">Escanear QR de Pareja</h3><button class="close-btn" onclick="stopScanner(); closeModal('qrScan')"><i data-lucide="x"></i></button></div>
-      <div id="qr-reader"></div>
-      <p style="text-align:center; font-size:0.85rem; color:var(--text-muted); margin-top:10px;" id="txt-scan-desc">Apunta la cámara al código QR de la pareja.</p>
+        <button onclick="shareViaWhatsApp()" style="background:#25D366; color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.8rem; box-shadow:0 4px 12px rgba(37,211,102,0.25);">
+          💬 Enviar datos por WhatsApp
+        </button>
+
+        <button onclick="shareDataDirectly()" style="background:var(--primary); color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1rem; box-shadow:0 4px 12px rgba(122,162,247,0.25);">
+          📲 Compartir Archivo JSON
+        </button>
+
+        <hr style="border:none; border-top:1px solid var(--border-color); margin:1rem 0;">
+
+        <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:0.5rem;" id="txt-sync-import-title">¿Recibiste el archivo de la pareja?</h4>
+        <button onclick="document.getElementById('importInput').click()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
+          📥 Cargar Archivo Recibido
+        </button>
+      </div>
     </div>
   </div>
 
@@ -528,7 +532,7 @@
         ms4Title: "4. Diario, Timeline y Totales Acumulados", ms4Desc: "Navega con las flechas día a día para consultar la secuencia cronológica de eventos. En la parte superior verás el resumen acumulado de ml de leche, horas de sueño y pañales del día.",
         ms5Title: "5. Calendario, Gráfico de Barras y Matriz 24h", ms5Desc: "En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa (con filtro de 4 semanas o 6 meses) y la matriz visual de 24 horas. Pulsa cualquier bloque para ver sus detalles.",
         ms6Title: "6. Gráficas de Crecimiento y Percentiles OMS", ms6Desc: "En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la mediana P50 de la OMS.",
-        ms7Title: "7. Sincronización QR entre dos Móviles", ms7Desc: "Para pasar todos los datos al otro progenitor: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú lateral y selecciona 'Escanear QR de pareja' para apuntar con la cámara.",
+        ms7Title: "7. Sincronización entre dos Móviles", ms7Desc: "Para pasar todos los datos al otro progenitor: Pulsa 'Sincronizar' y envía el archivo por WhatsApp. En el otro móvil, pulsa 'Cargar Archivo Recibido'.",
         ms8Title: "8. Copias de Seguridad e Idiomas", ms8Desc: "Desde el menú lateral puedes cambiar de idioma (Español 🇪🇸, Francés 🇫🇷, Inglés 🇬🇧), activar el Modo Oscuro o Exportar/Importar archivos JSON de respaldo."
       },
       fr: {
@@ -573,8 +577,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v35', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data_v20', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v36', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -804,12 +808,6 @@
         `;
       });
       lucide.createIcons();
-    }
-
-    /* MATRIZ DE RUTINA DE 24 HORAS CON DIVISIÓN DE SIESTAS QUE CRUZAN MEDIANOCHE */
-    function changeMatrixWeek(weeksOffset) {
-      selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
-      renderWeeklyMatrix24h();
     }
 
     function renderWeeklyMatrix24h() {
@@ -1094,7 +1092,7 @@
       saveState(); closeFormModal();
     }
 
-    function openModal(id) { document.getElementById(`${id}Modal`).classList.add('open'); if (id === 'qrShare') generateQRCode(); if (id === 'qrScan') startScanner(); }
+    function openModal(id) { document.getElementById(`${id}Modal`).classList.add('open'); }
     function closeModal(id) { document.getElementById(`${id}Modal`).classList.remove('open'); }
 
     function saveProfile(e) {
@@ -1335,6 +1333,27 @@
 
     function toggleVaccine(id) { appState.vaccines[id] = !appState.vaccines[id]; saveState(); renderVaccines(); }
 
+    /* FUNCIONES DE SINCRONIZACIÓN DIRECTA (SIN QR) */
+    function shareViaWhatsApp() {
+      const dataStr = JSON.stringify(appState, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const file = new File([blob], `babycare_${appState.baby.name}.json`, { type: 'application/json' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({
+          files: [file],
+          title: `BabyCare - Datos de ${appState.baby.name}`,
+          text: `Abre este archivo en BabyCare para sincronizar a ${appState.baby.name}.`
+        }).catch(e => {});
+      } else {
+        exportJSON();
+        setTimeout(() => {
+          const text = encodeURIComponent(`Hola! Te adjunto los datos de ${appState.baby.name} en BabyCare. Abre el archivo guardado con 'Cargar Archivo Recibido' en la app.`);
+          window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }, 500);
+      }
+    }
+
     function shareDataDirectly() {
       const dataStr = JSON.stringify(appState, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
@@ -1351,106 +1370,9 @@
       }
     }
 
-    function generateQRCode() {
-      const qrContainer = document.getElementById('qrcode');
-      if (!qrContainer) return;
-      qrContainer.innerHTML = '';
-
-      const compactLogs = appState.logs.slice(-20).map(l => ({
-        t: l.type === 'feeding' ? 0 : (l.type === 'diaper' ? 1 : (l.type === 'sleep' ? 2 : 3)),
-        d: l.detail ? l.detail.replace('Leche Materna Extraída', 'LME') : '',
-        s: Math.floor(new Date(l.timestamp).getTime() / 1000)
-      }));
-
-      const syncData = {
-        n: appState.baby.name,
-        b: appState.baby.dob,
-        g: appState.baby.gender === 'female' ? 1 : 0,
-        l: compactLogs,
-        v: Object.keys(appState.vaccines).filter(k => appState.vaccines[k])
-      };
-
-      const payload = JSON.stringify(syncData);
-
-      let success = false;
-      if (typeof qrcode !== 'undefined') {
-        try {
-          for (let typeNum = 1; typeNum <= 15; typeNum++) {
-            try {
-              const qr = qrcode(typeNum, 'L');
-              qr.addData(payload);
-              qr.make();
-              qrContainer.innerHTML = qr.createImgTag(5, 0);
-              const img = qrContainer.querySelector('img');
-              if (img) {
-                img.style.width = '220px';
-                img.style.height = '220px';
-                img.style.borderRadius = '12px';
-              }
-              success = true;
-              break;
-            } catch(e) { continue; }
-          }
-        } catch(e) {}
-      }
-
-      if (!success) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 220;
-        canvas.height = 220;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, 220, 220);
-        ctx.fillStyle = "#1E293B";
-        ctx.font = "bold 13px Nunito, sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("Sincronización BabyCare", 110, 100);
-        ctx.font = "11px Nunito, sans-serif";
-        ctx.fillStyle = "#64748B";
-        ctx.fillText("Use el botón inferior para enviar el archivo", 110, 125);
-        qrContainer.appendChild(canvas);
-      }
-    }
-
-    let html5QrcodeScanner = null;
-    function startScanner() {
-      if (html5QrcodeScanner) stopScanner();
-      html5QrcodeScanner = new Html5Qrcode("qr-reader");
-      html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, (decodedText) => {
-        try {
-          const imported = JSON.parse(decodedText);
-          if (imported.l || imported.logs) {
-            if (imported.l) {
-              appState.baby.name = imported.n || appState.baby.name;
-              appState.baby.dob = imported.b || appState.baby.dob;
-              appState.baby.gender = imported.g || appState.baby.gender;
-              appState.vaccines = imported.v || appState.vaccines;
-              
-              const unpackedLogs = imported.l.map(item => ({
-                id: Date.now() + Math.random(),
-                type: item.t === 0 ? 'feeding' : (item.t === 1 ? 'diaper' : (item.t === 2 ? 'sleep' : 'growth')),
-                detail: item.d ? item.d.replace('LME', 'Leche Materna Extraída') : '',
-                timestamp: new Date(item.s * 1000).toISOString(),
-                notes: ''
-              }));
-              appState.logs = unpackedLogs;
-            } else {
-              appState.logs = imported.logs;
-            }
-            saveState();
-            stopScanner();
-            closeModal('qrScan');
-            alert("¡Sincronización completada!");
-          }
-        } catch(e){}
-      }).catch(err => { alert("Activa los permisos de cámara en tu navegador."); });
-    }
-
-    function stopScanner() { if (html5QrcodeScanner) { html5QrcodeScanner.stop().then(() => html5QrcodeScanner.clear()).catch(e => {}); } }
-
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v35_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v36_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 
@@ -1460,7 +1382,7 @@
       reader.onload = (e) => {
         try {
           const imported = JSON.parse(e.target.result);
-          if (imported.baby && imported.logs) { appState = imported; saveState(); alert("¡Importado!"); }
+          if (imported.baby && imported.logs) { appState = imported; saveState(); alert("¡Importado correctamente!"); }
         } catch(err){}
       };
       reader.readAsText(file);

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v29.0 - Control Completo del Bebé</title>
+  <title>BabyCare v30.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%237AA2F7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
@@ -21,7 +21,7 @@
       --card-bg: #FFFFFF;
       --text-color: #4A4E69;
       --text-muted: #8E94A2;
-      --primary: #FFB7B2;
+      --primary: #7AA2F7;
       --secondary: #AEC6CF;
       --accent-green: #C5E1A5;
       --accent-yellow: #FFE599;
@@ -39,7 +39,7 @@
       --card-bg: #24283B;
       --text-color: #C0CAF5;
       --text-muted: #7AA2F7;
-      --primary: #F7768E;
+      --primary: #7AA2F7;
       --secondary: #7AA2F7;
       --accent-green: #9ECE6A;
       --accent-yellow: #E0AF68;
@@ -56,7 +56,7 @@
 
     header {
       display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.25rem;
-      background: linear-gradient(135deg, rgba(255, 183, 178, 0.85), rgba(215, 188, 232, 0.85)), 
+      background: linear-gradient(135deg, rgba(122, 162, 247, 0.85), rgba(174, 198, 207, 0.85)), 
                   url('https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
       border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); border-radius: 0 0 20px 20px;
     }
@@ -126,7 +126,7 @@
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS CON HASTA 3 SUBCOLUMNAS PARALELAS */
+    /* MATRIZ DE RUTINA DE 24 HORAS EN CALENDARIO */
     .routine-24h-grid {
       display: grid;
       grid-template-columns: 36px repeat(7, 1fr);
@@ -138,12 +138,12 @@
       font-size: 0.7rem;
     }
     .grid-header-cell { text-align: center; font-weight: 800; color: var(--text-muted); padding-bottom: 6px; }
-    .grid-header-cell.active-day { color: var(--primary); background: rgba(255, 183, 178, 0.2); border-radius: 6px; }
+    .grid-header-cell.active-day { color: var(--primary); background: rgba(122, 162, 247, 0.2); border-radius: 6px; }
     .grid-time-label { color: var(--text-muted); font-weight: 800; text-align: right; padding-right: 4px; line-height: 24px; height: 24px; font-size: 0.65rem; }
     
     .grid-day-col {
       position: relative;
-      height: 576px; /* 24 horas x 24px por hora = espacio holgado */
+      height: 576px;
       background: rgba(0,0,0,0.02);
       border-radius: 4px;
       border-left: 1px dashed var(--border-color);
@@ -200,8 +200,8 @@
 
     .btn-submit { width: 100%; padding: 0.65rem; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 0.9rem; font-weight: 800; cursor: pointer; }
 
-    #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; gap: 0.8rem; }
-    #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 200px; min-height: 200px; display: flex; align-items: center; justify-content: center; }
+    #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; gap: 0.8rem; min-height: 230px; }
+    #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 220px; min-height: 220px; display: flex; align-items: center; justify-content: center; }
     #qr-reader { width: 100%; border-radius: 16px; overflow: hidden; }
 
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; }
@@ -225,7 +225,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v29.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v30.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -341,7 +341,7 @@
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
 
-      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px CON SUB-COLUMNAS PARALELAS) -->
+      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS CON SUBCOLUMNAS SIN SOLAPAMIENTO -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
           <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de Rutina de 24 Horas</h3>
@@ -560,8 +560,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v29', 'babycare_data_v28', 'babycare_data_v27', 'babycare_data_v26', 'babycare_data_v25', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v29', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v30', 'babycare_data_v29', 'babycare_data_v28', 'babycare_data_v27', 'babycare_data_v26', 'babycare_data_v25', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v30', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -792,7 +792,7 @@
       lucide.createIcons();
     }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS CON SUB-COLUMNAS HORIZONTALES PARALELAS */
+    /* MATRIZ DE RUTINA DE 24 HORAS CON SUBCOLUMNAS SIN SOLAPAMIENTO */
     function changeMatrixWeek(weeksOffset) {
       selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
       renderWeeklyMatrix24h();
@@ -835,7 +835,6 @@
         `;
       }
 
-      // Eje Y: 24 horas completas (00:00 a 24:00 con 24px por hora = 576px de altura)
       let hoursColHtml = '<div style="display:flex; flex-direction:column; height:576px; justify-content:space-between;">';
       for (let h = 0; h <= 24; h += 3) {
         hoursColHtml += `<div class="grid-time-label">${h < 10 ? '0' + h : h}</div>`;
@@ -847,7 +846,6 @@
         const dayLogs = appState.logs.filter(l => l.timestamp.startsWith(dateStr)).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
         let colContent = `<div class="grid-day-col" style="height:576px;">`;
 
-        // Agrupar o calcular carril horizontal para eventos simultáneos
         dayLogs.forEach((log, idx) => {
           const logDate = new Date(log.timestamp);
           const hours = logDate.getHours() + (logDate.getMinutes() / 60);
@@ -866,7 +864,6 @@
             className = 'bath';
           }
 
-          // Asignar carril horizontal (Subcolumna 1, 2 o 3) si hay coincidencias de hora
           let lane = 0;
           const concurrent = dayLogs.filter((other, oIdx) => {
             if (oIdx >= idx) return false;
@@ -1302,26 +1299,34 @@
 
     function toggleVaccine(id) { appState.vaccines[id] = !appState.vaccines[id]; saveState(); renderVaccines(); }
 
-    /* GENERADOR Y RESTAURADOR DE CÓDIGO QR GARANTIZADO */
+    /* GENERADOR DE CÓDIGO QR 100% OFFLINE / NATIVO EN CANVAS */
     function generateQRCode() {
       const qrContainer = document.getElementById('qrcode');
       if (!qrContainer) return;
       qrContainer.innerHTML = '';
+
       const syncData = { babyName: appState.baby.name, babyDob: appState.baby.dob, babyGender: appState.baby.gender, logs: appState.logs, vaccines: appState.vaccines };
       const payload = JSON.stringify(syncData);
 
       try {
         if (typeof qrcode !== 'undefined') {
-          const qr = qrcode(0, 'L');
+          const qr = qrcode(0, 'M');
           qr.addData(payload);
           qr.make();
-          qrContainer.innerHTML = qr.createImgTag(5);
+          qrContainer.innerHTML = qr.createImgTag(5, 0);
+          const img = qrContainer.querySelector('img');
+          if (img) {
+            img.style.width = '220px';
+            img.style.height = '220px';
+            img.style.borderRadius = '12px';
+          }
           return;
         }
-      } catch(e){}
+      } catch(e) {
+        console.error("Error generando QR offline:", e);
+      }
 
-      // URL de respaldo de alta disponibilidad
-      qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}" alt="QR Code" style="width:220px; height:220px; border-radius:12px;">`;
+      qrContainer.innerHTML = `<div style="padding:10px; text-align:center; color:var(--primary); font-weight:800;">Generando vista de datos...</div>`;
     }
 
     let html5QrcodeScanner = null;
@@ -1342,7 +1347,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v29_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v30_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

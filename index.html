@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v19.0 - Control Completo del Bebé</title>
+  <title>BabyCare v20.0 - Control del Bebé</title>
   
-  <!-- Iconos PWA HD -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23FFB7B2'/><text y='.85em' x='8' font-size='75'>👶</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23FFB7B2'/><text y='.85em' x='8' font-size='75'>👶</text></svg>">
+  <!-- Iconos PNG HD para Android e iOS (Compatibles 100% con instalador PWA de Chrome) -->
+  <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
+  <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   
-  <!-- Manifest PWA Completo con Icono PNG NATIVO para instalación en Chrome Android -->
-  <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIkJhYnlDYXJlIiwKICAic2hvcnRfbmFtZSI6ICJCYWJ5Q2FyZSIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgInNjb3BlIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRkRGQkY3IiwKICAidGhlbWVfY29sb3IiOiAiI0ZGQjdCMiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU3VFVUhnQUFBTUFBQUFEQUNBTUFBQUNoUFAxYkFBQUFBMUJNVkVBQUFBQ25lamphQUFBQVNFTkVRSFI0MnUzQk1RRUFBQUFDb1BWUEJRb2FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUlDY1hmQU1BQUVlNEMzcUFBRUFBQUJKUlU1RXJrSmdnZyA9PSIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVRVVIZ0FBQU1BQUFBREFDQU1BQUFDaFBQXDFiQUFBQUExQk1WRUFBQUFDbmVqamFBQUFBU0VORVFIUjQydTNCTVFFQUFBQUNvUFZWQlFvYUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUlDY1hmQU1BQUVlNEMzcUFBRUFBQUJKUlU1RXJrSmdnZyA9PSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
+  <!-- Manifest Web App Oficial -->
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
@@ -138,7 +138,7 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
-    /* Modales */
+    /* Modal Fijo en Cabecera */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -160,11 +160,12 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 0.35rem 0.8rem;
+      padding: 0.4rem 0.9rem;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255, 183, 178, 0.5);
     }
 
     .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; -webkit-overflow-scrolling: touch; }
@@ -202,7 +203,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v19.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v20.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -387,13 +388,14 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
-  <!-- Modales con Doble Botón Guardar -->
+  <!-- Modales con Botón Guardar en la Cabecera Superior (100% Inamovible) -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
         <div class="modal-header">
           <h3 id="modalFormTitle">Nuevo Registro</h3>
           <div class="modal-header-actions">
+            <!-- Botón Guardar en la cabecera superior (siempre visible incluso con teclado abierto) -->
             <button type="submit" class="btn-header-save" id="btn-save-header">✓ Guardar</button>
             <button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button>
           </div>
@@ -457,7 +459,7 @@
     </div>
   </div>
 
-  <!-- Service Worker PWA de Registro Seguro -->
+  <!-- Service Worker PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -516,8 +518,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data_v16', 'babycare_data_v15', 'babycare_data_v14', 'babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v19', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data_v16', 'babycare_data_v15', 'babycare_data_v14', 'babycare_data_v13', 'babycare_data_v12', 'babycare_data_v11', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v20', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -935,7 +937,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v19_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v20_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

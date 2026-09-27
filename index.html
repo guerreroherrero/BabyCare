@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v8.0 - Control Completo del Bebé</title>
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%7D">
+  <title>BabyCare v11.0 - Control Completo del Bebé</title>
+  
+  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%F0%9F%90%B6%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -105,8 +109,20 @@
     .log-badge { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .log-info h4 { font-size: 0.9rem; font-weight: 800; }
     .log-info p { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+    
+    .time-ago-badge {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-left: 4px;
+    }
+
     .log-actions { display: flex; align-items: center; gap: 6px; }
-    .log-time { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 4px; }
+    .log-time { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
     .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; }
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
@@ -119,20 +135,26 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
+    /* Modales ultra-compactos sin scroll */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 28px 28px 0 0; padding: 1.5rem; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; }
-    @media(min-width: 600px) { .modal { border-radius: 28px; transform: translateY(20px); } }
+    .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 24px 24px 0 0; padding: 1.1rem 1.2rem; max-height: 95vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; }
+    @media(min-width: 600px) { .modal { border-radius: 24px; transform: translateY(20px); } }
     .modal-overlay.open .modal { transform: translateY(0); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
-    .form-group { margin-bottom: 1.1rem; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 0.4rem; }
-    .form-control { width: 100%; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.95rem; font-weight: 600; outline: none; }
-    .btn-submit { width: 100%; padding: 0.9rem; border-radius: 14px; border: none; background: var(--primary); color: white; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 0.5rem; }
+    
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .modal-header h3 { font-size: 1.1rem; font-weight: 800; }
+    
+    .form-group { margin-bottom: 0.6rem; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .form-control { width: 100%; padding: 0.5rem 0.8rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.9rem; font-weight: 600; outline: none; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 
-    #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; gap: 1rem; }
-    #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 220px; min-height: 220px; display: flex; align-items: center; justify-content: center; }
+    .btn-submit { width: 100%; padding: 0.75rem; border-radius: 12px; border: none; background: var(--primary); color: white; font-size: 0.95rem; font-weight: 800; cursor: pointer; margin-top: 0.6rem; }
+
+    #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; gap: 0.8rem; }
+    #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 200px; min-height: 200px; display: flex; align-items: center; justify-content: center; }
     #qr-reader { width: 100%; border-radius: 16px; overflow: hidden; }
 
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; }
@@ -152,7 +174,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v8.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v11.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -188,6 +210,7 @@
 
     <div class="alert-banner" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText">Atención: Se recomienda verificar la toma de leche.</span></div>
 
+    <!-- Acciones Rápidas (Vacunas reemplazado por Baño / Ducha) -->
     <div class="section-title"><span id="txt-quick-actions">Registrar Evento</span></div>
     <div class="grid-actions">
       <div class="action-btn" onclick="openFormModal('feeding')"><div class="action-icon" style="background: #FFE599; color: #B45309;"><i data-lucide="baby"></i></div><span id="act-feed">Toma / Leche</span></div>
@@ -195,7 +218,7 @@
       <div class="action-btn" onclick="openFormModal('sleep')"><div class="action-icon" style="background: #D7BCE8; color: #6B21A8;"><i data-lucide="moon"></i></div><span id="act-sleep">Sueño</span></div>
       <div class="action-btn" onclick="openFormModal('growth')"><div class="action-icon" style="background: #AEC6CF; color: #1E3A8A;"><i data-lucide="ruler"></i></div><span id="act-growth">Crecimiento</span></div>
       <div class="action-btn" onclick="openFormModal('health')"><div class="action-icon" style="background: #FFB3BA; color: #991B1B;"><i data-lucide="thermometer"></i></div><span id="act-health">Salud / Temp</span></div>
-      <div class="action-btn" onclick="openFormModal('vaccines')"><div class="action-icon" style="background: #FFDAC1; color: #9A3412;"><i data-lucide="syringe"></i></div><span id="act-vaccines">Vacunas</span></div>
+      <div class="action-btn" onclick="openFormModal('bath')"><div class="action-icon" style="background: #D7BCE8; color: #4A4E69;"><i data-lucide="shower-head"></i></div><span id="act-bath">Baño / Ducha</span></div>
     </div>
 
     <div class="tabs-nav">
@@ -230,7 +253,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: Curvas OMS (4 comparativas completas) -->
+    <!-- TAB 3: Curvas OMS -->
     <div class="tab-content" id="tab-charts">
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Evolución de Peso (kg) vs Percentil 50 OMS</h3>
@@ -269,8 +292,8 @@
     <div class="tab-content" id="tab-manual">
       <div class="card">
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header"><i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso</h3>
-        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar la foto y datos del Bebé</h4><p id="mstep1-desc">Pulsa directamente sobre el icono circular del bebé para subir o actualizar su foto real.</p></div></div>
-        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registrar, Editar y Borrar Eventos</h4><p id="mstep2-desc">Usa los botones superiores para registrar tomas, pañales, sueño, vacunas y peso.</p></div></div>
+        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar la foto y datos del Bebé</h4><p id="mstep1-desc">Pulsa directamente sobre el icono circular del bebé para subir su foto real.</p></div></div>
+        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registrar, Editar y Borrar Eventos</h4><p id="mstep2-desc">Usa los botones superiores para registrar tomas, pañales, sueño, baño y peso.</p></div></div>
       </div>
     </div>
   </div>
@@ -281,7 +304,7 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
-  <!-- Modales -->
+  <!-- Modales compactos -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <div class="modal-header"><h3 id="modalFormTitle">Nuevo Registro</h3><button class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button></div>
@@ -322,22 +345,35 @@
     </div>
   </div>
 
+  <!-- Service Worker PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
+        self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+        self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log(err));
+    }
+  </script>
+
   <script>
     let appState = { lang: 'es', theme: 'light', baby: { name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null }, logs: [{ id: 1, type: 'feeding', detail: 'Pecho Izquierdo (15m)', timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false } };
     let selectedDate = new Date();
 
     const i18n = {
-      es: { menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actVaccines: "Vacunas", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] },
-      en: { menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actVaccines: "Vaccines", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes", qrTitle: "Share via QR Code", qrDesc: "Scan code with partner's phone.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feed.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-      fr: { menuTitle: "Menu BabyCare", menuProfile: "Profil del Bébé", menuQR: "Partager (QR)", menuScan: "Scanner QR Partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Tétée/Biberon", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé/Temp", actVaccines: "Vaccins", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Sync", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes", qrTitle: "Partager par Code QR", qrDesc: "Scannez ce code depuis l'autre téléphone.", scanTitle: "Scanner le Code QR", scanDesc: "Pointez la caméra sur le code QR.", alertFeed: "⚠️ Attention: Plus de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] }
+      es: { menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] },
+      en: { menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes", qrTitle: "Share via QR Code", qrDesc: "Scan code with partner's phone.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feed.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      fr: { menuTitle: "Menu BabyCare", menuProfile: "Profil del Bébé", menuQR: "Partager (QR)", menuScan: "Scanner QR Partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Tétée/Biberon", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé/Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Sync", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes", qrTitle: "Partager par Code QR", qrDesc: "Scannez ce code depuis l'autre téléphone.", scanTitle: "Scanner le Code QR", scanDesc: "Pointez la caméra sur le code QR.", alertFeed: "⚠️ Attention: Plus de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] }
     };
 
     const standardVaccines = [{ id: 'v1', age: '2 meses', name: 'Hexavalente (DTPa-VPI-Hib-HB) + Neumococo + Rotavirus' }, { id: 'v2', age: '4 meses', name: 'Hexavalente + Neumococo + Rotavirus + Meningococo B' }, { id: 'v3', age: '6 meses', name: 'Hexavalente + Rotavirus' }, { id: 'v4', age: '12 meses', name: 'Triple Vírica (SRP) + Neumococo + Meningococo C/ACWY' }];
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v8', 'babycare_data_v7', 'babycare_data_v6', 'babycare_data_v5', 'babycare_data_v4', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v8', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v11', 'babycare_data_v10', 'babycare_data_v9', 'babycare_data_v8', 'babycare_data_v7', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v11', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -376,7 +412,7 @@
       document.getElementById('act-sleep').innerText = t.actSleep;
       document.getElementById('act-growth').innerText = t.actGrowth;
       document.getElementById('act-health').innerText = t.actHealth;
-      document.getElementById('act-vaccines').innerText = t.actVaccines;
+      if (document.getElementById('act-bath')) document.getElementById('act-bath').innerText = t.actBath;
 
       document.getElementById('tab-logs-btn').innerText = t.tabLogs;
       document.getElementById('tab-cal-btn').innerText = t.tabCal;
@@ -429,6 +465,24 @@
     function changeSelectedDate(days) { selectedDate.setDate(selectedDate.getDate() + days); renderLogs(); }
     function resetToToday() { selectedDate = new Date(); renderLogs(); }
 
+    // Helper para calcular "Hace cuánto tiempo"
+    function getTimeAgoString(timestamp) {
+      const now = new Date();
+      const past = new Date(timestamp);
+      const diffMs = now - past;
+      if (diffMs < 0) return '';
+      
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      const hours = Math.floor(diffMins / 60);
+      const mins = diffMins % 60;
+
+      if (hours === 0 && mins < 2) return 'Hace un momento';
+      if (hours === 0) return `Hace ${mins}m`;
+      if (hours < 24) return `Hace ${hours}h ${mins}m`;
+      const days = Math.floor(hours / 24);
+      return `Hace ${days}d`;
+    }
+
     function renderLogs() {
       const container = document.getElementById('logsContainer');
       container.innerHTML = '';
@@ -441,7 +495,6 @@
 
       const filtered = appState.logs.filter(l => l.timestamp.startsWith(targetKey)).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-      // Actualizar contadores OMS de hoy
       const todayFeedings = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'feeding').length;
       const todayDiapers = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'diaper').length;
       if (document.getElementById('val-feed-count')) {
@@ -453,14 +506,34 @@
 
       filtered.forEach(log => {
         const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timeAgo = getTimeAgoString(log.timestamp);
+
         let icon = 'baby'; let bg = '#FFE599'; let title = 'Alimentación';
         if (log.type === 'diaper') { icon = 'sparkles'; bg = '#C5E1A5'; title = 'Pañal'; }
         if (log.type === 'sleep') { icon = 'moon'; bg = '#D7BCE8'; title = 'Sueño'; }
         if (log.type === 'growth') { icon = 'ruler'; bg = '#AEC6CF'; title = 'Crecimiento'; }
         if (log.type === 'health') { icon = 'thermometer'; bg = '#FFB3BA'; title = 'Salud'; }
-        if (log.type === 'vaccines') { icon = 'syringe'; bg = '#FFDAC1'; title = 'Vacuna'; }
+        if (log.type === 'bath') { icon = 'shower-head'; bg = '#D7BCE8'; title = 'Baño / Ducha'; }
 
-        container.innerHTML += `<div class="log-item"><div class="log-left"><div class="log-badge" style="background:${bg};"><i data-lucide="${icon}" style="width:20px; height:20px;"></i></div><div class="log-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div></div><div class="log-actions"><span class="log-time">${timeStr}</span><button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div>`;
+        container.innerHTML += `
+          <div class="log-item">
+            <div class="log-left">
+              <div class="log-badge" style="background:${bg};">
+                <i data-lucide="${icon}" style="width:20px; height:20px;"></i>
+              </div>
+              <div class="log-info">
+                <h4>${title} - ${log.detail || ''}</h4>
+                <p>${log.notes || ''}</p>
+              </div>
+            </div>
+            <div class="log-actions">
+              <span class="log-time">${timeStr}</span>
+              ${timeAgo ? `<span class="time-ago-badge">${timeAgo}</span>` : ''}
+              <button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button>
+              <button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button>
+            </div>
+          </div>
+        `;
       });
       lucide.createIcons();
     }
@@ -468,12 +541,22 @@
     function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { appState.logs = appState.logs.filter(l => l.id !== id); saveState(); } }
     function editLog(id) { const log = appState.logs.find(l => l.id === id); if (log) openFormModal(log.type, log); }
 
+    // Formulario con hora local de Madrid / España preestablecida por defecto
     function openFormModal(type, existingLog = null) {
       document.getElementById('entryType').value = type;
       document.getElementById('editingLogId').value = existingLog ? existingLog.id : '';
       const fields = document.getElementById('dynamicFormFields');
       const title = document.getElementById('modalFormTitle');
-      document.getElementById('entryTimestamp').value = existingLog ? existingLog.timestamp.slice(0,16) : new Date().toISOString().slice(0,16);
+
+      // Hora local formateada para input datetime-local
+      let nowLocal;
+      if (existingLog) {
+        nowLocal = new Date(existingLog.timestamp);
+      } else {
+        nowLocal = new Date();
+      }
+      const localIsoStr = new Date(nowLocal.getTime() - (nowLocal.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      document.getElementById('entryTimestamp').value = localIsoStr;
       document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
 
       if (type === 'feeding') {
@@ -481,12 +564,16 @@
         fields.innerHTML = `<div class="form-group"><label>Tipo de Alimentación</label><select class="form-control" id="fType"><option value="Pecho">Pecho 🤱</option><option value="Biberón Fórmula">Biberón Fórmula 🍼</option><option value="Leche Materna Extraída">Leche Extraída 🍼</option><option value="Sólidos / Papilla">Sólidos 🥣</option></select></div><div class="form-group"><label>Detalle / Cantidad (ml o min)</label><input type="text" class="form-control" id="fDetail" placeholder="Ej: 120 ml o 15 min Pecho Izquierdo"></div>`;
       } else if (type === 'growth') {
         title.innerText = existingLog ? "Editar Crecimiento 📏" : "Registrar Crecimiento 📏";
-        fields.innerHTML = `<div class="form-group"><label>Peso (Kg)</label><input type="number" step="0.01" class="form-control" id="fWeight" placeholder="Ej: 5.45"></div><div class="form-group"><label>Talla / Longitud (cm)</label><input type="number" step="0.1" class="form-control" id="fHeight" placeholder="Ej: 58.5"></div><div class="form-group"><label>Perímetro Cefálico (cm)</label><input type="number" step="0.1" class="form-control" id="fHead" placeholder="Ej: 38.0"></div>`;
+        fields.innerHTML = `<div class="form-grid-2"><div class="form-group"><label>Peso (Kg)</label><input type="number" step="0.01" class="form-control" id="fWeight" placeholder="Ej: 5.45"></div><div class="form-group"><label>Talla (cm)</label><input type="number" step="0.1" class="form-control" id="fHeight" placeholder="Ej: 58.5"></div></div><div class="form-group"><label>Perímetro Cefálico (cm)</label><input type="number" step="0.1" class="form-control" id="fHead" placeholder="Ej: 38.0"></div>`;
         if (existingLog) {
           document.getElementById('fWeight').value = existingLog.weight || '';
           document.getElementById('fHeight').value = existingLog.height || '';
           document.getElementById('fHead').value = existingLog.head || '';
         }
+      } else if (type === 'bath') {
+        title.innerText = existingLog ? "Editar Baño 🧼" : "Registrar Baño / Ducha 🧼";
+        fields.innerHTML = `<div class="form-group"><label>Detalle / Productos</label><input type="text" class="form-control" id="fDetail" placeholder="Ej: Baño relajante con crema suave"></div>`;
+        if (existingLog) document.getElementById('fDetail').value = existingLog.detail || '';
       } else {
         title.innerText = existingLog ? "Editar Evento" : "Registrar Evento";
         fields.innerHTML = `<div class="form-group"><label>Detalle</label><input type="text" class="form-control" id="fDetail" value="${existingLog ? existingLog.detail : ''}"></div>`;
@@ -500,7 +587,7 @@
       e.preventDefault();
       const editingId = document.getElementById('editingLogId').value;
       const type = document.getElementById('entryType').value;
-      const timestamp = document.getElementById('entryTimestamp').value;
+      const timestampInput = document.getElementById('entryTimestamp').value;
       const notes = document.getElementById('entryNotes').value;
 
       let detail = ''; let weight = null; let height = null; let head = null;
@@ -517,11 +604,13 @@
         detail = document.getElementById('fDetail').value;
       }
 
+      const isoTimestamp = new Date(timestampInput).toISOString();
+
       if (editingId) {
         const idx = appState.logs.findIndex(l => l.id == editingId);
-        if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: new Date(timestamp).toISOString(), notes, weight, height, head };
+        if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: isoTimestamp, notes, weight, height, head };
       } else {
-        appState.logs.push({ id: Date.now(), type, detail, timestamp: new Date(timestamp).toISOString(), notes, weight, height, head });
+        appState.logs.push({ id: Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head });
       }
       saveState(); closeFormModal();
     }
@@ -574,13 +663,9 @@
     function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
     function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
 
-    /* Chart.js OMS 3 Gráficos: Peso, Talla y Perímetro Cefálico */
-    let weightChartInstance = null;
-    let heightChartInstance = null;
-    let headChartInstance = null;
+    let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null;
 
     function initChart() {
-      // 1. Gráfico Peso OMS
       const ctxWeight = document.getElementById('weightChart').getContext('2d');
       weightChartInstance = new Chart(ctxWeight, {
         type: 'line',
@@ -594,7 +679,6 @@
         options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
       });
 
-      // 2. Gráfico Talla OMS
       const ctxHeight = document.getElementById('heightChart').getContext('2d');
       heightChartInstance = new Chart(ctxHeight, {
         type: 'line',
@@ -608,7 +692,6 @@
         options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
       });
 
-      // 3. Gráfico Perímetro Cefálico OMS
       const ctxHead = document.getElementById('headChart').getContext('2d');
       headChartInstance = new Chart(ctxHead, {
         type: 'line',
@@ -678,7 +761,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v8_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v11_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 

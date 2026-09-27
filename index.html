@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v22.0 - Control Completo del Bebé</title>
+  <title>BabyCare v23.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -276,7 +276,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v22.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v23.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -319,7 +319,7 @@
 
     <div class="alert-banner" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText">Atención: Se recomienda verificar la toma de leche.</span></div>
 
-    <!-- Acciones Rápidas con color azul agua distintivo para Baño / Ducha -->
+    <!-- Acciones Rápidas -->
     <div class="section-title"><span id="txt-quick-actions">Registrar Evento</span></div>
     <div class="grid-actions">
       <div class="action-btn" onclick="openFormModal('feeding')"><div class="action-icon" style="background: #FFE599; color: #B45309;"><i data-lucide="baby"></i></div><span id="act-feed">Toma / Leche</span></div>
@@ -347,7 +347,7 @@
           <button class="date-nav-btn" onclick="changeSelectedDate(1)"><i data-lucide="chevron-right"></i></button>
         </div>
 
-        <!-- Resumen diario acumulado -->
+        <!-- Resumen diario acumulado (Total Leche, Sueño, Pañales) -->
         <div class="daily-summary-grid">
           <div class="summary-card">
             <h5 id="lbl-sum-feed">🍼 Leche total</h5>
@@ -363,12 +363,12 @@
           </div>
         </div>
 
-        <!-- Timeline Diario -->
+        <!-- Timeline Diario de Tomas y Eventos -->
         <div id="logsContainer" class="timeline-container"></div>
       </div>
     </div>
 
-    <!-- TAB 2: Calendario -->
+    <!-- TAB 2: Calendario e Histórico Comparativo -->
     <div class="tab-content" id="tab-calendar">
       <div class="card">
         <div class="calendar-header">
@@ -377,6 +377,24 @@
           <button class="burger-btn" onclick="nextMonth()"><i data-lucide="chevron-right"></i></button>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+
+      <!-- Gráfico Histórico Comparativo Semanal / Mensual -->
+      <div class="card" style="margin-top: 1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
+          <h3 style="font-size:1rem; font-weight:800;" id="txt-hist-chart-title">📊 Histórico Comparativo</h3>
+          <select class="form-control" id="histModeSelect" onchange="updateHistoryChart()" style="width:auto; padding:0.3rem 0.6rem; font-size:0.82rem;">
+            <option value="weekly" id="opt-hist-weekly">Semanales (Últimas 4 semanas)</option>
+            <option value="monthly" id="opt-hist-monthly">Mensuales (Últimos 6 meses)</option>
+          </select>
+        </div>
+        <canvas id="historyBarChart" height="200"></canvas>
+
+        <!-- Tarjeta de detalle al pulsar una barra -->
+        <div id="barDetailCard" class="who-indicator-card hidden" style="margin-top:0.8rem; background:var(--card-bg); border-color:var(--primary);">
+          <h4 id="barDetailTitle" style="font-size:0.9rem; font-weight:800; color:var(--primary); margin-bottom:4px;">Detalle del período</h4>
+          <p id="barDetailContent" style="font-size:0.83rem; font-weight:700; line-height:1.4; color:var(--text-color);"></p>
+        </div>
       </div>
     </div>
 
@@ -434,7 +452,7 @@
           <div class="step-number">2</div>
           <div class="step-content">
             <h4 id="mstep2-title">Registrar Eventos de Forma Rápida</h4>
-            <p id="mstep2-desc">Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner hora inicio y fin.</p>
+            <p id="mstep2-desc">Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner la hora de inicio y fin para calcular la duración exacta.</p>
           </div>
         </div>
 
@@ -442,7 +460,7 @@
           <div class="step-number">3</div>
           <div class="step-content">
             <h4 id="mstep3-title">Timeline Diario y Resumen Acumulado</h4>
-            <p id="mstep3-desc">Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta del día.</p>
+            <p id="mstep3-desc">Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta de eventos de la jornada.</p>
           </div>
         </div>
 
@@ -450,7 +468,7 @@
           <div class="step-number">4</div>
           <div class="step-content">
             <h4 id="mstep4-title">Sincronización por Código QR</h4>
-            <p id="mstep4-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.</p>
+            <p id="mstep4-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja' para leer la pantalla.</p>
           </div>
         </div>
 
@@ -458,15 +476,39 @@
           <div class="step-number">5</div>
           <div class="step-content">
             <h4 id="mstep5-title">Comparativas y Alertas OMS</h4>
-            <p id="mstep5-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).</p>
+            <p id="mstep5-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50), además del conteo diario de tomas y pañales.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4 id="mstep4-title">Histórico Comparativo en Calendario</h4>
+            <p id="mstep4-desc">Debajo del calendario encontrarás el gráfico de barras histórico comparativo por semanas o meses. Al pulsar sobre cualquier barra verás el detalle detallado de ese período.</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4 id="mstep5-title">Sincronización por Código QR</h4>
+            <p id="mstep5-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.</p>
           </div>
         </div>
 
         <div class="manual-step">
           <div class="step-number">6</div>
           <div class="step-content">
-            <h4 id="mstep6-title">Copia de Seguridad y Configuración</h4>
-            <p id="mstep6-desc">Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo.</p>
+            <h4 id="mstep6-title">Comparativas y Alertas OMS</h4>
+            <p id="mstep6-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).</p>
+          </div>
+        </div>
+
+        <div class="manual-step">
+          <div class="step-number">7</div>
+          <div class="step-content">
+            <h4 id="mstep7-title">Copia de Seguridad y Configuración</h4>
+            <p id="mstep7-desc">Desde el menú lateral puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo.</p>
           </div>
         </div>
       </div>
@@ -572,46 +614,52 @@
         menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche total", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
+        histChartTitle: "📊 Histórico Comparativo", optHistWeekly: "Semanales (Últimas 4 semanas)", optHistMonthly: "Mensuales (Últimos 6 meses)",
         mHeader: "Manual de Uso Paso a Paso",
         ms1Title: "Personalizar foto y datos del Bebé", ms1Desc: "Pulsa directamente sobre la foto o avatar del bebé para subir su foto real. Pulsa en el icono del lápiz para configurar su nombre, fecha de nacimiento y género.",
-        ms2Title: "Registrar Eventos de Forma Rápida", ms2Desc: "Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner hora inicio y fin.",
+        ms2Title: "Registrar Eventos de Forma Rápida", ms2Desc: "Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En Alimentación viene preestablecida 'Leche Extraída' y Baño tiene su color cian propio.",
         ms3Title: "Timeline Diario y Resumen Acumulado", ms3Desc: "Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta del día.",
-        ms4Title: "Sincronización por Código QR", ms4Desc: "Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.",
-        ms5Title: "Comparativas y Alertas OMS", ms5Desc: "En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).",
-        ms6Title: "Copia de Seguridad y Configuración", ms6Desc: "Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo."
+        ms4Title: "Histórico Comparativo en Calendario", ms4Desc: "Debajo del calendario encontrarás el gráfico de barras histórico comparativo por semanas o meses. Al pulsar sobre cualquier barra verás el detalle detallado de ese período.",
+        ms5Title: "Sincronización por Código QR", ms5Desc: "Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.",
+        ms6Title: "Comparativas y Alertas OMS", ms6Desc: "En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).",
+        ms7Title: "Copia de Seguridad y Configuración", ms7Desc: "Desde el menú lateral puedes cambiar el idioma (Español, Francés, Inglés en ese orden), activar Modo Oscuro o exportar/importar respaldo JSON."
       },
       fr: {
         menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données (QR)", menuScan: "Scanner le QR partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager par Code QR", qrDesc: "Ouvrez l'appareil photo de l'autre téléphone pour synchroniser.", scanTitle: "Scanner le QR du Partenaire", scanDesc: "Pointez la caméra sur le code QR affiché.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
         sumFeed: "🍼 Lait total", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
+        histChartTitle: "📊 Historique Comparatif", optHistWeekly: "Hebdomadaire (4 dernières semaines)", optHistMonthly: "Mensuel (6 derniers mois)",
         mHeader: "Guide d'Utilisation Étape par Étape",
         ms1Title: "Personnaliser la photo et le profil", ms1Desc: "Appuyez sur la photo du bébé pour en télécharger une vraie. Cliquez sur le crayon pour modifier le nom, la date de naissance et le sexe.",
         ms2Title: "Enregistrer rapidement des événements", ms2Desc: "Cliquez sur l'un des boutons supérieurs (Alimentation, Couche, Sommeil, Croissance, Santé, Bain). Le lait tiré est sélectionné par défaut.",
         ms3Title: "Chronologie quotidienne et résumé", ms3Desc: "Consultez en un coup d'œil la quantité de lait, le sommeil total et les couches de chaque journée sur une frise chronologique.",
-        ms4Title: "Synchronisation par Code QR", ms4Desc: "Pour transférer des données : Sur le téléphone A, appuyez sur 'Sync'. Sur le téléphone B, ouvrez le menu et appuyez sur 'Scanner QR partenaire'.",
-        ms5Title: "Comparaisons et Alertes OMS", ms5Desc: "Dans l'onglet 'Courbes OMS', observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS (P50).",
-        ms6Title: "Sauvegarde et Paramètres", ms6Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON."
+        ms4Title: "Historique comparatif sous le calendrier", ms4Desc: "Sous le calendrier, retrouvez le graphique comparatif en barres par semaines ou mois. Appuyez sur une barre pour voir les détails.",
+        ms5Title: "Synchronisation par Code QR", ms5Desc: "Pour transférer des données : Sur le téléphone A, appuyez sur 'Sync'. Sur le téléphone B, ouvrez le menu et appuyez sur 'Scanner QR partenaire'.",
+        ms6Title: "Comparaisons et Alertes OMS", ms6Desc: "Dans l'onglet 'Courbes OMS', observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS (P50).",
+        ms7Title: "Sauvegarde et Paramètres", ms7Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON."
       },
       en: {
         menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share via QR Code", qrDesc: "Open partner's camera to sync all data instantly.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the displayed QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
         sumFeed: "🍼 Total Milk", sumSleep: "💤 Total Sleep", sumDiaper: "💦 Diapers",
+        histChartTitle: "📊 Historical Comparison", optHistWeekly: "Weekly (Last 4 weeks)", optHistMonthly: "Monthly (Last 6 months)",
         mHeader: "Step-by-Step User Manual",
         ms1Title: "Personalize Baby Photo & Details", ms1Desc: "Tap directly on the circular baby icon to upload a real photo. Click the pencil icon to modify the baby's name, birth date, and gender.",
         ms2Title: "Quickly Log Events", ms2Desc: "Click any button in the top grid (Feeding, Diaper, Sleep, Growth, Health, Bath). Expressed Milk is set by default.",
         ms3Title: "Daily Timeline & Summary", ms3Desc: "Check total milk intake, total sleep, and diaper counts at a glance with a visual chronological timeline.",
-        ms4Title: "Sync Between Phones with QR Code", ms4Desc: "To transfer data: On Phone A, tap 'Sync' in the bottom bar. On Phone B, open the menu and tap 'Scan Partner QR' to read the screen.",
-        ms5Title: "WHO Growth Charts & Alerts", ms5Desc: "Under the 'WHO Growth' tab, view weight, height, and head circumference charts compared to WHO median (P50).",
-        ms6Title: "Backup & Settings", ms6Desc: "From the side menu you can change language (Spanish, French, English), toggle Dark Mode, or export/import JSON backup files."
+        ms4Title: "Historical Comparison under Calendar", ms4Desc: "Below the calendar you will find the comparative bar chart by weeks or months. Click on any bar to display detailed data.",
+        ms5Title: "Sync Between Phones with QR Code", ms5Desc: "To transfer data: On Phone A, tap 'Sync' in the bottom bar. On Phone B, open the menu and tap 'Scan Partner QR' to read the screen.",
+        ms6Title: "WHO Growth Charts & Alerts", ms6Desc: "Under the 'WHO Growth' tab, view weight, height, and head circumference charts compared to WHO median (P50).",
+        ms7Title: "Backup & Settings", ms7Desc: "From the side menu you can change language (Spanish, French, English), toggle Dark Mode, or export/import JSON backup files."
       }
     };
 
     const standardVaccines = [{ id: 'v1', age: '2 meses', name: 'Hexavalente (DTPa-VPI-Hib-HB) + Neumococo + Rotavirus' }, { id: 'v2', age: '4 meses', name: 'Hexavalente + Neumococo + Rotavirus + Meningococo B' }, { id: 'v3', age: '6 meses', name: 'Hexavalente + Rotavirus' }, { id: 'v4', age: '12 meses', name: 'Triple Vírica (SRP) + Neumococo + Meningococo C/ACWY' }];
 
-    window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
+    window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initHistoryChart(); updateHistoryChart(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v22', 'babycare_data_v21', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v22', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v23', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v23', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -709,9 +757,19 @@
         document.getElementById('mstep6-desc').innerText = t.ms6Desc;
       }
 
+      document.getElementById('txt-hist-chart-title').innerText = t.histChartTitle || "📊 Histórico Comparativo";
+      document.getElementById('opt-hist-weekly').innerText = t.optHistWeekly || "Semanales (Últimas 4 semanas)";
+      document.getElementById('opt-hist-monthly').innerText = t.optHistMonthly || "Mensuales (Últimos 6 meses)";
+
+      if (document.getElementById('mstep7-title')) {
+        document.getElementById('mstep7-title').innerText = t.ms7Title;
+        document.getElementById('mstep7-desc').innerText = t.ms7Desc;
+      }
+
       document.getElementById('langSelect').value = lang;
       renderCalendar();
       checkAlerts();
+      if (typeof updateHistoryChart === 'function') updateHistoryChart();
     }
 
     function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
@@ -783,6 +841,7 @@
 
       filtered.forEach(log => {
         if (log.type === 'feeding') {
+          // Extraer ml si existen en el texto o propiedad
           if (log.amount) {
             totalMilkMl += parseFloat(log.amount);
           } else if (log.detail) {
@@ -873,6 +932,7 @@
       document.getElementById('entryTimestamp').value = localIsoStr;
       document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
 
+      // Mostrar/Ocultar campo de Timestamp general
       document.getElementById('groupTimestampMain').style.display = (type === 'sleep') ? 'none' : 'block';
 
       if (type === 'feeding') {
@@ -900,6 +960,7 @@
       } else if (type === 'sleep') {
         title.innerText = existingLog ? "Editar Sueño 💤" : "Registrar Sueño 💤";
         
+        // Formulario de Sueño con Hora Inicio y Hora Fin
         let startTime = localIsoStr;
         let endTime = localIsoStr;
         if (existingLog && existingLog.startTimestamp && existingLog.endTimestamp) {
@@ -982,7 +1043,7 @@
         const eVal = document.getElementById('fSleepEnd').value;
         startTimestamp = new Date(sVal).toISOString();
         endTimestamp = new Date(eVal).toISOString();
-        isoTimestamp = endTimestamp;
+        isoTimestamp = endTimestamp; // El registro queda ordenado por la hora que despertó
 
         const diffMs = new Date(eVal) - new Date(sVal);
         durationMins = Math.max(0, Math.floor(diffMs / (1000 * 60)));
@@ -1055,6 +1116,169 @@
     function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
     function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
     function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
+
+    
+    /* Gráfico de Barras Histórico Comparativo (Semanales / Mensuales) con Click Interactivo */
+    let historyChartInstance = null;
+
+    function initHistoryChart() {
+      const ctx = document.getElementById('historyBarChart').getContext('2d');
+      historyChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+          datasets: [
+            {
+              label: 'Leche (ml)',
+              data: [650, 720, 800, 850],
+              backgroundColor: 'rgba(255, 229, 153, 0.85)',
+              borderColor: '#B45309',
+              borderWidth: 1.5
+            },
+            {
+              label: 'Sueño (Horas)',
+              data: [14.5, 15.0, 13.8, 14.2],
+              backgroundColor: 'rgba(215, 188, 232, 0.85)',
+              borderColor: '#6B21A8',
+              borderWidth: 1.5
+            },
+            {
+              label: 'Pañales (Cant.)',
+              data: [35, 42, 38, 40],
+              backgroundColor: 'rgba(197, 225, 165, 0.85)',
+              borderColor: '#3F6212',
+              borderWidth: 1.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { weight: 'bold' } } }
+          },
+          interaction: {
+            mode: 'nearest',
+            intersect: true
+          },
+          onClick: (evt, elements) => {
+            if (elements && elements.length > 0) {
+              const el = elements[0];
+              const datasetIndex = el.datasetIndex;
+              const index = el.index;
+              
+              const periodLabel = historyChartInstance.data.labels[index];
+              const dataset = historyChartInstance.data.datasets[datasetIndex];
+              const value = dataset.data[index];
+              const metricName = dataset.label;
+
+              const card = document.getElementById('barDetailCard');
+              const title = document.getElementById('barDetailTitle');
+              const body = document.getElementById('barDetailContent');
+
+              if (card && title && body) {
+                card.classList.remove('hidden');
+                title.innerText = `🔍 ${periodLabel} - ${metricName}`;
+                
+                let detailsText = `Registrado en ${periodLabel}: <strong>${value} ${metricName.includes('ml') ? 'ml totales' : (metricName.includes('Horas') ? 'horas de sueño' : 'pañales cambiados')}</strong>.`;
+                body.innerHTML = detailsText;
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateHistoryChart() {
+      if (!historyChartInstance) return;
+      const mode = document.getElementById('histModeSelect') ? document.getElementById('histModeSelect').value : 'weekly';
+      
+      const now = new Date();
+      let labels = [];
+      let milkData = [];
+      let sleepData = [];
+      let diaperData = [];
+
+      if (mode === 'weekly') {
+        // Generar 4 semanas anteriores
+        for (let i = 3; i >= 0; i--) {
+          const wStart = new Date(now.getTime() - (i * 7 + 6) * 86400000);
+          const wEnd = new Date(now.getTime() - (i * 7) * 86400000);
+          
+          const labelStr = `Sem ${4 - i} (${wStart.getDate()}/${wStart.getMonth()+1})`;
+          labels.push(labelStr);
+
+          // Filtrar logs en ese rango de días
+          const periodLogs = appState.logs.filter(l => {
+            const d = new Date(l.timestamp);
+            return d >= wStart && d <= new Date(wEnd.getTime() + 86399999);
+          });
+
+          let milkSum = 0;
+          let sleepMinsSum = 0;
+          let diaperCount = 0;
+
+          periodLogs.forEach(l => {
+            if (l.type === 'feeding') {
+              if (l.amount) milkSum += parseFloat(l.amount);
+              else if (l.detail) {
+                const match = l.detail.match(/(\d+)\s*ml/i);
+                if (match) milkSum += parseInt(match[1]);
+              }
+            } else if (l.type === 'sleep') {
+              if (l.durationMins) sleepMinsSum += parseInt(l.durationMins);
+            } else if (l.type === 'diaper') {
+              diaperCount++;
+            }
+          });
+
+          milkData.push(milkSum);
+          sleepData.push(parseFloat((sleepMinsSum / 60).toFixed(1)));
+          diaperData.push(diaperCount);
+        }
+      } else {
+        // Generar 6 meses anteriores
+        const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+        for (let i = 5; i >= 0; i--) {
+          const mDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          const mYear = mDate.getFullYear();
+          const mMonth = mDate.getMonth();
+          labels.push(`${monthNames[mMonth]} ${mYear}`);
+
+          const periodLogs = appState.logs.filter(l => {
+            const d = new Date(l.timestamp);
+            return d.getFullYear() === mYear && d.getMonth() === mMonth;
+          });
+
+          let milkSum = 0;
+          let sleepMinsSum = 0;
+          let diaperCount = 0;
+
+          periodLogs.forEach(l => {
+            if (l.type === 'feeding') {
+              if (l.amount) milkSum += parseFloat(l.amount);
+              else if (l.detail) {
+                const match = l.detail.match(/(\d+)\s*ml/i);
+                if (match) milkSum += parseInt(match[1]);
+              }
+            } else if (l.type === 'sleep') {
+              if (l.durationMins) sleepMinsSum += parseInt(l.durationMins);
+            } else if (l.type === 'diaper') {
+              diaperCount++;
+            }
+          });
+
+          milkData.push(milkSum);
+          sleepData.push(parseFloat((sleepMinsSum / 60).toFixed(1)));
+          diaperData.push(diaperCount);
+        }
+      }
+
+      historyChartInstance.data.labels = labels;
+      historyChartInstance.data.datasets[0].data = milkData;
+      historyChartInstance.data.datasets[1].data = sleepData;
+      historyChartInstance.data.datasets[2].data = diaperData;
+      historyChartInstance.update();
+    }
 
     let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null;
 
@@ -1154,7 +1378,7 @@
 
     function exportJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v22_${appState.baby.name}.json`);
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v21_${appState.baby.name}.json`);
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
     }
 
@@ -1172,3 +1396,4 @@
   </script>
 </body>
 </html>
+

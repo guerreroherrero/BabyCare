@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v6.0 - Control del Bebé</title>
+  <title>BabyCare v8.0 - Control Completo del Bebé</title>
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%7D">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
@@ -11,15 +11,56 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
-    :root { --bg-color: #FDFBF7; --card-bg: #FFFFFF; --text-color: #4A4E69; --text-muted: #8E94A2; --primary: #FFB7B2; --secondary: #AEC6CF; --warning: #FFF2B2; --warning-border: #F7D070; --danger: #FFB3BA; --border-color: #F0EAE1; --shadow: 0 8px 24px rgba(149,157,165,0.1); --radius: 20px; }
-    [data-theme="dark"] { --bg-color: #1A1B26; --card-bg: #24283B; --text-color: #C0CAF5; --text-muted: #7AA2F7; --primary: #F7768E; --secondary: #7AA2F7; --warning: #3D3B30; --warning-border: #E0AF68; --danger: #F7768E; --border-color: #2F354F; --shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    :root {
+      --bg-color: #FDFBF7;
+      --card-bg: #FFFFFF;
+      --text-color: #4A4E69;
+      --text-muted: #8E94A2;
+      --primary: #FFB7B2;
+      --secondary: #AEC6CF;
+      --accent-green: #C5E1A5;
+      --accent-yellow: #FFE599;
+      --accent-purple: #D7BCE8;
+      --warning: #FFF2B2;
+      --warning-border: #F7D070;
+      --danger: #FFB3BA;
+      --border-color: #F0EAE1;
+      --shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+      --radius: 20px;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1A1B26;
+      --card-bg: #24283B;
+      --text-color: #C0CAF5;
+      --text-muted: #7AA2F7;
+      --primary: #F7768E;
+      --secondary: #7AA2F7;
+      --accent-green: #9ECE6A;
+      --accent-yellow: #E0AF68;
+      --accent-purple: #BB9AF7;
+      --warning: #3D3B30;
+      --warning-border: #E0AF68;
+      --danger: #F7768E;
+      --border-color: #2F354F;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
     * { box-sizing: border-box; font-family: 'Nunito', sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; padding-bottom: 90px; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.25rem; background: linear-gradient(135deg, rgba(255,183,178,0.85), rgba(215,188,232,0.85)), url('https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80') center/cover no-repeat; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); border-radius: 0 0 20px 20px; }
+
+    header {
+      display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.25rem;
+      background: linear-gradient(135deg, rgba(255, 183, 178, 0.85), rgba(215, 188, 232, 0.85)), 
+                  url('https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+      border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); border-radius: 0 0 20px 20px;
+    }
+
     .brand { display: flex; align-items: center; gap: 12px; }
     .brand-icon { width: 44px; height: 44px; background: #FFFFFF; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
     .brand-title { font-size: 1.45rem; font-weight: 900; color: #333333; text-shadow: 0 2px 4px rgba(255,255,255,0.6); }
-    .burger-btn { background: rgba(255,255,255,0.85); border: 1px solid var(--border-color); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #333; }
+    .burger-btn { background: rgba(255, 255, 255, 0.85); border: 1px solid var(--border-color); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #333; }
+
     .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .drawer-overlay.open { opacity: 1; pointer-events: auto; }
     .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--card-bg); z-index: 201; transition: right 0.3s; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; overflow-y: auto; }
@@ -27,6 +68,7 @@
     .drawer-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); }
     .close-btn { background: none; border: none; cursor: pointer; color: var(--text-color); }
     .drawer-item { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1rem; border-radius: 12px; background: var(--bg-color); color: var(--text-color); font-weight: 700; cursor: pointer; border: 1px solid var(--border-color); }
+
     .container { max-width: 600px; margin: 0 auto; padding: 1.25rem; }
     .baby-profile-card { background: var(--card-bg); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1rem; }
     .baby-avatar-container { position: relative; cursor: pointer; width: 68px; height: 68px; flex-shrink: 0; }
@@ -35,23 +77,28 @@
     .avatar-edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--card-bg); }
     .baby-info h2 { font-size: 1.3rem; font-weight: 800; }
     .baby-info p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+
     .alert-banner { background: var(--warning); border: 1px solid var(--warning-border); border-radius: 16px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 700; }
     .alert-banner.hidden { display: none; }
+
     .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; display: flex; justify-content: space-between; }
     .grid-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
     .action-btn { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 1rem 0.5rem; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; box-shadow: var(--shadow); }
     .action-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
     .action-btn span { font-size: 0.8rem; font-weight: 700; }
+
     .tabs-nav { display: flex; background: var(--card-bg); padding: 4px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 1.25rem; gap: 4px; }
     .tab-btn { flex: 1; padding: 0.65rem 0.5rem; text-align: center; font-weight: 700; font-size: 0.85rem; border-radius: 12px; border: none; background: transparent; color: var(--text-color); cursor: pointer; }
     .tab-btn.active { background: var(--primary); color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+
     .card { background: var(--card-bg); border-radius: var(--radius); padding: 1.25rem; border: 1px solid var(--border-color); box-shadow: var(--shadow); margin-bottom: 1.25rem; }
     .date-nav-bar { display: flex; align-items: center; justify-content: space-between; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.4rem 0.8rem; margin-bottom: 1rem; }
     .date-nav-btn { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .date-display { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; }
     .today-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
+
     .log-item { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 0; border-bottom: 1px solid var(--border-color); }
     .log-item:last-child { border-bottom: none; }
     .log-left { display: flex; align-items: center; gap: 12px; }
@@ -63,13 +110,15 @@
     .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; }
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
+
     .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-    .cal-day-name { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); }
-    .cal-cell { aspect-ratio: 1; border-radius: 10px; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; cursor: pointer; position: relative; border: 1px solid var(--border-color); }
-    .cal-cell.today { border: 2px solid var(--primary); font-weight: 900; }
+    .cal-day-name { font-size: 0.78rem; font-weight: 800; color: var(--primary); padding: 6px 0; background: var(--bg-color); border-radius: 8px; }
+    .cal-cell { aspect-ratio: 1; border-radius: 12px; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; cursor: pointer; position: relative; border: 1px solid var(--border-color); }
+    .cal-cell.today { background: var(--accent-yellow) !important; border: 2px solid #F59E0B !important; font-weight: 900 !important; color: #78350F !important; }
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
+
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -81,32 +130,34 @@
     .form-group label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 0.4rem; }
     .form-control { width: 100%; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.95rem; font-weight: 600; outline: none; }
     .btn-submit { width: 100%; padding: 0.9rem; border-radius: 14px; border: none; background: var(--primary); color: white; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 0.5rem; }
+
     #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; gap: 1rem; }
     #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 220px; min-height: 220px; display: flex; align-items: center; justify-content: center; }
     #qr-reader { width: 100%; border-radius: 16px; overflow: hidden; }
+
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; }
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 800; cursor: pointer; text-decoration: none; }
     .nav-item.active { color: var(--primary); }
+
     .vaccine-item { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: var(--bg-color); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); }
-    .vaccine-item.done { opacity: 0.6; }
     .checkbox-custom { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; }
     .vaccine-item.done .checkbox-custom { background: var(--primary); color: white; }
-    .manual-step { display: flex; gap: 1rem; margin-bottom: 1.2rem; }
-    .step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .step-content h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; }
-    .step-content p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; }
+
+    .who-indicator-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.9rem 1.1rem; margin-top: 1rem; font-size: 0.88rem; }
   </style>
 </head>
 <body>
 
+  <!-- Header Banner -->
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v6.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v8.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
 
+  <!-- Drawer Menu -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -154,6 +205,7 @@
       <button class="tab-btn" onclick="switchTab('vaccinesList')" id="tab-vac-btn">Vacunas</button>
     </div>
 
+    <!-- TAB 1: Diario -->
     <div class="tab-content active" id="tab-logs">
       <div class="card">
         <div class="section-title"><span id="txt-recent-logs">Actividad Reciente</span></div>
@@ -166,6 +218,7 @@
       </div>
     </div>
 
+    <!-- TAB 2: Calendario -->
     <div class="tab-content" id="tab-calendar">
       <div class="card">
         <div class="calendar-header">
@@ -177,13 +230,34 @@
       </div>
     </div>
 
+    <!-- TAB 3: Curvas OMS (4 comparativas completas) -->
     <div class="tab-content" id="tab-charts">
       <div class="card">
-        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">Evolución de Peso (kg) vs Estándar OMS</h3>
-        <canvas id="weightChart" height="200"></canvas>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Evolución de Peso (kg) vs Percentil 50 OMS</h3>
+        <canvas id="weightChart" height="180"></canvas>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-height-chart">2. Evolución de Talla / Longitud (cm) vs OMS</h3>
+        <canvas id="heightChart" height="180"></canvas>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-head-chart">3. Perímetro Cefálico (cm) vs OMS</h3>
+        <canvas id="headChart" height="180"></canvas>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Control Diario de Tomas y Pañales</h3>
+        <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias normales recomendadas según etapa OMS:</p>
+        <div class="who-indicator-card">
+          <p>🍼 <strong>Tomas/día:</strong> <span id="val-feed-count">0 hoy</span> (Rango OMS: 6 - 10 tomas en lactantes)</p>
+          <p style="margin-top:6px;">💦 <strong>Pañales/día:</strong> <span id="val-diaper-count">0 hoy</span> (Rango OMS: 4 - 8 pañales húmedos)</p>
+        </div>
       </div>
     </div>
 
+    <!-- TAB 4: Vacunas -->
     <div class="tab-content" id="tab-vaccinesList">
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-vaccine-title">Calendario Vacunal Recomendado</h3>
@@ -191,12 +265,12 @@
       </div>
     </div>
 
+    <!-- TAB 5: Manual -->
     <div class="tab-content" id="tab-manual">
       <div class="card">
-        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;"><i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso</h3>
-        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4>Personalizar la foto y datos del Bebé</h4><p>Pulsa directamente sobre el icono circular del bebé para subir su foto real. Haz clic en el icono del lápiz para modificar su nombre, fecha de nacimiento y género.</p></div></div>
-        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4>Registrar, Editar y Borrar Eventos</h4><p>Usa los botones superiores para registrar tomas, pañales, sueño, vacunas y peso. Puedes editar o eliminar cualquier entrada errónea pulsando en los botones de cada fila.</p></div></div>
-        <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4>Sincronizar entre dos móviles con Código QR</h4><p><strong>Enviar:</strong> Pulsa en "Sincronizar" en la barra inferior.<br><strong>Recibir:</strong> Abre el menú de hamburguesa, pulsa "Escanear QR de pareja" y apunta a la pantalla del otro móvil.</p></div></div>
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header"><i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso</h3>
+        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar la foto y datos del Bebé</h4><p id="mstep1-desc">Pulsa directamente sobre el icono circular del bebé para subir o actualizar su foto real.</p></div></div>
+        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registrar, Editar y Borrar Eventos</h4><p id="mstep2-desc">Usa los botones superiores para registrar tomas, pañales, sueño, vacunas y peso.</p></div></div>
       </div>
     </div>
   </div>
@@ -207,6 +281,7 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('qrShare')"><i data-lucide="qr-code"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
+  <!-- Modales -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <div class="modal-header"><h3 id="modalFormTitle">Nuevo Registro</h3><button class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button></div>
@@ -235,7 +310,7 @@
   <div class="modal-overlay" id="qrShareModal">
     <div class="modal">
       <div class="modal-header"><h3 id="txt-qr-title">Compartir por Código QR</h3><button class="close-btn" onclick="closeModal('qrShare')"><i data-lucide="x"></i></button></div>
-      <div id="qrContainer"><p style="text-align:center; font-size:0.88rem; color:var(--text-muted);" id="txt-qr-desc">Pide al otro progenitor que escanee este código desde la opción 'Escanear QR' en su móvil.</p><div id="qrcode">Generando código QR...</div></div>
+      <div id="qrContainer"><p style="text-align:center; font-size:0.88rem; color:var(--text-muted);" id="txt-qr-desc">Pide al otro progenitor que escanee este código desde 'Escanear QR'.</p><div id="qrcode">Generando código...</div></div>
     </div>
   </div>
 
@@ -243,52 +318,381 @@
     <div class="modal">
       <div class="modal-header"><h3 id="txt-scan-title">Escanear QR de Pareja</h3><button class="close-btn" onclick="stopScanner(); closeModal('qrScan')"><i data-lucide="x"></i></button></div>
       <div id="qr-reader"></div>
-      <p style="text-align:center; font-size:0.85rem; color:var(--text-muted); margin-top:10px;" id="txt-scan-desc">Apunta la cámara al código QR generado en el otro dispositivo.</p>
+      <p style="text-align:center; font-size:0.85rem; color:var(--text-muted); margin-top:10px;" id="txt-scan-desc">Apunta la cámara al código QR de la pareja.</p>
     </div>
   </div>
 
   <script>
-    let appState = { lang: 'es', theme: 'light', baby: { name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null }, logs: [{ id: 1, type: 'feeding', detail: 'Pecho Izquierdo (15m)', timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'diaper', detail: 'Orina y Deposición (Normal)', timestamp: new Date(Date.now() - 3600000*3).toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false } };
+    let appState = { lang: 'es', theme: 'light', baby: { name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null }, logs: [{ id: 1, type: 'feeding', detail: 'Pecho Izquierdo (15m)', timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false } };
     let selectedDate = new Date();
-    const i18n = { es: { menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actVaccines: "Vacunas", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "Evolución de Peso (kg) vs OMS", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar directamente todo el historial.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado en el otro dispositivo.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma." } };
-    const standardVaccines = [{ id: 'v1', age: '2 meses', name: 'Hexavalente + Neumococo + Rotavirus' }, { id: 'v2', age: '4 meses', name: 'Hexavalente + Neumococo + Meningococo B' }];
+
+    const i18n = {
+      es: { menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actVaccines: "Vacunas", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] },
+      en: { menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actVaccines: "Vaccines", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes", qrTitle: "Share via QR Code", qrDesc: "Scan code with partner's phone.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feed.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      fr: { menuTitle: "Menu BabyCare", menuProfile: "Profil del Bébé", menuQR: "Partager (QR)", menuScan: "Scanner QR Partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Tétée/Biberon", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé/Temp", actVaccines: "Vaccins", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Sync", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes", qrTitle: "Partager par Code QR", qrDesc: "Scannez ce code depuis l'autre téléphone.", scanTitle: "Scanner le Code QR", scanDesc: "Pointez la caméra sur le code QR.", alertFeed: "⚠️ Attention: Plus de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] }
+    };
+
+    const standardVaccines = [{ id: 'v1', age: '2 meses', name: 'Hexavalente (DTPa-VPI-Hib-HB) + Neumococo + Rotavirus' }, { id: 'v2', age: '4 meses', name: 'Hexavalente + Neumococo + Rotavirus + Meningococo B' }, { id: 'v3', age: '6 meses', name: 'Hexavalente + Rotavirus' }, { id: 'v4', age: '12 meses', name: 'Triple Vírica (SRP) + Neumococo + Meningococo C/ACWY' }];
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v6', 'babycare_data_v5', 'babycare_data_v4', 'babycare_data_v3', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v6', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v8', 'babycare_data_v7', 'babycare_data_v6', 'babycare_data_v5', 'babycare_data_v4', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v8', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
-    function switchTab(tabId) { document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); const tabMap = { 'logs': 0, 'calendar': 1, 'charts': 2, 'vaccinesList': 3 }; if (tabMap[tabId] !== undefined) document.querySelectorAll('.tab-btn')[tabMap[tabId]].classList.add('active'); document.getElementById(`tab-${tabId}`).classList.add('active'); }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      const tabMap = { 'logs': 0, 'calendar': 1, 'charts': 2, 'vaccinesList': 3 };
+      if (tabMap[tabId] !== undefined) document.querySelectorAll('.tab-btn')[tabMap[tabId]].classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      document.getElementById('bnav-item-home').classList.remove('active');
+      document.getElementById('bnav-item-sync').classList.remove('active');
+      if (tabId === 'logs') document.getElementById('bnav-item-home').classList.add('active');
+    }
+
     function toggleTheme() { appState.theme = appState.theme === 'light' ? 'dark' : 'light'; applyTheme(appState.theme); saveState(); }
     function applyTheme(theme) { document.body.setAttribute('data-theme', theme); }
-    function setLanguage(lang) { appState.lang = lang; const t = i18n[lang] || i18n['es']; document.getElementById('txt-menu-title').innerText = t.menuTitle; document.getElementById('txt-menu-profile').innerText = t.menuProfile; document.getElementById('txt-menu-qr').innerText = t.menuQR; document.getElementById('txt-menu-scan').innerText = t.menuScan; document.getElementById('txt-menu-manual').innerText = t.menuManual; document.getElementById('txt-menu-export').innerText = t.menuExport; document.getElementById('txt-menu-import').innerText = t.menuImport; }
+
+    function setLanguage(lang) {
+      appState.lang = lang;
+      const t = i18n[lang] || i18n['es'];
+      document.getElementById('txt-menu-title').innerText = t.menuTitle;
+      document.getElementById('txt-menu-profile').innerText = t.menuProfile;
+      document.getElementById('txt-menu-qr').innerText = t.menuQR;
+      document.getElementById('txt-menu-scan').innerText = t.menuScan;
+      document.getElementById('txt-menu-manual').innerText = t.menuManual;
+      document.getElementById('txt-menu-export').innerText = t.menuExport;
+      document.getElementById('txt-menu-import').innerText = t.menuImport;
+      document.getElementById('txt-lang-label').innerText = t.langLabel;
+      document.getElementById('txt-theme-label').innerText = t.themeLabel;
+      document.getElementById('txt-theme-btn').innerText = t.themeBtn;
+      document.getElementById('txt-quick-actions').innerText = t.quickActions;
+
+      document.getElementById('act-feed').innerText = t.actFeed;
+      document.getElementById('act-diaper').innerText = t.actDiaper;
+      document.getElementById('act-sleep').innerText = t.actSleep;
+      document.getElementById('act-growth').innerText = t.actGrowth;
+      document.getElementById('act-health').innerText = t.actHealth;
+      document.getElementById('act-vaccines').innerText = t.actVaccines;
+
+      document.getElementById('tab-logs-btn').innerText = t.tabLogs;
+      document.getElementById('tab-cal-btn').innerText = t.tabCal;
+      document.getElementById('tab-chart-btn').innerText = t.tabCharts;
+      document.getElementById('tab-vac-btn').innerText = t.tabVac;
+
+      document.getElementById('txt-recent-logs').innerText = t.recentLogs;
+      document.getElementById('txt-weight-chart').innerText = t.weightChart;
+      document.getElementById('txt-vaccine-title').innerText = t.vaccineTitle;
+
+      document.getElementById('bnav-home').innerText = t.bnavHome;
+      document.getElementById('bnav-add').innerText = t.bnavAdd;
+      document.getElementById('bnav-share').innerText = t.bnavShare;
+
+      document.getElementById('langSelect').value = lang;
+      renderCalendar();
+      checkAlerts();
+    }
+
     function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
     function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 180; canvas.height = 180; ctx.drawImage(img, 0, 0, 180, 180); appState.baby.photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
-    function renderBabyProfile() { document.getElementById('babyNameDisplay').innerText = appState.baby.name || 'Léo'; const dob = new Date(appState.baby.dob); const diffDays = Math.floor((new Date() - dob) / (1000 * 60 * 60 * 24)); const months = Math.floor(diffDays / 30.4); const days = Math.floor(diffDays % 30.4); document.getElementById('babyAgeDisplay').innerText = `${months}m ${days}d (${diffDays} días de vida)`; const avatarDiv = document.getElementById('babyAvatarDisplay'); if (appState.baby.photo) { avatarDiv.innerHTML = `<img src="${appState.baby.photo}" alt="Bebé">`; } else { avatarDiv.innerHTML = appState.baby.gender === 'female' ? '👧' : '👦'; } }
-    function checkAlerts() { const banner = document.getElementById('alertBanner'); const text = document.getElementById('alertText'); const feedings = appState.logs.filter(l => l.type === 'feeding').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); if (feedings.length > 0) { const lastFeed = new Date(feedings[0].timestamp); const hoursAgo = (new Date() - lastFeed) / (1000 * 60 * 60); if (hoursAgo > 3.5) { banner.classList.remove('hidden'); text.innerText = i18n[appState.lang].alertFeed; return; } } banner.classList.add('hidden'); }
+
+    function renderBabyProfile() {
+      document.getElementById('babyNameDisplay').innerText = appState.baby.name || 'Léo';
+      const dob = new Date(appState.baby.dob);
+      const diffDays = Math.floor((new Date() - dob) / (1000 * 60 * 60 * 24));
+      const months = Math.floor(diffDays / 30.4);
+      const days = Math.floor(diffDays % 30.4);
+      document.getElementById('babyAgeDisplay').innerText = `${months}m ${days}d (${diffDays} días de vida)`;
+      const avatarDiv = document.getElementById('babyAvatarDisplay');
+      if (appState.baby.photo) { avatarDiv.innerHTML = `<img src="${appState.baby.photo}" alt="Bebé">`; } else { avatarDiv.innerHTML = appState.baby.gender === 'female' ? '👧' : '👦'; }
+      document.getElementById('profName').value = appState.baby.name;
+      document.getElementById('profDob').value = appState.baby.dob;
+      document.getElementById('profGender').value = appState.baby.gender;
+    }
+
+    function checkAlerts() {
+      const banner = document.getElementById('alertBanner');
+      const text = document.getElementById('alertText');
+      const t = i18n[appState.lang] || i18n['es'];
+      const feedings = appState.logs.filter(l => l.type === 'feeding').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      if (feedings.length > 0) {
+        const lastFeed = new Date(feedings[0].timestamp);
+        const hoursAgo = (new Date() - lastFeed) / (1000 * 60 * 60);
+        if (hoursAgo > 3.5) { banner.classList.remove('hidden'); text.innerText = t.alertFeed; return; }
+      }
+      banner.classList.add('hidden');
+    }
+
     function changeSelectedDate(days) { selectedDate.setDate(selectedDate.getDate() + days); renderLogs(); }
     function resetToToday() { selectedDate = new Date(); renderLogs(); }
-    function renderLogs() { const container = document.getElementById('logsContainer'); container.innerHTML = ''; const targetKey = selectedDate.toISOString().slice(0,10); const todayKey = new Date().toISOString().slice(0,10); document.getElementById('currentDateText').innerText = selectedDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }); document.getElementById('todayTag').innerText = (targetKey === todayKey) ? 'Hoy' : 'Ir a Hoy'; const filtered = appState.logs.filter(l => l.timestamp.startsWith(targetKey)).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); if (filtered.length === 0) { container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`; return; } filtered.forEach(log => { const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); container.innerHTML += `<div class="log-item"><div class="log-left"><div class="log-badge" style="background:#FFE599;"><i data-lucide="baby" style="width:20px;"></i></div><div class="log-info"><h4>${log.type} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div></div><div class="log-actions"><span class="log-time">${timeStr}</span><button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div>`; }); lucide.createIcons(); }
-    function deleteLog(id) { if (confirm("¿Eliminar este registro?")) { appState.logs = appState.logs.filter(l => l.id !== id); saveState(); } }
+
+    function renderLogs() {
+      const container = document.getElementById('logsContainer');
+      container.innerHTML = '';
+      const targetKey = selectedDate.toISOString().slice(0,10);
+      const todayKey = new Date().toISOString().slice(0,10);
+      const t = i18n[appState.lang] || i18n['es'];
+
+      document.getElementById('currentDateText').innerText = selectedDate.toLocaleDateString(appState.lang === 'en' ? 'en-US' : (appState.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' });
+      document.getElementById('todayTag').innerText = (targetKey === todayKey) ? t.today : (appState.lang === 'en' ? 'Go to Today' : 'Ir a Hoy');
+
+      const filtered = appState.logs.filter(l => l.timestamp.startsWith(targetKey)).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      // Actualizar contadores OMS de hoy
+      const todayFeedings = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'feeding').length;
+      const todayDiapers = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'diaper').length;
+      if (document.getElementById('val-feed-count')) {
+        document.getElementById('val-feed-count').innerText = `${todayFeedings} hoy`;
+        document.getElementById('val-diaper-count').innerText = `${todayDiapers} hoy`;
+      }
+
+      if (filtered.length === 0) { container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`; return; }
+
+      filtered.forEach(log => {
+        const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let icon = 'baby'; let bg = '#FFE599'; let title = 'Alimentación';
+        if (log.type === 'diaper') { icon = 'sparkles'; bg = '#C5E1A5'; title = 'Pañal'; }
+        if (log.type === 'sleep') { icon = 'moon'; bg = '#D7BCE8'; title = 'Sueño'; }
+        if (log.type === 'growth') { icon = 'ruler'; bg = '#AEC6CF'; title = 'Crecimiento'; }
+        if (log.type === 'health') { icon = 'thermometer'; bg = '#FFB3BA'; title = 'Salud'; }
+        if (log.type === 'vaccines') { icon = 'syringe'; bg = '#FFDAC1'; title = 'Vacuna'; }
+
+        container.innerHTML += `<div class="log-item"><div class="log-left"><div class="log-badge" style="background:${bg};"><i data-lucide="${icon}" style="width:20px; height:20px;"></i></div><div class="log-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div></div><div class="log-actions"><span class="log-time">${timeStr}</span><button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div>`;
+      });
+      lucide.createIcons();
+    }
+
+    function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { appState.logs = appState.logs.filter(l => l.id !== id); saveState(); } }
     function editLog(id) { const log = appState.logs.find(l => l.id === id); if (log) openFormModal(log.type, log); }
-    function openFormModal(type, existingLog = null) { document.getElementById('entryType').value = type; document.getElementById('editingLogId').value = existingLog ? existingLog.id : ''; document.getElementById('dynamicFormFields').innerHTML = `<div class="form-group"><label>Detalle</label><input type="text" class="form-control" id="fDetail" value="${existingLog ? existingLog.detail : ''}"></div>`; document.getElementById('entryTimestamp').value = existingLog ? existingLog.timestamp.slice(0,16) : new Date().toISOString().slice(0,16); document.getElementById('formModal').classList.add('open'); }
+
+    function openFormModal(type, existingLog = null) {
+      document.getElementById('entryType').value = type;
+      document.getElementById('editingLogId').value = existingLog ? existingLog.id : '';
+      const fields = document.getElementById('dynamicFormFields');
+      const title = document.getElementById('modalFormTitle');
+      document.getElementById('entryTimestamp').value = existingLog ? existingLog.timestamp.slice(0,16) : new Date().toISOString().slice(0,16);
+      document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
+
+      if (type === 'feeding') {
+        title.innerText = existingLog ? "Editar Toma / Leche 🍼" : "Registrar Toma / Leche 🍼";
+        fields.innerHTML = `<div class="form-group"><label>Tipo de Alimentación</label><select class="form-control" id="fType"><option value="Pecho">Pecho 🤱</option><option value="Biberón Fórmula">Biberón Fórmula 🍼</option><option value="Leche Materna Extraída">Leche Extraída 🍼</option><option value="Sólidos / Papilla">Sólidos 🥣</option></select></div><div class="form-group"><label>Detalle / Cantidad (ml o min)</label><input type="text" class="form-control" id="fDetail" placeholder="Ej: 120 ml o 15 min Pecho Izquierdo"></div>`;
+      } else if (type === 'growth') {
+        title.innerText = existingLog ? "Editar Crecimiento 📏" : "Registrar Crecimiento 📏";
+        fields.innerHTML = `<div class="form-group"><label>Peso (Kg)</label><input type="number" step="0.01" class="form-control" id="fWeight" placeholder="Ej: 5.45"></div><div class="form-group"><label>Talla / Longitud (cm)</label><input type="number" step="0.1" class="form-control" id="fHeight" placeholder="Ej: 58.5"></div><div class="form-group"><label>Perímetro Cefálico (cm)</label><input type="number" step="0.1" class="form-control" id="fHead" placeholder="Ej: 38.0"></div>`;
+        if (existingLog) {
+          document.getElementById('fWeight').value = existingLog.weight || '';
+          document.getElementById('fHeight').value = existingLog.height || '';
+          document.getElementById('fHead').value = existingLog.head || '';
+        }
+      } else {
+        title.innerText = existingLog ? "Editar Evento" : "Registrar Evento";
+        fields.innerHTML = `<div class="form-group"><label>Detalle</label><input type="text" class="form-control" id="fDetail" value="${existingLog ? existingLog.detail : ''}"></div>`;
+      }
+      document.getElementById('formModal').classList.add('open');
+    }
+
     function closeFormModal() { document.getElementById('formModal').classList.remove('open'); }
-    function saveLogEntry(e) { e.preventDefault(); const editingId = document.getElementById('editingLogId').value; const type = document.getElementById('entryType').value; const detail = document.getElementById('fDetail').value; const timestamp = document.getElementById('entryTimestamp').value; const notes = document.getElementById('entryNotes').value; if (editingId) { const idx = appState.logs.findIndex(l => l.id == editingId); if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: new Date(timestamp).toISOString(), notes }; } else { appState.logs.push({ id: Date.now(), type, detail, timestamp: new Date(timestamp).toISOString(), notes }); } saveState(); closeFormModal(); }
+
+    function saveLogEntry(e) {
+      e.preventDefault();
+      const editingId = document.getElementById('editingLogId').value;
+      const type = document.getElementById('entryType').value;
+      const timestamp = document.getElementById('entryTimestamp').value;
+      const notes = document.getElementById('entryNotes').value;
+
+      let detail = ''; let weight = null; let height = null; let head = null;
+
+      if (type === 'growth') {
+        const w = document.getElementById('fWeight').value;
+        const h = document.getElementById('fHeight').value;
+        const hd = document.getElementById('fHead').value;
+        detail = `Peso: ${w}kg, Talla: ${h}cm, Cabeza: ${hd}cm`;
+        weight = parseFloat(w); height = parseFloat(h); head = parseFloat(hd);
+      } else if (type === 'feeding') {
+        detail = `${document.getElementById('fType').value} (${document.getElementById('fDetail').value})`;
+      } else {
+        detail = document.getElementById('fDetail').value;
+      }
+
+      if (editingId) {
+        const idx = appState.logs.findIndex(l => l.id == editingId);
+        if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: new Date(timestamp).toISOString(), notes, weight, height, head };
+      } else {
+        appState.logs.push({ id: Date.now(), type, detail, timestamp: new Date(timestamp).toISOString(), notes, weight, height, head });
+      }
+      saveState(); closeFormModal();
+    }
+
     function openModal(id) { document.getElementById(`${id}Modal`).classList.add('open'); if (id === 'qrShare') generateQRCode(); if (id === 'qrScan') startScanner(); }
     function closeModal(id) { document.getElementById(`${id}Modal`).classList.remove('open'); }
-    function saveProfile(e) { e.preventDefault(); appState.baby.name = document.getElementById('profName').value; appState.baby.dob = document.getElementById('profDob').value; appState.baby.gender = document.getElementById('profGender').value; saveState(); closeModal('profile'); }
-    function renderCalendar() { const grid = document.getElementById('calendarGrid'); grid.innerHTML = ''; for (let day = 1; day <= 30; day++) { grid.innerHTML += `<div class="cal-cell"><span>${day}</span></div>`; } }
-    function prevMonth() {} function nextMonth() {}
+
+    function saveProfile(e) {
+      e.preventDefault();
+      appState.baby.name = document.getElementById('profName').value;
+      appState.baby.dob = document.getElementById('profDob').value;
+      appState.baby.gender = document.getElementById('profGender').value;
+      saveState(); closeModal('profile');
+    }
+
+    let calDate = new Date();
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid'); grid.innerHTML = '';
+      const year = calDate.getFullYear(); const month = calDate.getMonth();
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
+      const t = i18n[appState.lang] || i18n['es'];
+      const dayHeaders = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+
+      dayHeaders.forEach(d => { grid.innerHTML += `<div class="cal-day-name">${d}</div>`; });
+      const firstDay = new Date(year, month, 1).getDay();
+      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < startingPos; i++) grid.innerHTML += `<div></div>`;
+      const today = new Date();
+
+      for (let day = 1; day <= totalDays; day++) {
+        const dateKey = new Date(year, month, day).toISOString().slice(0,10);
+        const dayLogs = appState.logs.filter(l => l.timestamp.startsWith(dateKey));
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+        let dotsHtml = '';
+        if (dayLogs.length > 0) {
+          dotsHtml = '<div class="cal-dots">';
+          if (dayLogs.some(l => l.type === 'feeding')) dotsHtml += '<div class="cal-dot" style="background:#FFE599"></div>';
+          if (dayLogs.some(l => l.type === 'diaper')) dotsHtml += '<div class="cal-dot" style="background:#C5E1A5"></div>';
+          if (dayLogs.some(l => l.type === 'sleep')) dotsHtml += '<div class="cal-dot" style="background:#D7BCE8"></div>';
+          dotsHtml += '</div>';
+        }
+        grid.innerHTML += `<div class="cal-cell ${isToday ? 'today' : ''}" onclick="selectCalendarDate(${year}, ${month}, ${day})"><span>${day}</span>${dotsHtml}</div>`;
+      }
+    }
+
+    function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
+    function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
+    function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
+
+    /* Chart.js OMS 3 Gráficos: Peso, Talla y Perímetro Cefálico */
     let weightChartInstance = null;
-    function initChart() { const ctx = document.getElementById('weightChart').getContext('2d'); weightChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['Nacimiento', '1m', '2m'], datasets: [{ label: 'Bebé', data: [3.2, 4.1, 5.0], borderColor: '#FF8B94' }] } }); }
-    function updateChart() {}
-    function renderVaccines() { const container = document.getElementById('vaccinesListContainer'); container.innerHTML = ''; standardVaccines.forEach(v => { container.innerHTML += `<div class="vaccine-item"><div><strong>${v.age}</strong>: ${v.name}</div></div>`; }); }
-    function generateQRCode() { const qrContainer = document.getElementById('qrcode'); qrContainer.innerHTML = ''; const payload = JSON.stringify({ babyName: appState.baby.name, logs: appState.logs }); try { if (typeof qrcode !== 'undefined') { const qr = qrcode(0, 'L'); qr.addData(payload); qr.make(); qrContainer.innerHTML = qr.createImgTag(5); return; } } catch(e){} qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}" alt="QR Code">`; }
+    let heightChartInstance = null;
+    let headChartInstance = null;
+
+    function initChart() {
+      // 1. Gráfico Peso OMS
+      const ctxWeight = document.getElementById('weightChart').getContext('2d');
+      weightChartInstance = new Chart(ctxWeight, {
+        type: 'line',
+        data: {
+          labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
+          datasets: [
+            { label: 'Léo (Kg)', data: [3.3, 4.2, 5.4, null, null, null], borderColor: '#FF8B94', backgroundColor: 'rgba(255,139,148,0.2)', borderWidth: 3, tension: 0.3 },
+            { label: 'OMS Mediana (P50)', data: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+
+      // 2. Gráfico Talla OMS
+      const ctxHeight = document.getElementById('heightChart').getContext('2d');
+      heightChartInstance = new Chart(ctxHeight, {
+        type: 'line',
+        data: {
+          labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
+          datasets: [
+            { label: 'Léo (cm)', data: [50, 54.5, 58, null, null, null], borderColor: '#779ECB', backgroundColor: 'rgba(119,158,203,0.2)', borderWidth: 3, tension: 0.3 },
+            { label: 'OMS Mediana (P50)', data: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6], borderColor: '#B2AC88', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+
+      // 3. Gráfico Perímetro Cefálico OMS
+      const ctxHead = document.getElementById('headChart').getContext('2d');
+      headChartInstance = new Chart(ctxHead, {
+        type: 'line',
+        data: {
+          labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
+          datasets: [
+            { label: 'Léo (cm)', data: [34.5, 36.8, 38, null, null, null], borderColor: '#B2AC88', backgroundColor: 'rgba(178,172,136,0.2)', borderWidth: 3, tension: 0.3 },
+            { label: 'OMS Mediana (P50)', data: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+
+    function updateChart() {
+      if (!weightChartInstance) return;
+      const growthLogs = appState.logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+      if (growthLogs.length > 0) {
+        const weights = growthLogs.map(l => l.weight).filter(w => w);
+        const heights = growthLogs.map(l => l.height).filter(h => h);
+        const heads = growthLogs.map(l => l.head).filter(h => h);
+
+        if (weights.length > 0) { weightChartInstance.data.datasets[0].data = weights; weightChartInstance.update(); }
+        if (heights.length > 0) { heightChartInstance.data.datasets[0].data = heights; heightChartInstance.update(); }
+        if (heads.length > 0) { headChartInstance.data.datasets[0].data = heads; headChartInstance.update(); }
+      }
+    }
+
+    function renderVaccines() {
+      const container = document.getElementById('vaccinesListContainer'); container.innerHTML = '';
+      standardVaccines.forEach(v => {
+        const isDone = appState.vaccines[v.id] || false;
+        container.innerHTML += `<div class="vaccine-item ${isDone ? 'done' : ''}"><div><strong>${v.age}</strong>: ${v.name}</div><div class="checkbox-custom" onclick="toggleVaccine('${v.id}')">${isDone ? '✓' : ''}</div></div>`;
+      });
+    }
+
+    function toggleVaccine(id) { appState.vaccines[id] = !appState.vaccines[id]; saveState(); renderVaccines(); }
+
+    function generateQRCode() {
+      const qrContainer = document.getElementById('qrcode'); qrContainer.innerHTML = '';
+      const syncData = { babyName: appState.baby.name, babyDob: appState.baby.dob, babyGender: appState.baby.gender, logs: appState.logs, vaccines: appState.vaccines };
+      const payload = JSON.stringify(syncData);
+      try {
+        if (typeof qrcode !== 'undefined') {
+          const qr = qrcode(0, 'L'); qr.addData(payload); qr.make();
+          qrContainer.innerHTML = qr.createImgTag(5); return;
+        }
+      } catch(e){}
+      qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}" alt="QR Code" style="width:220px; height:220px;">`;
+    }
+
     let html5QrcodeScanner = null;
-    function startScanner() { if (html5QrcodeScanner) stopScanner(); html5QrcodeScanner = new Html5Qrcode("qr-reader"); html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, (decodedText) => { try { const imported = JSON.parse(decodedText); if (imported.logs) { appState.logs = imported.logs; saveState(); stopScanner(); closeModal('qrScan'); alert("¡Sincronizado!"); } } catch(e){} }).catch(err => { alert("Permite el acceso a la cámara en tu navegador."); }); }
+    function startScanner() {
+      if (html5QrcodeScanner) stopScanner();
+      html5QrcodeScanner = new Html5Qrcode("qr-reader");
+      html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, (decodedText) => {
+        try {
+          const imported = JSON.parse(decodedText);
+          if (imported.logs) {
+            appState.logs = imported.logs; saveState(); stopScanner(); closeModal('qrScan'); alert("¡Sincronizado!");
+          }
+        } catch(e){}
+      }).catch(err => { alert("Activa los permisos de cámara en tu navegador."); });
+    }
+
     function stopScanner() { if (html5QrcodeScanner) { html5QrcodeScanner.stop().then(() => html5QrcodeScanner.clear()).catch(e => {}); } }
-    function exportJSON() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2)); const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v6_${appState.baby.name}.json`); document.body.appendChild(anchor); anchor.click(); anchor.remove(); }
-    function importJSON(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { try { const imported = JSON.parse(e.target.result); if (imported.baby && imported.logs) { appState = imported; saveState(); alert("¡Importado!"); } } catch(err){} }; reader.readAsText(file); }
+
+    function exportJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v8_${appState.baby.name}.json`);
+      document.body.appendChild(anchor); anchor.click(); anchor.remove();
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.baby && imported.logs) { appState = imported; saveState(); alert("¡Importado!"); }
+        } catch(err){}
+      };
+      reader.readAsText(file);
+    }
   </script>
 </body>
 </html>

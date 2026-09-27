@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v38.0 - Control Completo del Bebé</title>
+  <title>BabyCare v39.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -188,17 +188,7 @@
     .modal-header h3 { font-size: 1.05rem; font-weight: 800; }
     .modal-header-actions { display: flex; align-items: center; gap: 8px; }
     
-    .btn-header-save {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.35rem 0.8rem;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
+    .btn-header-save { background: var(--primary); color: white; border: none; padding: 0.35rem 0.8rem; border-radius: 10px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
     .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; -webkit-overflow-scrolling: touch; }
     .modal-footer { flex-shrink: 0; padding-top: 0.4rem; background: var(--card-bg); }
     
@@ -230,7 +220,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v38.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v39.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -345,7 +335,7 @@
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
 
-      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px CON SUB-COLUMNAS PARALELAS) -->
+      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS CON NAVEGACIÓN ENTRE SEMANAS -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
           <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de Rutina de 24 Horas</h3>
@@ -587,8 +577,8 @@
 
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v37', 'babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v37', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
+    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v39', 'babycare_data_v37', 'babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
+    function saveState() { localStorage.setItem('babycare_data_v39', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -817,6 +807,12 @@
       lucide.createIcons();
     }
 
+    /* NAVEGACIÓN Y RENDIMIENTO DE MATRIZ SEMANAL DE 24 HORAS */
+    function changeMatrixWeek(weeksOffset) {
+      selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
+      renderWeeklyMatrix24h();
+    }
+
     function renderWeeklyMatrix24h() {
       const grid = document.getElementById('routine24hGrid');
       if (!grid) return;
@@ -861,7 +857,7 @@
       hoursColHtml += '</div>';
       grid.innerHTML += hoursColHtml;
 
-      weekDates.forEach((dateStr, dayIdx) => {
+      weekDates.forEach((dateStr) => {
         let colContent = `<div class="grid-day-col" style="height:576px;">`;
         let dayBlocks = [];
 

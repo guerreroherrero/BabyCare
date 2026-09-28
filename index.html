@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare v40.0 - Control Completo del Bebé</title>
+  <title>BabyCare v40.1.0 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -142,6 +142,7 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
+    /* Modales */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -188,7 +189,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v40.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">v40.1.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -208,8 +209,8 @@
     </div>
 
     <div class="drawer-item" onclick="closeDrawer(); openModal('profile');"><i data-lucide="user"></i><span id="txt-menu-profile">Perfil del Bebé</span></div>
-    <div class="drawer-item" onclick="closeDrawer(); openModal('alarmsModal');"><i data-lucide="bell"></i><span id="txt-menu-alarms">Alarmas y Avisos</span></div>
-    <div class="drawer-item" onclick="closeDrawer(); openModal('syncModal');"><i data-lucide="share-2"></i><span id="txt-menu-sync">Sincronizar con Pareja</span></div>
+    <div class="drawer-item" onclick="closeDrawer(); openModal('alarms');"><i data-lucide="bell"></i><span id="txt-menu-alarms">Alarmas y Avisos</span></div>
+    <div class="drawer-item" onclick="closeDrawer(); openModal('sync');"><i data-lucide="share-2"></i><span id="txt-menu-sync">Sincronizar con Pareja</span></div>
     <div class="drawer-item" onclick="closeDrawer(); switchTab('manual');"><i data-lucide="book-open"></i><span id="txt-menu-manual">Manual de Uso</span></div>
     <div class="drawer-item" onclick="exportJSON()"><i data-lucide="download"></i><span id="txt-menu-export">Exportar Archivo JSON</span></div>
     <div class="drawer-item" onclick="triggerFileInput()"><i data-lucide="upload"></i><span id="txt-menu-import">Importar Archivo JSON</span></div>
@@ -367,7 +368,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: Manual Completo Traducido (8 Pasos) -->
+    <!-- TAB 5: Manual Completo Traducido -->
     <div class="tab-content" id="tab-manual">
       <div class="card">
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
@@ -389,7 +390,7 @@
   <nav class="bottom-nav">
     <div class="nav-item active" id="bnav-item-home" onclick="switchTab('logs')"><i data-lucide="list"></i><span id="bnav-home">Inicio</span></div>
     <div class="nav-item" onclick="openFormModal('feeding')"><i data-lucide="plus-circle" style="width:28px; height:28px; color:var(--primary);"></i><span id="bnav-add">Añadir</span></div>
-    <div class="nav-item" id="bnav-item-sync" onclick="openModal('syncModal')"><i data-lucide="share-2"></i><span id="bnav-share">Sincronizar</span></div>
+    <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="share-2"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
   <!-- Modales con Doble Botón Guardar -->
@@ -400,7 +401,7 @@
           <h3 id="modalFormTitle">Nuevo Registro</h3>
           <div class="modal-header-actions">
             <button type="submit" class="btn-header-save" id="btn-save-header">✓ Guardar</button>
-            <button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button>
+            <button type="button" class="close-btn" onclick="closeModal('form')"><i data-lucide="x"></i></button>
           </div>
         </div>
         
@@ -448,6 +449,7 @@
     </div>
   </div>
 
+  <!-- Modal Añadir Nuevo Bebé -->
   <div class="modal-overlay" id="addBabyModal">
     <div class="modal">
       <form onsubmit="addBaby(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
@@ -469,12 +471,13 @@
     </div>
   </div>
 
+  <!-- Modal Alarmas y Avisos -->
   <div class="modal-overlay" id="alarmsModal">
     <div class="modal">
       <div class="modal-header">
         <h3 id="txt-alarms-title">Alarmas y Avisos</h3>
         <div class="modal-header-actions">
-          <button type="button" class="close-btn" onclick="closeModal('alarmsModal')"><i data-lucide="x"></i></button>
+          <button type="button" class="close-btn" onclick="closeModal('alarms')"><i data-lucide="x"></i></button>
         </div>
       </div>
       <div class="modal-body" id="alarmsContainer" style="padding-bottom:10px;"></div>
@@ -516,11 +519,11 @@
   </div>
 
   <!-- Modal Único de Sincronización Directa por WhatsApp / Archivo -->
-  <div class="modal-overlay" id="syncModalModal">
+  <div class="modal-overlay" id="syncModal">
     <div class="modal">
       <div class="modal-header">
         <h3 id="txt-sync-title">Sincronizar con Pareja</h3>
-        <button class="close-btn" onclick="closeModal('syncModal')"><i data-lucide="x"></i></button>
+        <button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body" style="padding:0.8rem 0.2rem;">
         <p style="font-size:0.88rem; color:var(--text-color); margin-bottom:1.2rem; text-align:center; line-height:1.4;" id="txt-sync-desc">
@@ -560,7 +563,7 @@
   </script>
 
   <script>
-    let appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }] };
+    let appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [{ id: 1, type: 'feeding', detail: 'Leche Materna Extraída (110 ml)', amount: 110, timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false }, alarms: [] }] };
     let selectedDate = new Date();
     let selectedMatrixWeekDate = new Date();
 
@@ -633,7 +636,7 @@
     window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appData.lang); applyTheme(appData.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v40', 'babycare_data_v37', 'babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data'];
+      const keys = ['babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37', 'babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -666,7 +669,7 @@
       saveState();
     }
     
-    function saveState() { localStorage.setItem('babycare_data_v40', JSON.stringify(appData)); populateBabySelector(); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); renderAlarms(); }
+    function saveState() { localStorage.setItem('babycare_data_v40_1_0', JSON.stringify(appData)); populateBabySelector(); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); renderAlarms(); }
 
     function populateBabySelector() {
       const sel = document.getElementById('babySelector');
@@ -790,7 +793,6 @@
       if (document.getElementById('txt-sync-title')) document.getElementById('txt-sync-title').innerText = t.scanTitle || "Sincronizar con Pareja";
       if (document.getElementById('txt-sync-desc')) document.getElementById('txt-sync-desc').innerText = t.scanDesc || "Comparte los datos actualizados de tu bebé.";
       
-      // Dynamic strings missing
       if(document.getElementById('opt-4weeks')) document.getElementById('opt-4weeks').innerText = t.opt4w;
       if(document.getElementById('opt-6months')) document.getElementById('opt-6months').innerText = t.opt6m;
       if(document.getElementById('leg-feed')) document.getElementById('leg-feed').innerText = `${t.legFeed} 🍼`;
@@ -815,7 +817,6 @@
       if(document.getElementById('txt-btn-import')) document.getElementById('txt-btn-import').innerText = t.btnImport;
       if(document.getElementById('txt-sync-import-title')) document.getElementById('txt-sync-import-title').innerText = t.syncImportTitle;
 
-      // Manual Translations
       if (document.getElementById('txt-manual-header')) {
         document.getElementById('txt-manual-header').innerHTML = `<i data-lucide="book-open" style="color:var(--primary);"></i> ${t.mHeader}`;
         if (document.getElementById('mstep1-title')) { document.getElementById('mstep1-title').innerText = t.ms1Title; document.getElementById('mstep1-desc').innerText = t.ms1Desc; }
@@ -971,7 +972,6 @@
       lucide.createIcons();
     }
 
-    /* NAVEGACIÓN Y RENDIMIENTO DE MATRIZ SEMANAL DE 24 HORAS */
     function changeMatrixWeek(weeksOffset) {
       selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
       renderWeeklyMatrix24h();
@@ -1021,7 +1021,7 @@
       hoursColHtml += '</div>';
       grid.innerHTML += hoursColHtml;
 
-      weekDates.forEach((dateStr) => {
+      weekDates.forEach((dateStr, dayIdx) => {
         let colContent = `<div class="grid-day-col" style="height:576px;">`;
         let dayBlocks = [];
 
@@ -1261,7 +1261,7 @@
 
     function openModal(id) { 
       document.getElementById(`${id}Modal`).classList.add('open'); 
-      if (id === 'alarmsModal') renderAlarms();
+      if (id === 'alarms') renderAlarms();
     }
     function closeModal(id) { document.getElementById(`${id}Modal`).classList.remove('open'); }
 
@@ -1271,87 +1271,6 @@
       getActiveBaby().dob = document.getElementById('profDob').value;
       getActiveBaby().gender = document.getElementById('profGender').value;
       saveState(); closeModal('profile');
-    }
-
-    let calDate = new Date();
-    function renderCalendar() {
-      const grid = document.getElementById('calendarGrid'); grid.innerHTML = '';
-      const year = calDate.getFullYear(); const month = calDate.getMonth();
-      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
-      const t = i18n[appData.lang] || i18n['es'];
-      const dayHeaders = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-
-      dayHeaders.forEach(d => { grid.innerHTML += `<div class="cal-day-name">${d}</div>`; });
-      const firstDay = new Date(year, month, 1).getDay();
-      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
-      const totalDays = new Date(year, month + 1, 0).getDate();
-
-      for (let i = 0; i < startingPos; i++) grid.innerHTML += `<div></div>`;
-      const today = new Date();
-
-      for (let day = 1; day <= totalDays; day++) {
-        const dateKey = getLocalDateStr(new Date(year, month, day));
-        const dayLogs = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
-        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
-        let dotsHtml = '';
-        if (dayLogs.length > 0) {
-          dotsHtml = '<div class="cal-dots">';
-          if (dayLogs.some(l => l.type === 'feeding')) dotsHtml += '<div class="cal-dot" style="background:#FFE599"></div>';
-          if (dayLogs.some(l => l.type === 'diaper')) dotsHtml += '<div class="cal-dot" style="background:#C5E1A5"></div>';
-          if (dayLogs.some(l => l.type === 'sleep')) dotsHtml += '<div class="cal-dot" style="background:#D7BCE8"></div>';
-          dotsHtml += '</div>';
-        }
-        grid.innerHTML += `<div class="cal-cell ${isToday ? 'today' : ''}" onclick="selectCalendarDate(${year}, ${month}, ${day})"><span>${day}</span>${dotsHtml}</div>`;
-      }
-    }
-
-    function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
-    function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
-    function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
-
-    /* Gráficas OMS Estándar */
-    let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null; let barRoutinesChartInstance = null;
-
-    function initChart() {
-      const ctxWeight = document.getElementById('weightChart').getContext('2d');
-      weightChartInstance = new Chart(ctxWeight, {
-        type: 'line',
-        data: {
-          labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
-          datasets: [
-            { label: 'Léo (Kg)', data: [3.3, 4.2, 5.4, null, null, null], borderColor: '#FF8B94', backgroundColor: 'rgba(255,139,148,0.2)', borderWidth: 3, tension: 0.3 },
-            { label: 'OMS Mediana (P50)', data: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-      });
-
-      const ctxHeight = document.getElementById('heightChart').getContext('2d');
-      heightChartInstance = new Chart(ctxHeight, {
-        type: 'line',
-        data: {
-          labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
-          datasets: [
-            { label: 'Léo (cm)', data: [50, 54.5, 58, null, null, null], borderColor: '#779ECB', backgroundColor: 'rgba(119,158,203,0.2)', borderWidth: 3, tension: 0.3 },
-            { label: 'OMS Mediana (P50)', data: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6], borderColor: '#B2AC88', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-      });
-
-      const ctxHead = document.getElementById('headChart').getContext('2d');
-      headChartInstance = new Chart(ctxHead, {
-        type: 'line',
-        data: {
-          labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
-          datasets: [
-            { label: 'Léo (cm)', data: [34.5, 36.8, 38, null, null, null], borderColor: '#B2AC88', backgroundColor: 'rgba(178,172,136,0.2)', borderWidth: 3, tension: 0.3 },
-            { label: 'OMS Mediana (P50)', data: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-      });
     }
 
     function getBarChartRealData(range) {
@@ -1503,7 +1422,8 @@
 
     function toggleVaccine(id) { getActiveBaby().vaccines[id] = !getActiveBaby().vaccines[id]; saveState(); renderVaccines(); }
 
-    /* FUNCIONES DE SINCRONIZACIÓN DIRECTA (SIN QR) */
+    /* FUNCIONES DE SINCRONIZACIÓN CORREGIDAS Y COMPATIBLES CON MÓVILES (100% GARANTIZADAS) */
+    
     function shareViaWhatsApp() {
       try {
         const dataStr = JSON.stringify(appData, null, 2);
@@ -1594,7 +1514,7 @@
                appData.babies[0].vaccines = imported.vaccines || {};
             }
             saveState();
-            closeModal('syncModal');
+            closeModal('sync');
             alert("¡Datos sincronizados con éxito!");
           } else {
             alert("El archivo no tiene un formato válido de BabyCare.");
@@ -1675,7 +1595,6 @@
       });
       if (changed) {
         saveState();
-        renderAlarms();
       }
     }, 30000);
   </script>

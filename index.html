@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 1.1.1 - Control Completo del Bebé</title>
+  <title>BabyCare 1.1.2 - Control Completo del Bebé</title>
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -217,7 +217,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">👶</div>
-      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">1.1.1</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.75rem; color:#555; font-weight:800;">1.1.2</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -340,7 +340,7 @@
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
 
-      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px CON SUB-COLUMNAS PARALELAS) -->
+      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
           <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de Rutina de 24 Horas</h3>
@@ -560,18 +560,18 @@
           Comparte los datos actualizados de tu bebé de forma instantánea mediante WhatsApp o guardando el archivo de respaldo.
         </p>
 
-        <button onclick="shareViaWhatsApp()" style="background:#25D366; color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.8rem; box-shadow:0 4px 12px rgba(37,211,102,0.25);">
+        <button type="button" onclick="shareViaWhatsApp()" style="background:#25D366; color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.8rem; box-shadow:0 4px 12px rgba(37,211,102,0.25);">
           💬 <span id="txt-btn-wa">Enviar datos por WhatsApp</span>
         </button>
 
-        <button onclick="shareDataDirectly()" style="background:var(--primary); color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1rem; box-shadow:0 4px 12px rgba(122,162,247,0.25);">
+        <button type="button" onclick="shareDataDirectly()" style="background:var(--primary); color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1rem; box-shadow:0 4px 12px rgba(122,162,247,0.25);">
           📲 <span id="txt-btn-share">Compartir Archivo JSON</span>
         </button>
 
         <hr style="border:none; border-top:1px solid var(--border-color); margin:1rem 0;">
 
         <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:0.5rem;" id="txt-sync-import-title">¿Recibiste el archivo de la pareja?</h4>
-        <button onclick="triggerFileInput()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <button type="button" onclick="triggerFileInput()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
           📥 <span id="txt-btn-import">Cargar Archivo Recibido</span>
         </button>
       </div>
@@ -597,17 +597,9 @@
     let selectedDate = new Date();
     let selectedMatrixWeekDate = new Date();
 
-    function getActiveBaby() { 
-      const b = appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; 
-      if (!b.alarms) b.alarms = [];
-      if (!b.logs) b.logs = [];
-      if (!b.vaccines) b.vaccines = {};
-      return b;
-    }
-
     const i18n = {
       es: {
-        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (Enlace)", menuScan: "Sincronizar", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir Datos de Sincronización", qrDesc: "Comparte los datos actualizados de tu bebé.", scanTitle: "Sincronizar con Pareja", scanDesc: "Comparte los datos actualizados.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuScan: "Sincronizar", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", scanTitle: "Sincronizar con Pareja", scanDesc: "Comparte los datos actualizados de tu bebé.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche total", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
         mHeader: "Manual de Uso Paso a Paso Completo",
@@ -629,7 +621,7 @@
         deleteConfirm: "¿Estás seguro de eliminar este registro?", deleteBabyConfirm: "¿Estás seguro de eliminar todo el historial de", cannotDeleteOnly: "No puedes eliminar el único perfil.", syncSuccess: "¡Sincronización completada!", importSuccess: "¡Importado correctamente!", invalidFormat: "El archivo no tiene un formato válido de BabyCare.", errorRead: "Error al leer el archivo JSON.", errorDownload: "Error al descargar archivo. Inténtelo de nuevo."
       },
       fr: {
-        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données", menuScan: "Synchroniser", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager les Données", qrDesc: "Partagez les données par WhatsApp.", scanTitle: "Synchroniser", scanDesc: "Partagez les données.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuScan: "Synchroniser", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", scanTitle: "Synchroniser", scanDesc: "Partagez les données.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
         sumFeed: "🍼 Lait total", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
         mHeader: "Guide d'Utilisation Étape par Étape Complet",
@@ -651,7 +643,7 @@
         deleteConfirm: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?", deleteBabyConfirm: "Supprimer toutes les données pour", cannotDeleteOnly: "Vous ne pouvez pas supprimer le seul profil.", syncSuccess: "Synchronisation terminée !", importSuccess: "Importé avec succès !", invalidFormat: "Le fichier n'a pas un format BabyCare valide.", errorRead: "Erreur lors de la lecture du fichier JSON.", errorDownload: "Erreur de téléchargement. Veuillez réessayer."
       },
       en: {
-        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data", menuScan: "Sync", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share Synchronization Data", qrDesc: "Share data directly via WhatsApp/Email.", scanTitle: "Sync Data", scanDesc: "Share updated baby data.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuScan: "Sync", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", scanTitle: "Sync Data", scanDesc: "Share updated baby data.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
         sumFeed: "🍼 Total Milk", sumSleep: "💤 Total Sleep", sumDiaper: "💦 Diapers",
         mHeader: "Complete Step-by-Step User Manual",
@@ -684,10 +676,31 @@
       return `${y}-${m}-${day}`;
     }
 
-    window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appData.lang); applyTheme(appData.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
+    function getActiveBaby() { 
+      const b = appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; 
+      if (!b.alarms) b.alarms = [];
+      if (!b.logs) b.logs = [];
+      if (!b.vaccines) b.vaccines = {};
+      return b;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => { 
+      loadLocalStorageWithMigration(); 
+      setLanguage(appData.lang); 
+      applyTheme(appData.theme); 
+      renderBabyProfile(); 
+      renderLogs(); 
+      renderCalendar(); 
+      renderVaccines(); 
+      initChart(); 
+      initBarChart(); 
+      renderWeeklyMatrix24h(); 
+      checkAlerts(); 
+      lucide.createIcons(); 
+    });
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v1_1_1', 'babycare_data_v1_1_0', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37', 'babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data'];
+      const keys = ['babycare_data_v1_1_2', 'babycare_data_v1_1_1', 'babycare_data_v1_1_0', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37', 'babycare_data'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -720,7 +733,18 @@
       saveState();
     }
     
-    function saveState() { localStorage.setItem('babycare_data_v1_1_1', JSON.stringify(appData)); populateBabySelector(); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); renderAlarms(); }
+    function saveState() { 
+      localStorage.setItem('babycare_data_v1_1_2', JSON.stringify(appData)); 
+      populateBabySelector(); 
+      renderBabyProfile(); 
+      renderLogs(); 
+      renderCalendar(); 
+      checkAlerts(); 
+      updateChart(); 
+      updateBarChart(); 
+      renderWeeklyMatrix24h(); 
+      renderAlarms(); 
+    }
 
     function populateBabySelector() {
       const sel = document.getElementById('babySelector');
@@ -781,14 +805,6 @@
 
       if (tabId === 'manual') document.body.classList.add('manual-mode');
       else document.body.classList.remove('manual-mode');
-
-      // Resize or initialize charts if they are now visible
-      if (tabId === 'calendar' && !barRoutinesChartInstance) {
-         initBarChart();
-      }
-      if (tabId === 'charts' && !weightChartInstance) {
-         initChart();
-      }
     }
 
     function toggleTheme() { appData.theme = appData.theme === 'light' ? 'dark' : 'light'; applyTheme(appData.theme); saveState(); }
@@ -923,14 +939,6 @@
     function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
     function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 180; canvas.height = 180; ctx.drawImage(img, 0, 0, 180, 180); getActiveBaby().photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
 
-    function getActiveBaby() { 
-      const b = appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; 
-      if (!b.alarms) b.alarms = [];
-      if (!b.logs) b.logs = [];
-      if (!b.vaccines) b.vaccines = {};
-      return b;
-    }
-
     function renderBabyProfile() {
       const baby = getActiveBaby();
       const t = i18n[appData.lang] || i18n['es'];
@@ -1021,6 +1029,13 @@
       document.getElementById('val-sum-feed').innerText = `${totalMilkMl} ml`;
       document.getElementById('val-sum-sleep').innerText = `${sleepHours}h ${sleepMinsRem}m`;
       document.getElementById('val-sum-diaper').innerText = `${totalDiapersCount} t`;
+
+      const todayFeedings = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === todayKey && l.type === 'feeding').length;
+      const todayDiapers = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === todayKey && l.type === 'diaper').length;
+      if (document.getElementById('val-feed-count')) {
+        document.getElementById('val-feed-count').innerText = `${todayFeedings} hoy`;
+        document.getElementById('val-diaper-count').innerText = `${todayDiapers} hoy`;
+      }
 
       if (filtered.length === 0) {
         container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`;
@@ -1266,7 +1281,7 @@
           </div>
           <div class="form-group">
             <label>Duración Calculada</label>
-            <input type="text" class="form-control" id="fSleepDurationDisplay" readonly placeholder="Calculando..." style="background:#f0f0f0;">
+            <input type="text" class="form-control" id="fSleepDurationDisplay" readonly placeholder="Calculando..." style="background:var(--bg-color);">
           </div>
         `;
         setTimeout(calcSleepDuration, 100);
@@ -1354,6 +1369,22 @@
       saveState(); closeFormModal();
     }
 
+    function openModal(id) { 
+      document.getElementById(`${id}Modal`).classList.add('open'); 
+      if (id === 'alarms') renderAlarms();
+    }
+    
+    function closeModal(id) { document.getElementById(`${id}Modal`).classList.remove('open'); }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      getActiveBaby().name = document.getElementById('profName').value;
+      getActiveBaby().dob = document.getElementById('profDob').value;
+      getActiveBaby().gender = document.getElementById('profGender').value;
+      saveState(); closeModal('profile');
+    }
+
+    let calDate = new Date();
     function renderCalendar() {
       const grid = document.getElementById('calendarGrid'); grid.innerHTML = '';
       const year = calDate.getFullYear(); const month = calDate.getMonth();
@@ -1404,11 +1435,11 @@
             { label: 'OMS Mediana (P50)', data: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
       });
 
-      const ctxHeight = document.getElementById('heightChart').getContext('2d');
-      heightChartInstance = new Chart(ctxHeight, {
+      const ctxHeight = document.getElementById('heightChart');
+      heightChartInstance = new Chart(ctxHeight.getContext('2d'), {
         type: 'line',
         data: {
           labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
@@ -1417,11 +1448,11 @@
             { label: 'OMS Mediana (P50)', data: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6], borderColor: '#B2AC88', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
       });
 
-      const ctxHead = document.getElementById('headChart').getContext('2d');
-      headChartInstance = new Chart(ctxHead, {
+      const ctxHead = document.getElementById('headChart');
+      headChartInstance = new Chart(ctxHead.getContext('2d'), {
         type: 'line',
         data: {
           labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
@@ -1430,10 +1461,10 @@
             { label: 'OMS Mediana (P50)', data: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
       });
       
-      updateChart(); // Populate with actual data after init
+      updateChart();
     }
 
     function getBarChartRealData(range) {
@@ -1536,7 +1567,6 @@
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom' },
             tooltip: { enabled: true, mode: 'index', intersect: false }
@@ -1590,9 +1620,6 @@
 
     function toggleVaccine(id) { getActiveBaby().vaccines[id] = !getActiveBaby().vaccines[id]; saveState(); renderVaccines(); }
 
-    /* FUNCIONES DE SINCRONIZACIÓN CORREGIDAS Y COMPATIBLES CON MÓVILES (100% GARANTIZADAS) */
-    
-    // BOTÓN 1: WhatsApp Directo
     function shareViaWhatsApp() {
       try {
         const dataStr = JSON.stringify(appData, null, 2);
@@ -1620,7 +1647,6 @@
       }, 400);
     }
 
-    // BOTÓN 2: Compartir Archivo JSON (Menú Nativo del Móvil)
     function shareDataDirectly() {
       try {
         const dataStr = JSON.stringify(appData, null, 2);
@@ -1640,7 +1666,6 @@
       exportJSON();
     }
 
-    // BOTÓN 3: Cargar Archivo Recibido (Importar directo)
     function triggerFileInput() {
       let fileInput = document.getElementById('syncFileInput');
       if (!fileInput) {
@@ -1699,7 +1724,6 @@
       reader.readAsText(file);
     }
 
-    /* SISTEMA DE ALARMAS LOCALES CON SONIDO */
     function addAlarm() {
       const type = document.getElementById('newAlarmType').value;
       const offsetMins = parseInt(document.getElementById('newAlarmOffset').value);

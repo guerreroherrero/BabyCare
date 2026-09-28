@@ -8,13 +8,11 @@
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FFB7B2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%237AA2F7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     :root {
       --bg-color: #FDFBF7;
@@ -39,7 +37,7 @@
       --card-bg: #24283B;
       --text-color: #C0CAF5;
       --text-muted: #7AA2F7;
-      --primary: #F7768E;
+      --primary: #7AA2F7;
       --secondary: #7AA2F7;
       --accent-green: #9ECE6A;
       --accent-yellow: #E0AF68;
@@ -52,7 +50,7 @@
     }
 
     * { box-sizing: border-box; font-family: 'Nunito', sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; padding-bottom: 90px; }
+    body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; padding-bottom: 90px; transition: background 0.3s, color 0.3s; }
 
     header {
       display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.25rem;
@@ -84,7 +82,7 @@
     .baby-info p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
 
     .alert-banner { background: var(--warning); border: 1px solid var(--warning-border); border-radius: 16px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 700; }
-    .alert-banner.hidden { display: none; }
+    .alert-banner.hidden { display: none !important; }
 
     .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; display: flex; justify-content: space-between; }
     .grid-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
@@ -104,105 +102,37 @@
     .date-display { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; }
     .today-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
 
-    /* Resumen diario acumulado */
-    .daily-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.6rem;
-      margin-bottom: 1.2rem;
-    }
-    .summary-card {
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 0.6rem;
-      text-align: center;
-    }
-    .summary-card h5 {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-    .summary-card p {
-      font-size: 0.95rem;
-      font-weight: 900;
-      color: var(--text-color);
-    }
+    .daily-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1.2rem; }
+    .summary-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.6rem; text-align: center; }
+    .summary-card h5 { font-size: 0.72rem; color: var(--text-muted); font-weight: 800; margin-bottom: 2px; }
+    .summary-card p { font-size: 0.95rem; font-weight: 900; color: var(--text-color); }
 
-    /* Timeline Diario Estructurado */
-    .timeline-container {
-      position: relative;
-      padding-left: 1rem;
-      margin-top: 0.8rem;
-    }
-    .timeline-container::before {
-      content: '';
-      position: absolute;
-      left: 18px;
-      top: 15px;
-      bottom: 15px;
-      width: 2px;
-      background: var(--border-color);
-    }
+    .timeline-container { position: relative; padding-left: 1rem; margin-top: 0.8rem; }
+    .timeline-container::before { content: ''; position: absolute; left: 18px; top: 15px; bottom: 15px; width: 2px; background: var(--border-color); }
+    .timeline-item { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 0.6rem 0; }
+    .timeline-point { width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid var(--card-bg); box-shadow: 0 0 0 2px var(--primary); z-index: 2; margin-top: 4px; flex-shrink: 0; }
+    .timeline-content { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.7rem 0.9rem; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; }
+    .timeline-main-info h4 { font-size: 0.88rem; font-weight: 800; }
+    .timeline-main-info p { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
 
-    .timeline-item {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 0.6rem 0;
-    }
-
-    .timeline-point {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 3px solid var(--card-bg);
-      box-shadow: 0 0 0 2px var(--primary);
-      z-index: 2;
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
-
-    .timeline-content {
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 0.7rem 0.9rem;
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .timeline-main-info h4 {
-      font-size: 0.88rem;
-      font-weight: 800;
-    }
-    .timeline-main-info p {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .time-ago-badge {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 2px 6px;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-left: 4px;
-    }
-
+    .time-ago-badge { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; color: var(--primary); margin-left: 4px; }
     .log-actions { display: flex; align-items: center; gap: 6px; }
     .log-time { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
     .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; }
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
+
+    .routine-24h-grid { display: grid; grid-template-columns: 36px repeat(7, 1fr); background: var(--bg-color); border-radius: 16px; padding: 0.8rem 0.3rem; border: 1px solid var(--border-color); gap: 2px; font-size: 0.7rem; }
+    .grid-header-cell { text-align: center; font-weight: 800; color: var(--text-muted); padding-bottom: 6px; }
+    .grid-header-cell.active-day { color: var(--primary); background: rgba(122, 162, 247, 0.2); border-radius: 6px; }
+    .grid-time-label { color: var(--text-muted); font-weight: 800; text-align: right; padding-right: 4px; line-height: 24px; height: 24px; font-size: 0.65rem; }
+    .grid-day-col { position: relative; height: 576px; background: rgba(0,0,0,0.02); border-radius: 4px; border-left: 1px dashed var(--border-color); overflow: hidden; }
+    .routine-block { position: absolute; border-radius: 3px; min-height: 8px; opacity: 0.92; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.15s; }
+    .routine-block:active { transform: scale(1.1); z-index: 10; }
+    .routine-block.feed { background: #F59E0B; }
+    .routine-block.sleep { background: #818CF8; }
+    .routine-block.diaper { background: #34D399; }
+    .routine-block.bath { background: #38BDF8; }
 
     .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
@@ -212,17 +142,10 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
-    /* Modal */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    
-    .modal {
-      background: var(--card-bg); width: 100%; max-width: 550px;
-      border-radius: 20px 20px 0 0; padding: 0.9rem 1.1rem;
-      max-height: 96vh; display: flex; flex-direction: column;
-      transform: translateY(100%); transition: transform 0.3s;
-    }
+    .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 20px 20px 0 0; padding: 0.9rem 1.1rem; max-height: 96vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s; }
     @media(min-width: 600px) { .modal { border-radius: 20px; transform: translateY(20px); } }
     .modal-overlay.open .modal { transform: translateY(0); }
     
@@ -230,17 +153,7 @@
     .modal-header h3 { font-size: 1.05rem; font-weight: 800; }
     .modal-header-actions { display: flex; align-items: center; gap: 8px; }
     
-    .btn-header-save {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.35rem 0.8rem;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
+    .btn-header-save { background: var(--primary); color: white; border: none; padding: 0.35rem 0.8rem; border-radius: 10px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
     .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; -webkit-overflow-scrolling: touch; }
     .modal-footer { flex-shrink: 0; padding-top: 0.4rem; background: var(--card-bg); }
     
@@ -250,10 +163,7 @@
     .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
 
     .btn-submit { width: 100%; padding: 0.65rem; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 0.9rem; font-weight: 800; cursor: pointer; }
-
-    #qrContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; gap: 0.8rem; }
-    #qrcode { padding: 12px; background: white; border-radius: 16px; box-shadow: var(--shadow); min-width: 200px; min-height: 200px; display: flex; align-items: center; justify-content: center; }
-    #qr-reader { width: 100%; border-radius: 16px; overflow: hidden; }
+    .btn-danger { background: var(--danger); color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.8rem; margin-top: 10px; }
 
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; }
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 800; cursor: pointer; text-decoration: none; }
@@ -268,6 +178,37 @@
     .step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .step-content h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; }
     .step-content p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; }
+
+    .alarm-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.8rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;}
+
+    /* Modo Lectura Oculta Elementos Top */
+    body.manual-mode header {
+      display: none !important;
+    }
+    body.manual-mode .baby-profile-card,
+    body.manual-mode .alert-banner,
+    body.manual-mode .section-title,
+    body.manual-mode .grid-actions,
+    body.manual-mode .tabs-nav {
+      display: none !important;
+    }
+    
+    .exit-manual-btn {
+      display: none;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    body.manual-mode .exit-manual-btn {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -288,11 +229,19 @@
       <h3 id="txt-menu-title" style="font-weight:900;">Menú BabyCare</h3>
       <button class="close-btn" onclick="closeDrawer()"><i data-lucide="x"></i></button>
     </div>
+    
+    <div class="form-group" style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border-color);">
+      <label id="txt-baby-select-label" style="font-size:0.7rem; color:var(--text-muted);">Bebé Activo</label>
+      <select class="form-control" id="babySelector" onchange="switchBaby(this.value)" style="margin-bottom:6px; font-weight:800;"></select>
+      <button onclick="closeDrawer(); openModal('addBaby');" style="background:var(--bg-color); border:1px dashed var(--primary); color:var(--primary); padding:6px; width:100%; border-radius:8px; font-weight:800; cursor:pointer;" id="txt-btn-add-baby">+ Añadir Bebé</button>
+    </div>
+
     <div class="drawer-item" onclick="closeDrawer(); openModal('profile');"><i data-lucide="user"></i><span id="txt-menu-profile">Perfil del Bebé</span></div>
-    <div class="drawer-item" onclick="closeDrawer(); openModal('syncModal');"><i data-lucide="share-2"></i><span id="txt-menu-sync">Sincronizar con Pareja</span></div>
+    <div class="drawer-item" onclick="closeDrawer(); openModal('alarms');"><i data-lucide="bell"></i><span id="txt-menu-alarms">Alarmas y Avisos</span></div>
+    <div class="drawer-item" onclick="closeDrawer(); openModal('sync');"><i data-lucide="share-2"></i><span id="txt-menu-sync">Sincronizar con Pareja</span></div>
     <div class="drawer-item" onclick="closeDrawer(); switchTab('manual');"><i data-lucide="book-open"></i><span id="txt-menu-manual">Manual de Uso</span></div>
     <div class="drawer-item" onclick="exportJSON()"><i data-lucide="download"></i><span id="txt-menu-export">Exportar Archivo JSON</span></div>
-    <div class="drawer-item" onclick="document.getElementById('importInput').click()"><i data-lucide="upload"></i><span id="txt-menu-import">Importar Archivo JSON</span><input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)"></div>
+    <div class="drawer-item" onclick="triggerFileInput()"><i data-lucide="upload"></i><span id="txt-menu-import">Importar Archivo JSON</span></div>
     <hr style="border:none; border-top:1px solid var(--border-color); margin: 0.4rem 0;">
     <div class="form-group">
       <label id="txt-lang-label">Idioma / Language</label>
@@ -316,7 +265,7 @@
       <button style="margin-left:auto; background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="openModal('profile')"><i data-lucide="edit-3"></i></button>
     </div>
 
-    <div class="alert-banner" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText">Atención: Se recomienda verificar la toma de leche.</span></div>
+    <div class="alert-banner hidden" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText">Atención: Se recomienda verificar la toma de leche.</span></div>
 
     <!-- Acciones Rápidas -->
     <div class="section-title"><span id="txt-quick-actions">Registrar Evento</span></div>
@@ -346,7 +295,7 @@
           <button class="date-nav-btn" onclick="changeSelectedDate(1)"><i data-lucide="chevron-right"></i></button>
         </div>
 
-        <!-- Resumen diario acumulado (Total Leche, Sueño, Pañales) -->
+        <!-- Resumen diario acumulado -->
         <div class="daily-summary-grid">
           <div class="summary-card">
             <h5 id="lbl-sum-feed">🍼 Leche total</h5>
@@ -362,13 +311,14 @@
           </div>
         </div>
 
-        <!-- Timeline Diario de Tomas y Eventos -->
+        <!-- Timeline Diario -->
         <div id="logsContainer" class="timeline-container"></div>
       </div>
     </div>
 
-    <!-- TAB 2: Calendario -->
+    <!-- TAB 2: Calendario, Gráfico de Barras con Desplegable y Matriz Semanal de 24h -->
     <div class="tab-content" id="tab-calendar">
+      <!-- 1. Vista Mensual de Calendario -->
       <div class="card">
         <div class="calendar-header">
           <button class="burger-btn" onclick="prevMonth()"><i data-lucide="chevron-left"></i></button>
@@ -376,6 +326,38 @@
           <button class="burger-btn" onclick="nextMonth()"><i data-lucide="chevron-right"></i></button>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+
+      <!-- 2. Gráfica de Barras Interactivas con Desplegable -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
+          <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
+          <select class="form-control" id="barRangeSelect" style="width:auto; padding:0.3rem 0.6rem; font-size:0.78rem;" onchange="updateBarChartRange(this.value)">
+            <option value="4weeks" id="opt-4weeks" selected>Últimas 4 semanas</option>
+            <option value="6months" id="opt-6months">Últimos 6 meses</option>
+          </select>
+        </div>
+        <canvas id="barRoutinesChart" height="180"></canvas>
+      </div>
+
+      <!-- 3. MATRIZ SEMANAL DE RUTINA DE 24 HORAS EN CALENDARIO (AMPLIADA A 576px CON SUB-COLUMNAS PARALELAS) -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+          <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de Rutina de 24 Horas</h3>
+          <div style="display:flex; gap:6px;">
+            <button class="date-nav-btn" onclick="changeMatrixWeek(-1)"><i data-lucide="chevron-left"></i></button>
+            <button class="date-nav-btn" onclick="changeMatrixWeek(1)"><i data-lucide="chevron-right"></i></button>
+          </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;" id="matrixWeekLabel">Semana del 21 al 27 de Septiembre</p>
+
+        <div id="routine24hGrid" class="routine-24h-grid"></div>
+
+        <div style="display:flex; justify-content:center; gap:12px; margin-top:0.8rem; font-size:0.72rem; color:var(--text-muted);">
+          <span><span style="display:inline-block; width:10px; height:10px; background:#F59E0B; border-radius:2px; margin-right:4px;"></span><span id="leg-feed">Toma 🍼</span></span>
+          <span><span style="display:inline-block; width:10px; height:10px; background:#818CF8; border-radius:2px; margin-right:4px;"></span><span id="leg-sleep">Sueño 💤</span></span>
+          <span><span style="display:inline-block; width:10px; height:10px; background:#34D399; border-radius:2px; margin-right:4px;"></span><span id="leg-diaper">Pañal 💩</span></span>
+        </div>
       </div>
     </div>
 
@@ -414,60 +396,23 @@
       </div>
     </div>
 
-    <!-- TAB 5: Manual Completo Traducido -->
+    <!-- TAB 5: Manual Completo Traducido (9 Pasos) -->
     <div class="tab-content" id="tab-manual">
+      <button class="exit-manual-btn" onclick="switchTab('logs')">⬅ Volver a Inicio</button>
       <div class="card">
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
-          <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
+          <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso Completo
         </h3>
 
-        <div class="manual-step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h4 id="mstep1-title">Personalizar foto y datos del Bebé</h4>
-            <p id="mstep1-desc">Pulsa directamente sobre la foto o avatar del bebé para subir su foto real. Pulsa en el icono del lápiz para configurar su nombre, fecha de nacimiento y género.</p>
-          </div>
-        </div>
-
-        <div class="manual-step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h4 id="mstep2-title">Registrar Eventos de Forma Rápida</h4>
-            <p id="mstep2-desc">Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner la hora de inicio y fin para calcular la duración exacta.</p>
-          </div>
-        </div>
-
-        <div class="manual-step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h4 id="mstep3-title">Timeline Diario y Resumen Acumulado</h4>
-            <p id="mstep3-desc">Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta de eventos de la jornada.</p>
-          </div>
-        </div>
-
-        <div class="manual-step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h4 id="mstep4-title">Sincronización por Código QR</h4>
-            <p id="mstep4-desc">Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja' para leer la pantalla.</p>
-          </div>
-        </div>
-
-        <div class="manual-step">
-          <div class="step-number">5</div>
-          <div class="step-content">
-            <h4 id="mstep5-title">Comparativas y Alertas OMS</h4>
-            <p id="mstep5-desc">En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50), además del conteo diario de tomas y pañales.</p>
-          </div>
-        </div>
-
-        <div class="manual-step">
-          <div class="step-number">6</div>
-          <div class="step-content">
-            <h4 id="mstep6-title">Copia de Seguridad y Configuración</h4>
-            <p id="mstep6-desc">Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo.</p>
-          </div>
-        </div>
+        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil y Foto del Bebé</h4><p id="mstep1-desc">Pulsa sobre la foto o avatar circular para subir la foto real de tu bebé. Toca el icono del lápiz ✏️ para editar su nombre, fecha de nacimiento y género.</p></div></div>
+        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido de Eventos</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud, Baño). La hora actual y 'Leche Extraída (110 ml)' se seleccionan por defecto.</p></div></div>
+        <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep3-title">Registro y Cálculo de Sueño</h4><p id="mstep3-desc">Al registrar el sueño, indica la 'Hora Inicio' y 'Hora Fin'. La app calculará automáticamente la duración de la siesta en horas y minutos.</p></div></div>
+        <div class="manual-step"><div class="step-number">4</div><div class="step-content"><h4 id="mstep4-title">Diario, Timeline y Totales Acumulados</h4><p id="mstep4-desc">Navega con las flechas día a día para consultar la secuencia cronológica de eventos. En la parte superior verás el resumen acumulado del día.</p></div></div>
+        <div class="manual-step"><div class="step-number">5</div><div class="step-content"><h4 id="mstep5-title">Calendario, Gráfico de Barras y Matriz 24h</h4><p id="mstep5-desc">En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa (con filtro de 4 semanas o 6 meses) y la matriz visual de 24 horas.</p></div></div>
+        <div class="manual-step"><div class="step-number">6</div><div class="step-content"><h4 id="mstep6-title">Gráficas de Crecimiento y Percentiles OMS</h4><p id="mstep6-desc">En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la mediana P50 de la OMS.</p></div></div>
+        <div class="manual-step"><div class="step-number">7</div><div class="step-content"><h4 id="mstep7-title">Sincronización entre dos Móviles</h4><p id="mstep7-desc">Para pasar todos los datos al otro progenitor: Pulsa 'Sincronizar' y envía el archivo por WhatsApp. En el otro móvil, pulsa 'Cargar Archivo Recibido'.</p></div></div>
+        <div class="manual-step"><div class="step-number">8</div><div class="step-content"><h4 id="mstep8-title">Copias de Seguridad e Idiomas</h4><p id="mstep8-desc">Desde el menú lateral puedes cambiar de idioma (Español 🇪🇸, Francés 🇫🇷, Inglés 🇬🇧), activar el Modo Oscuro o Exportar/Importar archivos JSON de respaldo.</p></div></div>
+        <div class="manual-step"><div class="step-number">9</div><div class="step-content"><h4 id="mstep9-title">Alarmas y Avisos con Sonido</h4><p id="mstep9-desc">Programa temporizadores personalizados (ej. próxima toma) desde el menú. Emitirán un sonido en tu dispositivo incluso si la app está en segundo plano.</p></div></div>
       </div>
     </div>
   </div>
@@ -475,7 +420,7 @@
   <nav class="bottom-nav">
     <div class="nav-item active" id="bnav-item-home" onclick="switchTab('logs')"><i data-lucide="list"></i><span id="bnav-home">Inicio</span></div>
     <div class="nav-item" onclick="openFormModal('feeding')"><i data-lucide="plus-circle" style="width:28px; height:28px; color:var(--primary);"></i><span id="bnav-add">Añadir</span></div>
-    <div class="nav-item" id="bnav-item-sync" onclick="openModal('syncModal')"><i data-lucide="share-2"></i><span id="bnav-share">Sincronizar</span></div>
+    <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="share-2"></i><span id="bnav-share">Sincronizar</span></div>
   </nav>
 
   <!-- Modales con Doble Botón Guardar -->
@@ -528,17 +473,87 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn-submit" id="btn-save-profile">Actualizar Perfil</button>
+          <button type="button" class="btn-danger" id="btn-delete-baby" onclick="deleteActiveBaby()">Eliminar Bebé</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- Modal Añadir Nuevo Bebé -->
+  <div class="modal-overlay" id="addBabyModal">
+    <div class="modal">
+      <form onsubmit="addBaby(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
+        <div class="modal-header">
+          <h3 id="txt-add-baby-title">Añadir Nuevo Bebé</h3>
+          <div class="modal-header-actions">
+            <button type="button" class="close-btn" onclick="closeModal('addBaby')"><i data-lucide="x"></i></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="form-group"><label id="lbl-new-baby-name">Nombre</label><input type="text" class="form-control" id="newBabyName" required></div>
+          <div class="form-group"><label id="lbl-new-baby-dob">Fecha de Nacimiento</label><input type="date" class="form-control" id="newBabyDob" required></div>
+          <div class="form-group"><label id="lbl-new-baby-gender">Género</label><select class="form-control" id="newBabyGender"><option value="male" id="opt-new-male">Niño 👦</option><option value="female" id="opt-new-female">Niña 👧</option></select></div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-submit" id="btn-create-baby">Añadir Bebé</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Alarmas y Avisos -->
+  <div class="modal-overlay" id="alarmsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="txt-alarms-title">Alarmas y Avisos</h3>
+        <div class="modal-header-actions">
+          <button type="button" class="close-btn" onclick="closeModal('alarms')"><i data-lucide="x"></i></button>
+        </div>
+      </div>
+      <div class="modal-body" id="alarmsContainer" style="padding-bottom:10px;"></div>
+      <div class="modal-footer">
+        <div style="background:var(--bg-color); padding:10px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:10px;">
+          <h4 style="font-size:0.85rem; font-weight:800; margin-bottom:10px;" id="txt-new-alarm">Crear Nueva Alarma</h4>
+          <div class="form-group">
+            <label id="lbl-alarm-type">Tipo de Aviso</label>
+            <select class="form-control" id="newAlarmType">
+              <option value="Toma / Biberón 🍼">Toma / Biberón 🍼</option>
+              <option value="Pañal 💩">Pañal 💩</option>
+              <option value="Despertar de Siesta 💤">Despertar de Siesta 💤</option>
+              <option value="Medicina / Salud 🌡️">Medicina / Salud 🌡️</option>
+            </select>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label id="lbl-alarm-time">Avisar en...</label>
+              <select class="form-control" id="newAlarmOffset">
+                <option value="30">30 Minutos</option>
+                <option value="60">1 Hora</option>
+                <option value="120">2 Horas</option>
+                <option value="180">3 Horas</option>
+                <option value="240">4 Horas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label id="lbl-alarm-sound">Sonido</label>
+              <select class="form-control" id="newAlarmSound">
+                <option value="watch">Reloj Digital</option>
+                <option value="chime">Campana / Chime</option>
+              </select>
+            </div>
+          </div>
+          <button type="button" onclick="addAlarm()" style="background:var(--primary); color:white; border:none; padding:0.6rem 1rem; border-radius:10px; font-weight:800; font-size:0.85rem; margin-top:8px; cursor:pointer; width:100%;" id="btn-save-alarm">Añadir Alarma</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Único de Sincronización Directa por WhatsApp / Archivo -->
-  <div class="modal-overlay" id="syncModalModal">
+  <div class="modal-overlay" id="syncModal">
     <div class="modal">
       <div class="modal-header">
         <h3 id="txt-sync-title">Sincronizar con Pareja</h3>
-        <button class="close-btn" onclick="closeModal('syncModal')"><i data-lucide="x"></i></button>
+        <button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body" style="padding:0.8rem 0.2rem;">
         <p style="font-size:0.88rem; color:var(--text-color); margin-bottom:1.2rem; text-align:center; line-height:1.4;" id="txt-sync-desc">
@@ -546,18 +561,18 @@
         </p>
 
         <button onclick="shareViaWhatsApp()" style="background:#25D366; color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.8rem; box-shadow:0 4px 12px rgba(37,211,102,0.25);">
-          💬 Enviar datos por WhatsApp
+          💬 <span id="txt-btn-wa">Enviar datos por WhatsApp</span>
         </button>
 
         <button onclick="shareDataDirectly()" style="background:var(--primary); color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1rem; box-shadow:0 4px 12px rgba(122,162,247,0.25);">
-          📲 Compartir Archivo JSON
+          📲 <span id="txt-btn-share">Compartir Archivo JSON</span>
         </button>
 
         <hr style="border:none; border-top:1px solid var(--border-color); margin:1rem 0;">
 
         <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:0.5rem;" id="txt-sync-import-title">¿Recibiste el archivo de la pareja?</h4>
         <button onclick="triggerFileInput()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
-          📥 Cargar Archivo Recibido
+          📥 <span id="txt-btn-import">Cargar Archivo Recibido</span>
         </button>
       </div>
     </div>
@@ -578,45 +593,84 @@
   </script>
 
   <script>
-    let appState = { lang: 'es', theme: 'light', baby: { name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null }, logs: [{ id: 1, type: 'feeding', detail: 'Leche Materna Extraída (110 ml)', amount: 110, timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false } };
+    let appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [{ id: 1, type: 'feeding', detail: 'Leche Materna Extraída (110 ml)', amount: 110, timestamp: new Date().toISOString(), notes: 'Muy tranquilo' }, { id: 2, type: 'growth', detail: 'Peso: 5.40 kg, Talla: 58 cm, Cabeza: 38 cm', weight: 5.4, height: 58, head: 38, timestamp: new Date().toISOString(), notes: '' }], vaccines: { 'v1': true, 'v2': false }, alarms: [] }] };
     let selectedDate = new Date();
+    let selectedMatrixWeekDate = new Date();
+
+    function getActiveBaby() { 
+      const b = appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; 
+      if (!b.alarms) b.alarms = [];
+      if (!b.logs) b.logs = [];
+      if (!b.vaccines) b.vaccines = {};
+      return b;
+    }
 
     const i18n = {
       es: {
-        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (QR)", menuScan: "Escanear QR de pareja", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir por QR", qrDesc: "Abre la cámara del otro móvil para sincronizar.", scanTitle: "Escanear QR de Pareja", scanDesc: "Apunta con la cámara al código mostrado.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuQR: "Compartir datos (Enlace)", menuScan: "Sincronizar", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", qrTitle: "Compartir Datos de Sincronización", qrDesc: "Comparte los datos actualizados de tu bebé.", scanTitle: "Sincronizar con Pareja", scanDesc: "Comparte los datos actualizados.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche total", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
-        mHeader: "Manual de Uso Paso a Paso",
-        ms1Title: "Personalizar foto y datos del Bebé", ms1Desc: "Pulsa directamente sobre la foto o avatar del bebé para subir su foto real. Pulsa en el icono del lápiz para configurar su nombre, fecha de nacimiento y género.",
-        ms2Title: "Registrar Eventos de Forma Rápida", ms2Desc: "Haz clic en cualquiera de los botones de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud o Baño). En la alimentación viene preestablecida 'Leche Extraída' y en el sueño puedes poner hora inicio y fin.",
-        ms3Title: "Timeline Diario y Resumen Acumulado", ms3Desc: "Consulta de un vistazo cuánto ha comido, dormido y los pañales cambiados cada día. El timeline cronológico te permite ver la secuencia exacta del día.",
-        ms4Title: "Sincronización por Código QR", ms4Desc: "Para traspasar datos de un móvil a otro: En el móvil A pulsa 'Sincronizar' en la barra inferior. En el móvil B abre el menú y pulsa 'Escanear QR de pareja'.",
-        ms5Title: "Comparativas y Alertas OMS", ms5Desc: "En la pestaña 'Curvas OMS' podrás ver gráficos de peso, talla y perímetro cefálico comparados con la mediana de la OMS (P50).",
-        ms6Title: "Copia de Seguridad y Configuración", ms6Desc: "Desde el menú lateral de hamburguesa puedes cambiar el idioma (Español, Francés, Inglés), activar el Modo Oscuro o exportar/importar archivos JSON de respaldo."
+        mHeader: "Manual de Uso Paso a Paso Completo",
+        ms1Title: "1. Personalizar Perfil y Foto del Bebé", ms1Desc: "Pulsa sobre la foto o avatar circular para subir la foto real de tu bebé. Toca el icono del lápiz ✏️ para editar su nombre, fecha de nacimiento y género.",
+        ms2Title: "2. Registro Rápido de Eventos", ms2Desc: "Pulsa sobre cualquier botón de la cuadrícula superior (Alimentación, Pañal, Sueño, Crecimiento, Salud, Baño). La hora actual y 'Leche Extraída (110 ml)' se seleccionan por defecto.",
+        ms3Title: "3. Registro y Cálculo de Sueño", ms3Desc: "Al registrar el sueño, indica la 'Hora Inicio' y 'Hora Fin'. La app calculará automáticamente la duración de la siesta en horas y minutos.",
+        ms4Title: "4. Diario, Timeline y Totales Acumulados", ms4Desc: "Navega con las flechas día a día para consultar la secuencia cronológica de eventos. En la parte superior verás el resumen acumulado de ml de leche, horas de sueño y pañales del día.",
+        ms5Title: "5. Calendario, Gráfico de Barras y Matriz 24h", ms5Desc: "En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa (con filtro de 4 semanas o 6 meses) y la matriz visual de 24 horas. Pulsa cualquier bloque para ver sus detalles.",
+        ms6Title: "6. Gráficas de Crecimiento y Percentiles OMS", ms6Desc: "En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la mediana P50 de la OMS.",
+        ms7Title: "7. Sincronización entre dos Móviles", ms7Desc: "Para pasar todos los datos al otro progenitor: Pulsa 'Sincronizar' y envía el archivo por WhatsApp. En el otro móvil, pulsa 'Cargar Archivo Recibido'.",
+        ms8Title: "8. Copias de Seguridad e Idiomas", ms8Desc: "Desde el menú lateral puedes cambiar de idioma (Español 🇪🇸, Francés 🇫🇷, Inglés 🇬🇧), activar el Modo Oscuro o Exportar/Importar archivos JSON de respaldo.",
+        ms9Title: "9. Alarmas y Avisos con Sonido", ms9Desc: "Programa temporizadores personalizados (ej. próxima toma) desde el menú. Emitirán un sonido en tu dispositivo incluso si la app está en segundo plano.",
+        opt4w: "Últimas 4 semanas", opt6m: "Últimos 6 meses", legFeed: "Toma", legSleep: "Sueño", legDiaper: "Pañal",
+        babySelect: "Bebé Activo", addBaby: "+ Añadir Bebé", newBabyTitle: "Añadir Nuevo Bebé", createBabyBtn: "Añadir Bebé", deleteBabyBtn: "Eliminar Bebé", menuAlarms: "Alarmas y Avisos", alarmTitle: "Alarmas y Avisos", newAlarmTitle: "Crear Nueva Alarma", alarmType: "Tipo de Aviso", alarmTime: "Avisar en...", alarmSound: "Sonido", alarmSaveBtn: "Añadir Alarma",
+        btnWa: "Enviar datos por WhatsApp", btnShare: "Compartir Archivo JSON", btnImport: "Cargar Archivo Recibido", syncImportTitle: "¿Recibiste el archivo de la pareja?",
+        daysOfLife: "días de vida", months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"], weekOf: "Semana del", to: "al",
+        noAlarms: "No hay alarmas pendientes.", atTime: "A las", alarmAdded: "Alarma añadida. Te avisaremos en", minutes: "minutos", soundWatch: "Reloj Digital", soundChime: "Campana / Chime",
+        opt30m: "30 Minutos", opt1h: "1 Hora", opt2h: "2 Horas", opt3h: "3 Horas", opt4h: "4 Horas",
+        deleteConfirm: "¿Estás seguro de eliminar este registro?", deleteBabyConfirm: "¿Estás seguro de eliminar todo el historial de", cannotDeleteOnly: "No puedes eliminar el único perfil.", syncSuccess: "¡Sincronización completada!", importSuccess: "¡Importado correctamente!", invalidFormat: "El archivo no tiene un formato válido de BabyCare.", errorRead: "Error al leer el archivo JSON.", errorDownload: "Error al descargar archivo. Inténtelo de nuevo."
       },
       fr: {
-        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données (QR)", menuScan: "Scanner le QR partenaire", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager par Code QR", qrDesc: "Ouvrez l'appareil photo de l'autre téléphone pour synchroniser.", scanTitle: "Scanner le QR du Partenaire", scanDesc: "Pointez la caméra sur le code QR affiché.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuQR: "Partager les données", menuScan: "Synchroniser", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", qrTitle: "Partager les Données", qrDesc: "Partagez les données par WhatsApp.", scanTitle: "Synchroniser", scanDesc: "Partagez les données.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
         sumFeed: "🍼 Lait total", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
-        mHeader: "Guide d'Utilisation Étape par Étape",
-        ms1Title: "Personnaliser la photo et le profil", ms1Desc: "Appuyez sur la photo du bébé pour en télécharger une vraie. Cliquez sur le crayon pour modifier le nom, la date de naissance et le sexe.",
-        ms2Title: "Enregistrer rapidement des événements", ms2Desc: "Cliquez sur l'un des boutons supérieurs (Alimentation, Couche, Sommeil, Croissance, Santé, Bain). Le lait tiré est sélectionné par défaut.",
-        ms3Title: "Chronologie quotidienne et résumé", ms3Desc: "Consultez en un coup d'œil la quantité de lait, le sommeil total et les couches de chaque journée sur une frise chronologique.",
-        ms4Title: "Synchronisation par Code QR", ms4Desc: "Pour transférer des données : Sur le téléphone A, appuyez sur 'Sync'. Sur le téléphone B, ouvrez le menu et appuyez sur 'Scanner QR partenaire'.",
-        ms5Title: "Comparaisons et Alertes OMS", ms5Desc: "Dans l'onglet 'Courbes OMS', observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS (P50).",
-        ms6Title: "Sauvegarde et Paramètres", ms6Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON."
+        mHeader: "Guide d'Utilisation Étape par Étape Complet",
+        ms1Title: "1. Personnaliser la photo et le profil", ms1Desc: "Appuyez sur la photo du bébé pour en télécharger une vraie. Cliquez sur le crayon pour modifier le nom, la date de naissance et le sexe.",
+        ms2Title: "2. Enregistrer rapidement des événements", ms2Desc: "Cliquez sur l'un des boutons supérieurs. Le lait tiré (110 ml) est sélectionné par défaut.",
+        ms3Title: "3. Calcul du Sommeil", ms3Desc: "Indiquez l'heure de début et de fin de sommeil pour calculer automatiquement la durée.",
+        ms4Title: "4. Journal et Totaux Quotidiens", ms4Desc: "Consultez la chronologie quotidienne et le résumé des ml de lait, heures de sommeil et couches.",
+        ms5Title: "5. Calendrier, Graphique et Matrice 24h", ms5Desc: "Consultez le calendrier, le graphique comparatif (4 semaines / 6 mois) et la matrice 24h.",
+        ms6Title: "6. Courbes de Croissance OMS", ms6Desc: "Observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS.",
+        ms7Title: "7. Synchronisation", ms7Desc: "Pour transférer des données : Appuyez sur 'Sync' et envoyez le fichier.",
+        ms8Title: "8. Sauvegarde et Paramètres", ms8Desc: "Depuis le menu latéral, changez la langue (Espagnol, Français, Anglais), activez le Mode Sombre ou exportez/importez des fichiers JSON.",
+        ms9Title: "9. Alarmes et Avis", ms9Desc: "Programmez des minuteries personnalisées (par ex. pour le prochain repas) dans le menu.",
+        opt4w: "Dernières 4 semaines", opt6m: "Derniers 6 mois", legFeed: "Lait", legSleep: "Sommeil", legDiaper: "Couche",
+        babySelect: "Bébé Actif", addBaby: "+ Ajouter un bébé", newBabyTitle: "Ajouter un nouveau bébé", createBabyBtn: "Ajouter", deleteBabyBtn: "Supprimer le bébé", menuAlarms: "Alarmes", alarmTitle: "Alarmes et Avis", newAlarmTitle: "Créer une alarme", alarmType: "Type", alarmTime: "Avis dans...", alarmSound: "Son", alarmSaveBtn: "Ajouter l'alarme",
+        btnWa: "Envoyer via WhatsApp", btnShare: "Partager JSON", btnImport: "Charger le fichier reçu", syncImportTitle: "Avez-vous reçu le fichier ?",
+        daysOfLife: "jours de vie", months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"], weekOf: "Semaine du", to: "au",
+        noAlarms: "Aucune alarme en attente.", atTime: "À", alarmAdded: "Alarme ajoutée. Nous vous préviendrons dans", minutes: "minutes", soundWatch: "Horloge Numérique", soundChime: "Cloche",
+        opt30m: "30 Minutes", opt1h: "1 Heure", opt2h: "2 Heures", opt3h: "3 Heures", opt4h: "4 Heures",
+        deleteConfirm: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?", deleteBabyConfirm: "Supprimer toutes les données pour", cannotDeleteOnly: "Vous ne pouvez pas supprimer le seul profil.", syncSuccess: "Synchronisation terminée !", importSuccess: "Importé avec succès !", invalidFormat: "Le fichier n'a pas un format BabyCare valide.", errorRead: "Erreur lors de la lecture du fichier JSON.", errorDownload: "Erreur de téléchargement. Veuillez réessayer."
       },
       en: {
-        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data (QR)", menuScan: "Scan Partner QR", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share via QR Code", qrDesc: "Open partner's camera to sync all data instantly.", scanTitle: "Scan Partner's QR", scanDesc: "Point camera at the displayed QR code.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuQR: "Share Data", menuScan: "Sync", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", qrTitle: "Share Synchronization Data", qrDesc: "Share data directly via WhatsApp/Email.", scanTitle: "Sync Data", scanDesc: "Share updated baby data.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
         sumFeed: "🍼 Total Milk", sumSleep: "💤 Total Sleep", sumDiaper: "💦 Diapers",
-        mHeader: "Step-by-Step User Manual",
-        ms1Title: "Personalize Baby Photo & Details", ms1Desc: "Tap directly on the circular baby icon to upload a real photo. Click the pencil icon to modify the baby's name, birth date, and gender.",
-        ms2Title: "Quickly Log Events", ms2Desc: "Click any button in the top grid (Feeding, Diaper, Sleep, Growth, Health, Bath). Expressed Milk is set by default.",
-        ms3Title: "Daily Timeline & Summary", ms3Desc: "Check total milk intake, total sleep, and diaper counts at a glance with a visual chronological timeline.",
-        ms4Title: "Sync Between Phones with QR Code", ms4Desc: "To transfer data: On Phone A, tap 'Sync' in the bottom bar. On Phone B, open the menu and tap 'Scan Partner QR' to read the screen.",
-        ms5Title: "WHO Growth Charts & Alerts", ms5Desc: "Under the 'WHO Growth' tab, view weight, height, and head circumference charts compared to WHO median (P50).",
-        ms6Title: "Backup & Settings", ms6Desc: "From the side menu you can change language (Spanish, French, English), toggle Dark Mode, or export/import JSON backup files."
+        mHeader: "Complete Step-by-Step User Manual",
+        ms1Title: "1. Personalize Baby Photo & Details", ms1Desc: "Tap directly on the circular baby icon to upload a real photo. Click the pencil icon to modify the baby's name, birth date, and gender.",
+        ms2Title: "2. Quickly Log Events", ms2Desc: "Click any button in the top grid. Expressed Milk (110 ml) is set by default.",
+        ms3Title: "3. Sleep Duration Tracking", ms3Desc: "Enter 'Start Time' and 'End Time' to automatically calculate nap duration.",
+        ms4Title: "4. Daily Timeline & Totals", ms4Desc: "Check total milk intake, total sleep, and diaper counts at a glance.",
+        ms5Title: "5. Calendar, Bar Chart & 24h Matrix", ms5Desc: "Examine monthly calendar, 4-week / 6-month comparative bar chart, and 24h matrix grid.",
+        ms6Title: "6. WHO Growth Percentile Charts", ms6Desc: "Under 'WHO Growth', view weight, height, and head circumference charts.",
+        ms7Title: "7. Sync Between Phones", ms7Desc: "Tap 'Sync' and send the file via WhatsApp. On the other phone, tap 'Load Received File'.",
+        ms8Title: "8. Backup & Language Settings", ms8Desc: "From the side menu change language (Spanish, French, English), toggle Dark Mode, or export/import JSON files.",
+        ms9Title: "9. Alarms & Alerts", ms9Desc: "Set custom timers (e.g. next feeding) from the menu to notify you with sound.",
+        opt4w: "Last 4 weeks", opt6m: "Last 6 months", legFeed: "Feed", legSleep: "Sleep", legDiaper: "Diaper",
+        babySelect: "Active Baby", addBaby: "+ Add Baby", newBabyTitle: "Add New Baby", createBabyBtn: "Add Baby", deleteBabyBtn: "Delete Baby", menuAlarms: "Alarms & Alerts", alarmTitle: "Alarms & Alerts", newAlarmTitle: "Create New Alarm", alarmType: "Alert Type", alarmTime: "Alert in...", alarmSound: "Sound", alarmSaveBtn: "Add Alarm",
+        btnWa: "Send via WhatsApp", btnShare: "Share JSON File", btnImport: "Load Received File", syncImportTitle: "Received partner's file?",
+        daysOfLife: "days old", months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], weekOf: "Week of", to: "to",
+        noAlarms: "No pending alarms.", atTime: "At", alarmAdded: "Alarm added. We will notify you in", minutes: "minutes", soundWatch: "Digital Watch", soundChime: "Chime",
+        opt30m: "30 Minutes", opt1h: "1 Hour", opt2h: "2 Hours", opt3h: "3 Hours", opt4h: "4 Hours",
+        deleteConfirm: "Are you sure you want to delete this record?", deleteBabyConfirm: "Delete all data for", cannotDeleteOnly: "You cannot delete the only profile.", syncSuccess: "Sync completed!", importSuccess: "Successfully imported!", invalidFormat: "Invalid BabyCare format file.", errorRead: "Error reading JSON file.", errorDownload: "Error downloading file. Please try again."
       }
     };
 
@@ -630,10 +684,87 @@
       return `${y}-${m}-${day}`;
     }
 
-    window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appState.lang); applyTheme(appState.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); checkAlerts(); lucide.createIcons(); });
+    window.addEventListener('DOMContentLoaded', () => { loadLocalStorageWithMigration(); setLanguage(appData.lang); applyTheme(appData.theme); renderBabyProfile(); renderLogs(); renderCalendar(); renderVaccines(); initChart(); initBarChart(); renderWeeklyMatrix24h(); checkAlerts(); lucide.createIcons(); });
 
-    function loadLocalStorageWithMigration() { const keys = ['babycare_data_v1_1_1', 'babycare_data_v20', 'babycare_data_v19', 'babycare_data_v18', 'babycare_data_v17', 'babycare_data']; for (let key of keys) { const saved = localStorage.getItem(key); if (saved) { try { const parsed = JSON.parse(saved); if (parsed && parsed.logs) { appState = parsed; saveState(); break; } } catch(e){} } } }
-    function saveState() { localStorage.setItem('babycare_data_v1_1_1', JSON.stringify(appState)); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); }
+    function loadLocalStorageWithMigration() {
+      const keys = ['babycare_data_v1_1_1', 'babycare_data_v1_1_0', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37', 'babycare_data_v36', 'babycare_data_v35', 'babycare_data_v34', 'babycare_data_v30', 'babycare_data'];
+      let loaded = false;
+      for (let key of keys) {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed.babies) {
+              appData = parsed;
+            } else if (parsed.baby && parsed.logs) {
+              appData.lang = parsed.lang || 'es';
+              appData.theme = parsed.theme || 'light';
+              appData.babies = [{
+                id: Date.now(),
+                name: parsed.baby.name || 'Léo',
+                dob: parsed.baby.dob || '2026-07-19',
+                gender: parsed.baby.gender || 'male',
+                photo: parsed.baby.photo || null,
+                logs: parsed.logs || [],
+                vaccines: parsed.vaccines || {},
+                alarms: []
+              }];
+              appData.activeBabyId = appData.babies[0].id;
+            }
+            loaded = true;
+            break;
+          } catch(e){}
+        }
+      }
+      populateBabySelector();
+      saveState();
+    }
+    
+    function saveState() { localStorage.setItem('babycare_data_v1_1_1', JSON.stringify(appData)); populateBabySelector(); renderBabyProfile(); renderLogs(); renderCalendar(); checkAlerts(); updateChart(); updateBarChart(); renderWeeklyMatrix24h(); renderAlarms(); }
+
+    function populateBabySelector() {
+      const sel = document.getElementById('babySelector');
+      if(!sel) return;
+      sel.innerHTML = '';
+      appData.babies.forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b.id;
+        opt.text = b.name;
+        if(b.id === appData.activeBabyId) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    function switchBaby(id) {
+      appData.activeBabyId = parseInt(id);
+      saveState();
+    }
+
+    function addBaby(e) {
+      e.preventDefault();
+      const n = document.getElementById('newBabyName').value;
+      const d = document.getElementById('newBabyDob').value;
+      const g = document.getElementById('newBabyGender').value;
+      const newId = Date.now();
+      appData.babies.push({ id: newId, name: n, dob: d, gender: g, photo: null, logs: [], vaccines: {}, alarms: [] });
+      appData.activeBabyId = newId;
+      saveState();
+      closeModal('addBaby');
+    }
+
+    function deleteActiveBaby() {
+      const t = i18n[appData.lang] || i18n['es'];
+      if (appData.babies.length <= 1) {
+        alert(t.cannotDeleteOnly);
+        return;
+      }
+      if (confirm(`${t.deleteBabyConfirm} ${getActiveBaby().name}?`)) {
+        appData.babies = appData.babies.filter(b => b.id !== appData.activeBabyId);
+        appData.activeBabyId = appData.babies[0].id;
+        saveState();
+        closeModal('profile');
+      }
+    }
 
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
     function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
@@ -650,24 +781,28 @@
 
       if (tabId === 'manual') document.body.classList.add('manual-mode');
       else document.body.classList.remove('manual-mode');
-    };
-      if (tabMap[tabId] !== undefined) document.querySelectorAll('.tab-btn')[tabMap[tabId]].classList.add('active');
-      document.getElementById(`tab-${tabId}`).classList.add('active');
-      document.getElementById('bnav-item-home').classList.remove('active');
-      document.getElementById('bnav-item-sync').classList.remove('active');
-      if (tabId === 'logs') document.getElementById('bnav-item-home').classList.add('active');
+
+      // Resize or initialize charts if they are now visible
+      if (tabId === 'calendar' && !barRoutinesChartInstance) {
+         initBarChart();
+      }
+      if (tabId === 'charts' && !weightChartInstance) {
+         initChart();
+      }
     }
 
-    function toggleTheme() { appState.theme = appState.theme === 'light' ? 'dark' : 'light'; applyTheme(appState.theme); saveState(); }
-    function applyTheme(theme) { document.body.setAttribute('data-theme', theme); }
+    function toggleTheme() { appData.theme = appData.theme === 'light' ? 'dark' : 'light'; applyTheme(appData.theme); saveState(); }
+    function applyTheme(theme) {
+      if (theme === 'dark') document.body.setAttribute('data-theme', 'dark');
+      else document.body.removeAttribute('data-theme');
+    }
 
     function setLanguage(lang) {
-      appState.lang = lang;
+      appData.lang = lang;
       const t = i18n[lang] || i18n['es'];
       document.getElementById('txt-menu-title').innerText = t.menuTitle;
       document.getElementById('txt-menu-profile').innerText = t.menuProfile;
-      document.getElementById('txt-menu-qr').innerText = t.menuQR;
-      document.getElementById('txt-menu-scan').innerText = t.menuScan;
+      if (document.getElementById('txt-menu-sync')) document.getElementById('txt-menu-sync').innerText = t.menuScan || "Sincronizar con Pareja";
       document.getElementById('txt-menu-manual').innerText = t.menuManual;
       document.getElementById('txt-menu-export').innerText = t.menuExport;
       document.getElementById('txt-menu-import').innerText = t.menuImport;
@@ -693,11 +828,11 @@
       document.getElementById('lbl-sum-diaper').innerText = t.sumDiaper;
 
       document.getElementById('txt-recent-logs').innerText = t.recentLogs;
+      if (document.getElementById('txt-bar-chart-title')) document.getElementById('txt-bar-chart-title').innerText = t.barChartTitle;
       document.getElementById('txt-weight-chart').innerText = t.weightChart;
       document.getElementById('txt-height-chart').innerText = t.heightChart;
       document.getElementById('txt-head-chart').innerText = t.headChart;
-      document.getElementById('txt-who-routines').innerText = t.whoRoutines;
-      document.getElementById('txt-who-routines-desc').innerText = t.whoRoutinesDesc;
+      document.getElementById('txt-weekly-matrix-title').innerText = t.weeklyMatrixTitle;
       document.getElementById('txt-vaccine-title').innerText = t.vaccineTitle;
 
       document.getElementById('bnav-home').innerText = t.bnavHome;
@@ -718,55 +853,105 @@
       document.getElementById('opt-male').innerText = t.optMale;
       document.getElementById('opt-female').innerText = t.optFemale;
 
-      document.getElementById('txt-qr-title').innerText = t.qrTitle;
-      document.getElementById('txt-qr-desc').innerText = t.qrDesc;
-      document.getElementById('txt-scan-title').innerText = t.scanTitle;
-      document.getElementById('txt-scan-desc').innerText = t.scanDesc;
+      if (document.getElementById('txt-sync-title')) document.getElementById('txt-sync-title').innerText = t.scanTitle || "Sincronizar con Pareja";
+      if (document.getElementById('txt-sync-desc')) document.getElementById('txt-sync-desc').innerText = t.scanDesc || "Comparte los datos actualizados de tu bebé.";
+      if (document.getElementById('alertText')) document.getElementById('alertText').innerText = t.alertFeed;
+      
+      if(document.getElementById('opt-4weeks')) document.getElementById('opt-4weeks').innerText = t.opt4w;
+      if(document.getElementById('opt-6months')) document.getElementById('opt-6months').innerText = t.opt6m;
+      if(document.getElementById('leg-feed')) document.getElementById('leg-feed').innerText = `${t.legFeed} 🍼`;
+      if(document.getElementById('leg-sleep')) document.getElementById('leg-sleep').innerText = `${t.legSleep} 💤`;
+      if(document.getElementById('leg-diaper')) document.getElementById('leg-diaper').innerText = `${t.legDiaper} 💩`;
+      
+      if(document.getElementById('txt-baby-select-label')) document.getElementById('txt-baby-select-label').innerText = t.babySelect;
+      if(document.getElementById('txt-btn-add-baby')) document.getElementById('txt-btn-add-baby').innerText = t.addBaby;
+      if(document.getElementById('txt-add-baby-title')) document.getElementById('txt-add-baby-title').innerText = t.newBabyTitle;
+      if(document.getElementById('btn-create-baby')) document.getElementById('btn-create-baby').innerText = t.createBabyBtn;
+      if(document.getElementById('btn-delete-baby')) document.getElementById('btn-delete-baby').innerText = t.deleteBabyBtn;
+      if(document.getElementById('txt-menu-alarms')) document.getElementById('txt-menu-alarms').innerText = t.menuAlarms;
+      if(document.getElementById('txt-alarms-title')) document.getElementById('txt-alarms-title').innerText = t.alarmTitle;
+      if(document.getElementById('txt-new-alarm')) document.getElementById('txt-new-alarm').innerText = t.newAlarmTitle;
+      if(document.getElementById('lbl-alarm-type')) document.getElementById('lbl-alarm-type').innerText = t.alarmType;
+      if(document.getElementById('lbl-alarm-time')) document.getElementById('lbl-alarm-time').innerText = t.alarmTime;
+      if(document.getElementById('lbl-alarm-sound')) document.getElementById('lbl-alarm-sound').innerText = t.alarmSound;
+      if(document.getElementById('btn-save-alarm')) document.getElementById('btn-save-alarm').innerText = t.alarmSaveBtn;
 
-      // Manual Translations
+      if(document.getElementById('txt-btn-wa')) document.getElementById('txt-btn-wa').innerText = t.btnWa;
+      if(document.getElementById('txt-btn-share')) document.getElementById('txt-btn-share').innerText = t.btnShare;
+      if(document.getElementById('txt-btn-import')) document.getElementById('txt-btn-import').innerText = t.btnImport;
+      if(document.getElementById('txt-sync-import-title')) document.getElementById('txt-sync-import-title').innerText = t.syncImportTitle;
+
+      const alarmTypeSel = document.getElementById('newAlarmType');
+      if (alarmTypeSel && alarmTypeSel.options.length > 0) {
+        alarmTypeSel.options[0].value = alarmTypeSel.options[0].text = `${t.actFeed} 🍼`;
+        alarmTypeSel.options[1].value = alarmTypeSel.options[1].text = `${t.actDiaper} 💩`;
+        alarmTypeSel.options[2].value = alarmTypeSel.options[2].text = `${t.actSleep} 💤`;
+        alarmTypeSel.options[3].value = alarmTypeSel.options[3].text = `${t.actHealth} 🌡️`;
+      }
+      const alarmSoundSel = document.getElementById('newAlarmSound');
+      if (alarmSoundSel && alarmSoundSel.options.length > 0) {
+        alarmSoundSel.options[0].text = t.soundWatch;
+        alarmSoundSel.options[1].text = t.soundChime;
+      }
+      const alarmTimeSel = document.getElementById('newAlarmOffset');
+      if (alarmTimeSel && alarmTimeSel.options.length > 0) {
+        alarmTimeSel.options[0].text = t.opt30m; alarmTimeSel.options[1].text = t.opt1h;
+        alarmTimeSel.options[2].text = t.opt2h; alarmTimeSel.options[3].text = t.opt3h;
+        alarmTimeSel.options[4].text = t.opt4h;
+      }
+
       if (document.getElementById('txt-manual-header')) {
         document.getElementById('txt-manual-header').innerHTML = `<i data-lucide="book-open" style="color:var(--primary);"></i> ${t.mHeader}`;
-        document.getElementById('mstep1-title').innerText = t.ms1Title;
-        document.getElementById('mstep1-desc').innerText = t.ms1Desc;
-        document.getElementById('mstep2-title').innerText = t.ms2Title;
-        document.getElementById('mstep2-desc').innerText = t.ms2Desc;
-        document.getElementById('mstep3-title').innerText = t.ms3Title;
-        document.getElementById('mstep3-desc').innerText = t.ms3Desc;
-        document.getElementById('mstep4-title').innerText = t.ms4Title;
-        document.getElementById('mstep4-desc').innerText = t.ms4Desc;
-        document.getElementById('mstep5-title').innerText = t.ms5Title;
-        document.getElementById('mstep5-desc').innerText = t.ms5Desc;
-        document.getElementById('mstep6-title').innerText = t.ms6Title;
-        document.getElementById('mstep6-desc').innerText = t.ms6Desc;
+        if (document.getElementById('mstep1-title')) { document.getElementById('mstep1-title').innerText = t.ms1Title; document.getElementById('mstep1-desc').innerText = t.ms1Desc; }
+        if (document.getElementById('mstep2-title')) { document.getElementById('mstep2-title').innerText = t.ms2Title; document.getElementById('mstep2-desc').innerText = t.ms2Desc; }
+        if (document.getElementById('mstep3-title')) { document.getElementById('mstep3-title').innerText = t.ms3Title; document.getElementById('mstep3-desc').innerText = t.ms3Desc; }
+        if (document.getElementById('mstep4-title')) { document.getElementById('mstep4-title').innerText = t.ms4Title; document.getElementById('mstep4-desc').innerText = t.ms4Desc; }
+        if (document.getElementById('mstep5-title')) { document.getElementById('mstep5-title').innerText = t.ms5Title; document.getElementById('mstep5-desc').innerText = t.ms5Desc; }
+        if (document.getElementById('mstep6-title')) { document.getElementById('mstep6-title').innerText = t.ms6Title; document.getElementById('mstep6-desc').innerText = t.ms6Desc; }
+        if (document.getElementById('mstep7-title')) { document.getElementById('mstep7-title').innerText = t.ms7Title; document.getElementById('mstep7-desc').innerText = t.ms7Desc; }
+        if (document.getElementById('mstep8-title')) { document.getElementById('mstep8-title').innerText = t.ms8Title; document.getElementById('mstep8-desc').innerText = t.ms8Desc; }
+        if (document.getElementById('mstep9-title')) { document.getElementById('mstep9-title').innerText = t.ms9Title; document.getElementById('mstep9-desc').innerText = t.ms9Desc; }
       }
 
       document.getElementById('langSelect').value = lang;
       renderCalendar();
+      renderWeeklyMatrix24h();
+      renderBabyProfile();
       checkAlerts();
     }
 
     function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
-    function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 180; canvas.height = 180; ctx.drawImage(img, 0, 0, 180, 180); appState.baby.photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
+    function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 180; canvas.height = 180; ctx.drawImage(img, 0, 0, 180, 180); getActiveBaby().photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
+
+    function getActiveBaby() { 
+      const b = appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; 
+      if (!b.alarms) b.alarms = [];
+      if (!b.logs) b.logs = [];
+      if (!b.vaccines) b.vaccines = {};
+      return b;
+    }
 
     function renderBabyProfile() {
-      document.getElementById('babyNameDisplay').innerText = appState.baby.name || 'Léo';
-      const dob = new Date(appState.baby.dob);
+      const baby = getActiveBaby();
+      const t = i18n[appData.lang] || i18n['es'];
+      document.getElementById('babyNameDisplay').innerText = baby.name || 'Léo';
+      const dob = new Date(baby.dob);
       const diffDays = Math.floor((new Date() - dob) / (1000 * 60 * 60 * 24));
       const months = Math.floor(diffDays / 30.4);
       const days = Math.floor(diffDays % 30.4);
-      document.getElementById('babyAgeDisplay').innerText = `${months}m ${days}d (${diffDays} días de vida)`;
+      document.getElementById('babyAgeDisplay').innerText = `${months}m ${days}d (${diffDays} ${t.daysOfLife})`;
       const avatarDiv = document.getElementById('babyAvatarDisplay');
-      if (appState.baby.photo) { avatarDiv.innerHTML = `<img src="${appState.baby.photo}" alt="Bebé">`; } else { avatarDiv.innerHTML = appState.baby.gender === 'female' ? '👧' : '👦'; }
-      document.getElementById('profName').value = appState.baby.name;
-      document.getElementById('profDob').value = appState.baby.dob;
-      document.getElementById('profGender').value = appState.baby.gender;
+      if (baby.photo) { avatarDiv.innerHTML = `<img src="${baby.photo}" alt="Bebé">`; } else { avatarDiv.innerHTML = baby.gender === 'female' ? '👧' : '👦'; }
+      document.getElementById('profName').value = baby.name;
+      document.getElementById('profDob').value = baby.dob;
+      document.getElementById('profGender').value = baby.gender;
     }
 
     function checkAlerts() {
       const banner = document.getElementById('alertBanner');
       const text = document.getElementById('alertText');
-      const t = i18n[appState.lang] || i18n['es'];
-      const feedings = appState.logs.filter(l => l.type === 'feeding').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const t = i18n[appData.lang] || i18n['es'];
+      const feedings = getActiveBaby().logs.filter(l => l.type === 'feeding').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
       if (feedings.length > 0) {
         const lastFeed = new Date(feedings[0].timestamp);
         const hoursAgo = (new Date() - lastFeed) / (1000 * 60 * 60);
@@ -793,38 +978,32 @@
       return `Hace ${days}d`;
     }
 
-    /* Renderizador del Timeline Diario y Acumulados */
     function renderLogs() {
       const container = document.getElementById('logsContainer');
       container.innerHTML = '';
       const targetKey = getLocalDateStr(selectedDate);
       const todayKey = getLocalDateStr(new Date());
-      const t = i18n[appState.lang] || i18n['es'];
+      const t = i18n[appData.lang] || i18n['es'];
 
-      document.getElementById('currentDateText').innerText = selectedDate.toLocaleDateString(appState.lang === 'en' ? 'en-US' : (appState.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' });
-      document.getElementById('todayTag').innerText = (targetKey === todayKey) ? t.today : (appState.lang === 'en' ? 'Go to Today' : 'Ir a Hoy');
+      document.getElementById('currentDateText').innerText = selectedDate.toLocaleDateString(appData.lang === 'en' ? 'en-US' : (appData.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' });
+      document.getElementById('todayTag').innerText = (targetKey === todayKey) ? t.today : (appData.lang === 'en' ? 'Go to Today' : 'Ir a Hoy');
 
-      // Filtrar registros del día seleccionado
-      const filtered = appState.logs.filter(l => l.timestamp.startsWith(targetKey)).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const filtered = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-      // 1. CÁLCULO DE ACUMULADOS DIARIOS
       let totalMilkMl = 0;
       let totalSleepMins = 0;
       let totalDiapersCount = 0;
 
       filtered.forEach(log => {
         if (log.type === 'feeding') {
-          // Extraer ml si existen en el texto o propiedad
-          if (log.amount) {
-            totalMilkMl += parseFloat(log.amount);
-          } else if (log.detail) {
+          if (log.amount) totalMilkMl += parseFloat(log.amount);
+          else if (log.detail) {
             const match = log.detail.match(/(\d+)\s*ml/i);
             if (match) totalMilkMl += parseInt(match[1]);
           }
         } else if (log.type === 'sleep') {
-          if (log.durationMins) {
-            totalSleepMins += parseInt(log.durationMins);
-          } else if (log.detail) {
+          if (log.durationMins) totalSleepMins += parseInt(log.durationMins);
+          else if (log.detail) {
             const matchH = log.detail.match(/(\d+)\s*h/i);
             const matchM = log.detail.match(/(\d+)\s*m/i);
             let mins = 0;
@@ -837,27 +1016,17 @@
         }
       });
 
-      // Actualizar tarjetas de resumen del día
       const sleepHours = Math.floor(totalSleepMins / 60);
       const sleepMinsRem = totalSleepMins % 60;
       document.getElementById('val-sum-feed').innerText = `${totalMilkMl} ml`;
       document.getElementById('val-sum-sleep').innerText = `${sleepHours}h ${sleepMinsRem}m`;
       document.getElementById('val-sum-diaper').innerText = `${totalDiapersCount} t`;
 
-      // Actualizar contadores OMS de hoy
-      const todayFeedings = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'feeding').length;
-      const todayDiapers = appState.logs.filter(l => l.timestamp.startsWith(todayKey) && l.type === 'diaper').length;
-      if (document.getElementById('val-feed-count')) {
-        document.getElementById('val-feed-count').innerText = `${todayFeedings} hoy`;
-        document.getElementById('val-diaper-count').innerText = `${todayDiapers} hoy`;
-      }
-
       if (filtered.length === 0) {
         container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`;
         return;
       }
 
-      // 2. TIMELINE DIARIO CRONOLÓGICO VISUAL
       filtered.forEach(log => {
         const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const timeAgo = getTimeAgoString(log.timestamp);
@@ -890,9 +1059,132 @@
       lucide.createIcons();
     }
 
-    
+    function changeMatrixWeek(weeksOffset) {
+      selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7));
+      renderWeeklyMatrix24h();
+    }
+
+    function renderWeeklyMatrix24h() {
+      const grid = document.getElementById('routine24hGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const curr = new Date(selectedMatrixWeekDate);
+      const dayOfWeek = curr.getDay();
+      const distanceToMon = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+      
+      const mon = new Date(curr);
+      mon.setDate(curr.getDate() + distanceToMon);
+      const sun = new Date(mon);
+      sun.setDate(mon.getDate() + 6);
+
+      const t = i18n[appData.lang] || i18n['es'];
+      const localeCode = appData.lang === 'fr' ? 'fr-FR' : (appData.lang === 'en' ? 'en-US' : 'es-ES');
+      document.getElementById('matrixWeekLabel').innerText = `${t.weekOf} ${mon.getDate()} ${mon.toLocaleDateString(localeCode,{month:'short'})} ${t.to} ${sun.getDate()} ${sun.toLocaleDateString(localeCode,{month:'short', year:'numeric'})}`;
+
+      grid.innerHTML += `<div class="grid-header-cell"></div>`;
+      const daysShort = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+      const weekDates = [];
+      const todayStr = getLocalDateStr(new Date());
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(mon);
+        d.setDate(mon.getDate() + i);
+        const dateStr = getLocalDateStr(d);
+        weekDates.push(dateStr);
+        const isToday = dateStr === todayStr;
+
+        grid.innerHTML += `
+          <div class="grid-header-cell ${isToday ? 'active-day' : ''}">
+            <div>${daysShort[i]}</div>
+            <div style="font-size:0.85rem; font-weight:900;">${d.getDate()}</div>
+          </div>
+        `;
+      }
+
+      let hoursColHtml = '<div style="display:flex; flex-direction:column; height:576px; justify-content:space-between;">';
+      for (let h = 0; h <= 24; h += 3) {
+        hoursColHtml += `<div class="grid-time-label">${h < 10 ? '0' + h : h}</div>`;
+      }
+      hoursColHtml += '</div>';
+      grid.innerHTML += hoursColHtml;
+
+      weekDates.forEach((dateStr) => {
+        let colContent = `<div class="grid-day-col" style="height:576px;">`;
+        let dayBlocks = [];
+
+        getActiveBaby().logs.forEach(log => {
+          let logDateStr = getLocalDateStr(log.timestamp);
+
+          if (log.type === 'sleep' && log.startTimestamp && log.endTimestamp) {
+            const startD = new Date(log.startTimestamp);
+            const endD = new Date(log.endTimestamp);
+            const startStr = getLocalDateStr(startD);
+            const endStr = getLocalDateStr(endD);
+
+            if (startStr !== endStr) {
+              if (dateStr === startStr) {
+                const startMins = startD.getHours() * 60 + startD.getMinutes();
+                const dur1 = 1440 - startMins;
+                dayBlocks.push({ log, startMins, durationMins: dur1 });
+              } else if (dateStr === endStr) {
+                const endMins = endD.getHours() * 60 + endD.getMinutes();
+                dayBlocks.push({ log, startMins: 0, durationMins: endMins });
+              }
+            } else if (dateStr === startStr) {
+              const startMins = startD.getHours() * 60 + startD.getMinutes();
+              const dur = Math.max(15, (endD - startD) / 60000);
+              dayBlocks.push({ log, startMins, durationMins: dur });
+            }
+          } else if (logDateStr === dateStr) {
+            const d = new Date(log.timestamp);
+            const startMins = d.getHours() * 60 + d.getMinutes();
+            dayBlocks.push({ log, startMins, durationMins: 20 });
+          }
+        });
+
+        dayBlocks.sort((a,b) => a.startMins - b.startMins);
+
+        dayBlocks.forEach((blockItem, idx) => {
+          const log = blockItem.log;
+          const topPx = (blockItem.startMins / 1440) * 576;
+          let heightPx = (blockItem.durationMins / 1440) * 576;
+
+          if (topPx + heightPx > 576) {
+            heightPx = Math.max(8, 576 - topPx);
+          }
+
+          let className = 'feed';
+          if (log.type === 'sleep') className = 'sleep';
+          else if (log.type === 'diaper') className = 'diaper';
+          else if (log.type === 'bath') className = 'bath';
+
+          let lane = 0;
+          const concurrent = dayBlocks.filter((other, oIdx) => {
+            if (oIdx >= idx) return false;
+            return Math.abs(other.startMins - blockItem.startMins) < 45;
+          });
+          lane = concurrent.length % 3;
+
+          const widthPercent = 30;
+          const leftPercent = lane * 33;
+
+          colContent += `
+            <div class="routine-block ${className}" 
+                 style="top:${topPx}px; height:${heightPx}px; left:${leftPercent}%; width:${widthPercent}%; cursor:pointer;"
+                 onclick="showMatrixBlockDetail('${log.id}')"
+                 title="${log.detail || ''}">
+            </div>
+          `;
+        });
+
+        colContent += `</div>`;
+        grid.innerHTML += colContent;
+      });
+    }
+
     function showMatrixBlockDetail(logId) {
-      const log = appState.logs.find(l => l.id == logId);
+      const log = getActiveBaby().logs.find(l => l.id == logId);
       if (!log) return;
       const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const dateStr = new Date(log.timestamp).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
@@ -906,10 +1198,16 @@
       alert(`${typeTitle}\n• Hora: ${timeStr} (${dateStr})\n• Detalle: ${log.detail || '-'}\n• Notas: ${log.notes || 'Sin observaciones'}`);
     }
 
-    function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { appState.logs = appState.logs.filter(l => l.id !== id); saveState(); } }
-    function editLog(id) { const log = appState.logs.find(l => l.id === id); if (log) openFormModal(log.type, log); }
+    function deleteLog(id) { 
+      const t = i18n[appData.lang] || i18n['es'];
+      if (confirm(t.deleteConfirm)) { 
+        getActiveBaby().logs = getActiveBaby().logs.filter(l => l.id !== id); 
+        saveState(); 
+      } 
+    }
+    
+    function editLog(id) { const log = getActiveBaby().logs.find(l => l.id === id); if (log) openFormModal(log.type, log); }
 
-    /* Modal Form Generator */
     function openFormModal(type, existingLog = null) {
       document.getElementById('entryType').value = type;
       document.getElementById('editingLogId').value = existingLog ? existingLog.id : '';
@@ -921,7 +1219,6 @@
       document.getElementById('entryTimestamp').value = localIsoStr;
       document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
 
-      // Mostrar/Ocultar campo de Timestamp general
       document.getElementById('groupTimestampMain').style.display = (type === 'sleep') ? 'none' : 'block';
 
       if (type === 'feeding') {
@@ -949,7 +1246,6 @@
       } else if (type === 'sleep') {
         title.innerText = existingLog ? "Editar Sueño 💤" : "Registrar Sueño 💤";
         
-        // Formulario de Sueño con Hora Inicio y Hora Fin
         let startTime = localIsoStr;
         let endTime = localIsoStr;
         if (existingLog && existingLog.startTimestamp && existingLog.endTimestamp) {
@@ -1032,7 +1328,7 @@
         const eVal = document.getElementById('fSleepEnd').value;
         startTimestamp = new Date(sVal).toISOString();
         endTimestamp = new Date(eVal).toISOString();
-        isoTimestamp = endTimestamp; // El registro queda ordenado por la hora que despertó
+        isoTimestamp = endTimestamp;
 
         const diffMs = new Date(eVal) - new Date(sVal);
         durationMins = Math.max(0, Math.floor(diffMs / (1000 * 60)));
@@ -1050,32 +1346,19 @@
       }
 
       if (editingId) {
-        const idx = appState.logs.findIndex(l => l.id == editingId);
-        if (idx !== -1) appState.logs[idx] = { ...appState.logs[idx], type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins };
+        const idx = getActiveBaby().logs.findIndex(l => l.id == editingId);
+        if (idx !== -1) getActiveBaby().logs[idx] = { ...getActiveBaby().logs[idx], type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins };
       } else {
-        appState.logs.push({ id: Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins });
+        getActiveBaby().logs.push({ id: Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins });
       }
       saveState(); closeFormModal();
     }
 
-    function openModal(id) { document.getElementById(`${id}Modal`).classList.add('open'); }
-    function closeModal(id) { document.getElementById(`${id}Modal`).classList.remove('open'); }
-
-    function saveProfile(e) {
-      e.preventDefault();
-      appState.baby.name = document.getElementById('profName').value;
-      appState.baby.dob = document.getElementById('profDob').value;
-      appState.baby.gender = document.getElementById('profGender').value;
-      saveState(); closeModal('profile');
-    }
-
-    let calDate = new Date();
     function renderCalendar() {
       const grid = document.getElementById('calendarGrid'); grid.innerHTML = '';
       const year = calDate.getFullYear(); const month = calDate.getMonth();
-      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
-      const t = i18n[appState.lang] || i18n['es'];
+      const t = i18n[appData.lang] || i18n['es'];
+      document.getElementById('calMonthTitle').innerText = `${t.months[month]} ${year}`;
       const dayHeaders = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
       dayHeaders.forEach(d => { grid.innerHTML += `<div class="cal-day-name">${d}</div>`; });
@@ -1088,7 +1371,7 @@
 
       for (let day = 1; day <= totalDays; day++) {
         const dateKey = getLocalDateStr(new Date(year, month, day));
-        const dayLogs = appState.logs.filter(l => l.timestamp.startsWith(dateKey));
+        const dayLogs = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
         const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
         let dotsHtml = '';
         if (dayLogs.length > 0) {
@@ -1106,11 +1389,13 @@
     function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
     function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
 
-    let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null;
+    let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null; let barRoutinesChartInstance = null;
 
     function initChart() {
-      const ctxWeight = document.getElementById('weightChart').getContext('2d');
-      weightChartInstance = new Chart(ctxWeight, {
+      const ctxWeight = document.getElementById('weightChart');
+      if(!ctxWeight) return;
+      
+      weightChartInstance = new Chart(ctxWeight.getContext('2d'), {
         type: 'line',
         data: {
           labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
@@ -1119,7 +1404,7 @@
             { label: 'OMS Mediana (P50)', data: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
       });
 
       const ctxHeight = document.getElementById('heightChart').getContext('2d');
@@ -1132,7 +1417,7 @@
             { label: 'OMS Mediana (P50)', data: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6], borderColor: '#B2AC88', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
       });
 
       const ctxHead = document.getElementById('headChart').getContext('2d');
@@ -1145,97 +1430,350 @@
             { label: 'OMS Mediana (P50)', data: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
       });
+      
+      updateChart(); // Populate with actual data after init
+    }
+
+    function getBarChartRealData(range) {
+      const today = new Date();
+      let labels = [];
+      let feedData = [];
+      let diaperData = [];
+      let sleepData = [];
+      const t = i18n[appData.lang] || i18n['es'];
+
+      if (range === '6months') {
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+          const y = d.getFullYear();
+          const m = d.getMonth();
+          labels.push(t.months[m]);
+
+          const monthLogs = getActiveBaby().logs.filter(l => {
+            const ld = new Date(l.timestamp);
+            return ld.getFullYear() === y && ld.getMonth() === m;
+          });
+
+          let feeds = monthLogs.filter(l => l.type === 'feeding').length;
+          let diapers = monthLogs.filter(l => l.type === 'diaper').length;
+          let sleepMins = 0;
+          monthLogs.filter(l => l.type === 'sleep').forEach(l => {
+            if (l.durationMins) sleepMins += parseInt(l.durationMins);
+            else if (l.detail) {
+              const matchH = l.detail.match(/(\d+)\s*h/i);
+              const matchM = l.detail.match(/(\d+)\s*m/i);
+              if (matchH) sleepMins += parseInt(matchH[1]) * 60;
+              if (matchM) sleepMins += parseInt(matchM[1]);
+            }
+          });
+
+          feedData.push(feeds);
+          diaperData.push(diapers);
+          sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+        }
+      } else {
+        const currentDay = today.getDay();
+        const distToMon = (currentDay === 0 ? -6 : 1 - currentDay);
+        const thisMon = new Date(today);
+        thisMon.setDate(today.getDate() + distToMon);
+        const localeCode = appData.lang === 'fr' ? 'fr-FR' : (appData.lang === 'en' ? 'en-US' : 'es-ES');
+
+        for (let i = 3; i >= 0; i--) {
+          const mon = new Date(thisMon);
+          mon.setDate(thisMon.getDate() - (i * 7));
+          const sun = new Date(mon);
+          sun.setDate(mon.getDate() + 6);
+
+          const labelStr = `${mon.getDate()} ${mon.toLocaleDateString(localeCode,{month:'short'})} - ${sun.getDate()} ${sun.toLocaleDateString(localeCode,{month:'short'})}`;
+          labels.push(labelStr);
+
+          const monStr = getLocalDateStr(mon);
+          const sunStr = getLocalDateStr(sun);
+
+          const weekLogs = getActiveBaby().logs.filter(l => {
+            const dateStr = getLocalDateStr(l.timestamp);
+            return dateStr >= monStr && dateStr <= sunStr;
+          });
+
+          let feeds = weekLogs.filter(l => l.type === 'feeding').length;
+          let diapers = weekLogs.filter(l => l.type === 'diaper').length;
+          let sleepMins = 0;
+          weekLogs.filter(l => l.type === 'sleep').forEach(l => {
+            if (l.durationMins) sleepMins += parseInt(l.durationMins);
+            else if (l.detail) {
+              const matchH = l.detail.match(/(\d+)\s*h/i);
+              const matchM = l.detail.match(/(\d+)\s*m/i);
+              if (matchH) sleepMins += parseInt(matchH[1]) * 60;
+              if (matchM) sleepMins += parseInt(matchM[1]);
+            }
+          });
+
+          feedData.push(feeds);
+          diaperData.push(diapers);
+          sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+        }
+      }
+
+      return { labels, feedData, diaperData, sleepData };
+    }
+
+    function initBarChart() {
+      const ctxBar = document.getElementById('barRoutinesChart');
+      if (!ctxBar) return;
+      const realData = getBarChartRealData('4weeks');
+
+      barRoutinesChartInstance = new Chart(ctxBar.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: realData.labels,
+          datasets: [
+            { label: 'Tomas 🍼', data: realData.feedData, backgroundColor: '#FFE599', borderRadius: 6 },
+            { label: 'Pañales 💩', data: realData.diaperData, backgroundColor: '#C5E1A5', borderRadius: 6 },
+            { label: 'Sueño (h) 💤', data: realData.sleepData, backgroundColor: '#D7BCE8', borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { enabled: true, mode: 'index', intersect: false }
+          },
+          interaction: { mode: 'nearest', axis: 'x', intersect: false }
+        }
+      });
+    }
+
+    function updateBarChartRange(range) {
+      if (!barRoutinesChartInstance) return;
+      const realData = getBarChartRealData(range);
+      barRoutinesChartInstance.data.labels = realData.labels;
+      barRoutinesChartInstance.data.datasets[0].data = realData.feedData;
+      barRoutinesChartInstance.data.datasets[1].data = realData.diaperData;
+      barRoutinesChartInstance.data.datasets[2].data = realData.sleepData;
+      barRoutinesChartInstance.update();
+    }
+
+    function updateBarChart() {
+      if (barRoutinesChartInstance) {
+        const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '4weeks';
+        updateBarChartRange(selectVal);
+      }
     }
 
     function updateChart() {
       if (!weightChartInstance) return;
-      const growthLogs = appState.logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(a.timestamp));
-      if (growthLogs.length > 0) {
-        const weights = growthLogs.map(l => l.weight).filter(w => w);
-        const heights = growthLogs.map(l => l.height).filter(h => h);
-        const heads = growthLogs.map(l => l.head).filter(h => h);
+      const growthLogs = getActiveBaby().logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(a.timestamp));
+      
+      const weights = growthLogs.map(l => l.weight).filter(w => w);
+      const heights = growthLogs.map(l => l.height).filter(h => h);
+      const heads = growthLogs.map(l => l.head).filter(h => h);
 
-        if (weights.length > 0) { weightChartInstance.data.datasets[0].data = weights; weightChartInstance.update(); }
-        if (heights.length > 0) { heightChartInstance.data.datasets[0].data = heights; heightChartInstance.update(); }
-        if (heads.length > 0) { headChartInstance.data.datasets[0].data = heads; headChartInstance.update(); }
-      }
+      if (weights.length > 0) { weightChartInstance.data.datasets[0].data = weights; }
+      if (heights.length > 0) { heightChartInstance.data.datasets[0].data = heights; }
+      if (heads.length > 0) { headChartInstance.data.datasets[0].data = heads; }
+      
+      weightChartInstance.update();
+      heightChartInstance.update();
+      headChartInstance.update();
     }
 
     function renderVaccines() {
       const container = document.getElementById('vaccinesListContainer'); container.innerHTML = '';
       standardVaccines.forEach(v => {
-        const isDone = appState.vaccines[v.id] || false;
+        const isDone = getActiveBaby().vaccines[v.id] || false;
         container.innerHTML += `<div class="vaccine-item ${isDone ? 'done' : ''}"><div><strong>${v.age}</strong>: ${v.name}</div><div class="checkbox-custom" onclick="toggleVaccine('${v.id}')">${isDone ? '✓' : ''}</div></div>`;
       });
     }
 
-    function toggleVaccine(id) { appState.vaccines[id] = !appState.vaccines[id]; saveState(); renderVaccines(); }
+    function toggleVaccine(id) { getActiveBaby().vaccines[id] = !getActiveBaby().vaccines[id]; saveState(); renderVaccines(); }
 
-    function generateQRCode() {
-      const qrContainer = document.getElementById('qrcode'); qrContainer.innerHTML = '';
-      const syncData = { babyName: appState.baby.name, babyDob: appState.baby.dob, babyGender: appState.baby.gender, logs: appState.logs, vaccines: appState.vaccines };
-      const payload = JSON.stringify(syncData);
+    /* FUNCIONES DE SINCRONIZACIÓN CORREGIDAS Y COMPATIBLES CON MÓVILES (100% GARANTIZADAS) */
+    
+    // BOTÓN 1: WhatsApp Directo
+    function shareViaWhatsApp() {
       try {
-        if (typeof qrcode !== 'undefined') {
-          const qr = qrcode(0, 'L'); qr.addData(payload); qr.make();
-          qrContainer.innerHTML = qr.createImgTag(5); return;
+        const dataStr = JSON.stringify(appData, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const file = new File([blob], `babycare_${getActiveBaby().name}.json`, { type: 'application/json' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            files: [file],
+            title: `BabyCare - ${getActiveBaby().name}`,
+            text: `Datos de ${getActiveBaby().name}`
+          }).catch(() => { fallbackWhatsApp(); });
+          return;
         }
-      } catch(e){}
-      qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}" alt="QR Code" style="width:220px; height:220px;">`;
+      } catch(e) {}
+      
+      fallbackWhatsApp();
     }
 
-    let html5QrcodeScanner = null;
-    function startScanner() {
-      if (html5QrcodeScanner) stopScanner();
-      html5QrcodeScanner = new Html5Qrcode("qr-reader");
-      html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, (decodedText) => {
-        try {
-          const imported = JSON.parse(decodedText);
-          if (imported.logs) {
-            appState.logs = imported.logs; saveState(); stopScanner(); closeModal('qrScan'); alert("¡Sincronizado!");
-          }
-        } catch(e){}
-      }).catch(err => { alert("Activa los permisos de cámara en tu navegador."); });
+    function fallbackWhatsApp() {
+      exportJSON();
+      const text = encodeURIComponent(`¡Hola! Te envío los datos de ${getActiveBaby().name} para BabyCare. Descarga el archivo adjunto y toca 'Cargar Archivo Recibido' en la app para sincronizar.`);
+      setTimeout(() => {
+        window.location.href = `https://api.whatsapp.com/send?text=${text}`;
+      }, 400);
     }
 
-    function stopScanner() { if (html5QrcodeScanner) { html5QrcodeScanner.stop().then(() => html5QrcodeScanner.clear()).catch(e => {}); } }
-
+    // BOTÓN 2: Compartir Archivo JSON (Menú Nativo del Móvil)
     function shareDataDirectly() {
-      const dataStr = JSON.stringify(appState, null, 2);
-      const blob = new Blob([dataStr], { type: 'application/json' });
-      const file = new File([blob], `babycare_${appState.baby.name}.json`, { type: 'application/json' });
+      try {
+        const dataStr = JSON.stringify(appData, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const file = new File([blob], `babycare_${getActiveBaby().name}.json`, { type: 'application/json' });
 
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        navigator.share({
-          files: [file],
-          title: `BabyCare - Datos de ${appState.baby.name}`,
-          text: `Sincronización de BabyCare para ${appState.baby.name}`
-        }).catch(err => {});
-      } else {
-        exportJSON();
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            files: [file],
+            title: `BabyCare - ${getActiveBaby().name}`,
+            text: `Sincronización de BabyCare`
+          }).catch(() => { exportJSON(); });
+          return;
+        }
+      } catch(e) {}
+
+      exportJSON();
+    }
+
+    // BOTÓN 3: Cargar Archivo Recibido (Importar directo)
+    function triggerFileInput() {
+      let fileInput = document.getElementById('syncFileInput');
+      if (!fileInput) {
+        fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.id = 'syncFileInput';
+        fileInput.accept = '.json,application/json';
+        fileInput.style.display = 'none';
+        fileInput.onchange = (e) => importJSON(e);
+        document.body.appendChild(fileInput);
       }
+      fileInput.value = '';
+      fileInput.click();
     }
 
     function exportJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-      const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `babycare_v21_${appState.baby.name}.json`);
-      document.body.appendChild(anchor); anchor.click(); anchor.remove();
+      const t = i18n[appData.lang] || i18n['es'];
+      try {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+        const anchor = document.createElement('a');
+        anchor.setAttribute("href", dataStr);
+        anchor.setAttribute("download", `babycare_${getActiveBaby().name}.json`);
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      } catch(e) {
+        alert(t.errorDownload);
+      }
     }
 
     function importJSON(event) {
-      const file = event.target.files[0]; if (!file) return;
+      const t = i18n[appData.lang] || i18n['es'];
+      const file = event.target.files[0];
+      if (!file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
           const imported = JSON.parse(e.target.result);
-          if (imported.baby && imported.logs) { appState = imported; saveState(); alert("¡Importado!"); }
-        } catch(err){}
+          if (imported.babies || (imported.baby && imported.logs)) {
+            if (imported.babies) {
+               appData = imported;
+            } else {
+               appData.babies[0].logs = imported.logs;
+               appData.babies[0].vaccines = imported.vaccines || {};
+            }
+            saveState();
+            closeModal('syncModal');
+            alert(t.syncSuccess);
+          } else {
+            alert(t.invalidFormat);
+          }
+        } catch(err) {
+          alert(t.errorRead);
+        }
       };
       reader.readAsText(file);
     }
+
+    /* SISTEMA DE ALARMAS LOCALES CON SONIDO */
+    function addAlarm() {
+      const type = document.getElementById('newAlarmType').value;
+      const offsetMins = parseInt(document.getElementById('newAlarmOffset').value);
+      const sound = document.getElementById('newAlarmSound').value;
+      
+      const targetTime = Date.now() + (offsetMins * 60000);
+      const newAlarm = { id: Date.now(), title: type, time: targetTime, sound: sound, triggered: false };
+      
+      getActiveBaby().alarms.push(newAlarm);
+      saveState();
+      
+      const t = i18n[appData.lang] || i18n['es'];
+      alert(`${t.alarmAdded} ${offsetMins} ${t.minutes}.`);
+    }
+
+    function deleteAlarm(id) {
+      getActiveBaby().alarms = getActiveBaby().alarms.filter(a => a.id !== id);
+      saveState();
+    }
+
+    function renderAlarms() {
+      const container = document.getElementById('alarmsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      const activeAlarms = getActiveBaby().alarms.filter(a => !a.triggered).sort((a,b) => a.time - b.time);
+      const t = i18n[appData.lang] || i18n['es'];
+      
+      if (activeAlarms.length === 0) {
+        container.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:var(--text-muted);">${t.noAlarms}</p>`;
+        return;
+      }
+      
+      activeAlarms.forEach(al => {
+        const timeStr = new Date(al.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        container.innerHTML += `
+          <div class="alarm-item">
+            <div>
+              <strong style="font-size:0.85rem;">${al.title}</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${t.atTime} ${timeStr}</div>
+            </div>
+            <button type="button" onclick="deleteAlarm(${al.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i data-lucide="trash-2" style="width:16px;"></i></button>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    function playAlarmSound(soundKey) {
+      const audioUrl = soundKey === 'chime' 
+        ? 'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg' 
+        : 'https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg';
+      const audio = new Audio(audioUrl);
+      audio.play().catch(e => console.log('Audio autoplay blocked by browser', e));
+    }
+
+    setInterval(() => {
+      const now = Date.now();
+      let changed = false;
+      appData.babies.forEach(baby => {
+        if (!baby.alarms) baby.alarms = [];
+        baby.alarms.forEach(al => {
+          if (!al.triggered && now >= al.time) {
+            al.triggered = true;
+            changed = true;
+            playAlarmSound(al.sound);
+            alert(`⏰ ¡Aviso para ${baby.name}!\n\n🔔 ${al.title}`);
+          }
+        });
+      });
+      if (changed) {
+        saveState();
+      }
+    }, 30000);
   </script>
 </body>
 </html>
-

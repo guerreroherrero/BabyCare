@@ -82,7 +82,7 @@
     .baby-info p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
 
     .alert-banner { background: var(--warning); border: 1px solid var(--warning-border); border-radius: 16px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 700; }
-    .alert-banner.hidden { display: none; }
+    .alert-banner.hidden { display: none !important; }
 
     .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; display: flex; justify-content: space-between; }
     .grid-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
@@ -102,13 +102,11 @@
     .date-display { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; }
     .today-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
 
-    /* Resumen diario acumulado */
     .daily-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1.2rem; }
     .summary-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.6rem; text-align: center; }
     .summary-card h5 { font-size: 0.72rem; color: var(--text-muted); font-weight: 800; margin-bottom: 2px; }
     .summary-card p { font-size: 0.95rem; font-weight: 900; color: var(--text-color); }
 
-    /* Timeline Diario Estructurado */
     .timeline-container { position: relative; padding-left: 1rem; margin-top: 0.8rem; }
     .timeline-container::before { content: ''; position: absolute; left: 18px; top: 15px; bottom: 15px; width: 2px; background: var(--border-color); }
     .timeline-item { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 0.6rem 0; }
@@ -124,38 +122,12 @@
     .icon-btn.edit { color: var(--secondary); }
     .icon-btn.delete { color: var(--danger); }
 
-    /* MATRIZ DE RUTINA DE 24 HORAS EN CALENDARIO */
-    .routine-24h-grid {
-      display: grid;
-      grid-template-columns: 36px repeat(7, 1fr);
-      background: var(--bg-color);
-      border-radius: 16px;
-      padding: 0.8rem 0.3rem;
-      border: 1px solid var(--border-color);
-      gap: 2px;
-      font-size: 0.7rem;
-    }
+    .routine-24h-grid { display: grid; grid-template-columns: 36px repeat(7, 1fr); background: var(--bg-color); border-radius: 16px; padding: 0.8rem 0.3rem; border: 1px solid var(--border-color); gap: 2px; font-size: 0.7rem; }
     .grid-header-cell { text-align: center; font-weight: 800; color: var(--text-muted); padding-bottom: 6px; }
     .grid-header-cell.active-day { color: var(--primary); background: rgba(122, 162, 247, 0.2); border-radius: 6px; }
     .grid-time-label { color: var(--text-muted); font-weight: 800; text-align: right; padding-right: 4px; line-height: 24px; height: 24px; font-size: 0.65rem; }
-    
-    .grid-day-col {
-      position: relative;
-      height: 576px;
-      background: rgba(0,0,0,0.02);
-      border-radius: 4px;
-      border-left: 1px dashed var(--border-color);
-      overflow: hidden;
-    }
-    
-    .routine-block {
-      position: absolute;
-      border-radius: 3px;
-      min-height: 8px;
-      opacity: 0.92;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-      transition: transform 0.15s;
-    }
+    .grid-day-col { position: relative; height: 576px; background: rgba(0,0,0,0.02); border-radius: 4px; border-left: 1px dashed var(--border-color); overflow: hidden; }
+    .routine-block { position: absolute; border-radius: 3px; min-height: 8px; opacity: 0.92; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.15s; }
     .routine-block:active { transform: scale(1.1); z-index: 10; }
     .routine-block.feed { background: #F59E0B; }
     .routine-block.sleep { background: #818CF8; }
@@ -170,17 +142,10 @@
     .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
     .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
-    /* Modales */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
     @media(min-width: 600px) { .modal-overlay { align-items: center; } }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    
-    .modal {
-      background: var(--card-bg); width: 100%; max-width: 550px;
-      border-radius: 20px 20px 0 0; padding: 0.9rem 1.1rem;
-      max-height: 96vh; display: flex; flex-direction: column;
-      transform: translateY(100%); transition: transform 0.3s;
-    }
+    .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 20px 20px 0 0; padding: 0.9rem 1.1rem; max-height: 96vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s; }
     @media(min-width: 600px) { .modal { border-radius: 20px; transform: translateY(20px); } }
     .modal-overlay.open .modal { transform: translateY(0); }
     
@@ -611,7 +576,13 @@
     let selectedDate = new Date();
     let selectedMatrixWeekDate = new Date();
 
-    function getActiveBaby() { return appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; }
+    function getActiveBaby() { 
+      const b = appData.babies.find(b => b.id === appData.activeBabyId) || appData.babies[0]; 
+      if (!b.alarms) b.alarms = [];
+      if (!b.logs) b.logs = [];
+      if (!b.vaccines) b.vaccines = {};
+      return b;
+    }
 
     const i18n = {
       es: {
@@ -632,7 +603,8 @@
         babySelect: "Bebé Activo", addBaby: "+ Añadir Bebé", newBabyTitle: "Añadir Nuevo Bebé", createBabyBtn: "Añadir Bebé", deleteBabyBtn: "Eliminar Bebé", menuAlarms: "Alarmas y Avisos", alarmTitle: "Alarmas y Avisos", newAlarmTitle: "Crear Nueva Alarma", alarmType: "Tipo de Aviso", alarmTime: "Avisar en...", alarmSound: "Sonido", alarmSaveBtn: "Añadir Alarma",
         btnWa: "Enviar datos por WhatsApp", btnShare: "Compartir Archivo JSON", btnImport: "Cargar Archivo Recibido", syncImportTitle: "¿Recibiste el archivo de la pareja?",
         daysOfLife: "días de vida", months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"], weekOf: "Semana del", to: "al",
-        noAlarms: "No hay alarmas pendientes.", atTime: "A las", alarmAdded: "Alarma añadida. Te avisaremos en", minutes: "minutos",
+        noAlarms: "No hay alarmas pendientes.", atTime: "A las", alarmAdded: "Alarma añadida. Te avisaremos en", minutes: "minutos", soundWatch: "Reloj Digital", soundChime: "Campana / Chime",
+        opt30m: "30 Minutos", opt1h: "1 Hora", opt2h: "2 Horas", opt3h: "3 Horas", opt4h: "4 Horas",
         deleteConfirm: "¿Estás seguro de eliminar este registro?", deleteBabyConfirm: "¿Estás seguro de eliminar todo el historial de", cannotDeleteOnly: "No puedes eliminar el único perfil.", syncSuccess: "¡Sincronización completada!", importSuccess: "¡Importado correctamente!", invalidFormat: "El archivo no tiene un formato válido de BabyCare.", errorRead: "Error al leer el archivo JSON.", errorDownload: "Error al descargar archivo. Inténtelo de nuevo."
       },
       fr: {
@@ -653,7 +625,8 @@
         babySelect: "Bébé Actif", addBaby: "+ Ajouter un bébé", newBabyTitle: "Ajouter un nouveau bébé", createBabyBtn: "Ajouter", deleteBabyBtn: "Supprimer le bébé", menuAlarms: "Alarmes", alarmTitle: "Alarmes et Avis", newAlarmTitle: "Créer une alarme", alarmType: "Type", alarmTime: "Avis dans...", alarmSound: "Son", alarmSaveBtn: "Ajouter l'alarme",
         btnWa: "Envoyer via WhatsApp", btnShare: "Partager JSON", btnImport: "Charger le fichier reçu", syncImportTitle: "Avez-vous reçu le fichier ?",
         daysOfLife: "jours de vie", months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"], weekOf: "Semaine du", to: "au",
-        noAlarms: "Aucune alarme en attente.", atTime: "À", alarmAdded: "Alarme ajoutée. Nous vous préviendrons dans", minutes: "minutes",
+        noAlarms: "Aucune alarme en attente.", atTime: "À", alarmAdded: "Alarme ajoutée. Nous vous préviendrons dans", minutes: "minutes", soundWatch: "Horloge Numérique", soundChime: "Cloche",
+        opt30m: "30 Minutes", opt1h: "1 Heure", opt2h: "2 Heures", opt3h: "3 Heures", opt4h: "4 Heures",
         deleteConfirm: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?", deleteBabyConfirm: "Supprimer toutes les données pour", cannotDeleteOnly: "Vous ne pouvez pas supprimer le seul profil.", syncSuccess: "Synchronisation terminée !", importSuccess: "Importé avec succès !", invalidFormat: "Le fichier n'a pas un format BabyCare valide.", errorRead: "Erreur lors de la lecture du fichier JSON.", errorDownload: "Erreur de téléchargement. Veuillez réessayer."
       },
       en: {
@@ -674,7 +647,8 @@
         babySelect: "Active Baby", addBaby: "+ Add Baby", newBabyTitle: "Add New Baby", createBabyBtn: "Add Baby", deleteBabyBtn: "Delete Baby", menuAlarms: "Alarms & Alerts", alarmTitle: "Alarms & Alerts", newAlarmTitle: "Create New Alarm", alarmType: "Alert Type", alarmTime: "Alert in...", alarmSound: "Sound", alarmSaveBtn: "Add Alarm",
         btnWa: "Send via WhatsApp", btnShare: "Share JSON File", btnImport: "Load Received File", syncImportTitle: "Received partner's file?",
         daysOfLife: "days old", months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], weekOf: "Week of", to: "to",
-        noAlarms: "No pending alarms.", atTime: "At", alarmAdded: "Alarm added. We will notify you in", minutes: "minutes",
+        noAlarms: "No pending alarms.", atTime: "At", alarmAdded: "Alarm added. We will notify you in", minutes: "minutes", soundWatch: "Digital Watch", soundChime: "Chime",
+        opt30m: "30 Minutes", opt1h: "1 Hour", opt2h: "2 Hours", opt3h: "3 Hours", opt4h: "4 Hours",
         deleteConfirm: "Are you sure you want to delete this record?", deleteBabyConfirm: "Delete all data for", cannotDeleteOnly: "You cannot delete the only profile.", syncSuccess: "Sync completed!", importSuccess: "Successfully imported!", invalidFormat: "Invalid BabyCare format file.", errorRead: "Error reading JSON file.", errorDownload: "Error downloading file. Please try again."
       }
     };
@@ -852,6 +826,7 @@
 
       if (document.getElementById('txt-sync-title')) document.getElementById('txt-sync-title').innerText = t.scanTitle || "Sincronizar con Pareja";
       if (document.getElementById('txt-sync-desc')) document.getElementById('txt-sync-desc').innerText = t.scanDesc || "Comparte los datos actualizados de tu bebé.";
+      if (document.getElementById('alertText')) document.getElementById('alertText').innerText = t.alertFeed;
       
       if(document.getElementById('opt-4weeks')) document.getElementById('opt-4weeks').innerText = t.opt4w;
       if(document.getElementById('opt-6months')) document.getElementById('opt-6months').innerText = t.opt6m;
@@ -876,6 +851,25 @@
       if(document.getElementById('txt-btn-share')) document.getElementById('txt-btn-share').innerText = t.btnShare;
       if(document.getElementById('txt-btn-import')) document.getElementById('txt-btn-import').innerText = t.btnImport;
       if(document.getElementById('txt-sync-import-title')) document.getElementById('txt-sync-import-title').innerText = t.syncImportTitle;
+
+      const alarmTypeSel = document.getElementById('newAlarmType');
+      if (alarmTypeSel && alarmTypeSel.options.length > 0) {
+        alarmTypeSel.options[0].value = alarmTypeSel.options[0].text = `${t.actFeed} 🍼`;
+        alarmTypeSel.options[1].value = alarmTypeSel.options[1].text = `${t.actDiaper} 💩`;
+        alarmTypeSel.options[2].value = alarmTypeSel.options[2].text = `${t.actSleep} 💤`;
+        alarmTypeSel.options[3].value = alarmTypeSel.options[3].text = `${t.actHealth} 🌡️`;
+      }
+      const alarmSoundSel = document.getElementById('newAlarmSound');
+      if (alarmSoundSel && alarmSoundSel.options.length > 0) {
+        alarmSoundSel.options[0].text = t.soundWatch;
+        alarmSoundSel.options[1].text = t.soundChime;
+      }
+      const alarmTimeSel = document.getElementById('newAlarmOffset');
+      if (alarmTimeSel && alarmTimeSel.options.length > 0) {
+        alarmTimeSel.options[0].text = t.opt30m; alarmTimeSel.options[1].text = t.opt1h;
+        alarmTimeSel.options[2].text = t.opt2h; alarmTimeSel.options[3].text = t.opt3h;
+        alarmTimeSel.options[4].text = t.opt4h;
+      }
 
       if (document.getElementById('txt-manual-header')) {
         document.getElementById('txt-manual-header').innerHTML = `<i data-lucide="book-open" style="color:var(--primary);"></i> ${t.mHeader}`;
@@ -1242,7 +1236,7 @@
           </div>
           <div class="form-group">
             <label>Duración Calculada</label>
-            <input type="text" class="form-control" id="fSleepDurationDisplay" readonly placeholder="Calculando..." style="background:#f0f0f0;">
+            <input type="text" class="form-control" id="fSleepDurationDisplay" readonly placeholder="Calculando..." style="background:var(--bg-color);">
           </div>
         `;
         setTimeout(calcSleepDuration, 100);
@@ -1558,7 +1552,6 @@
 
     function toggleVaccine(id) { getActiveBaby().vaccines[id] = !getActiveBaby().vaccines[id]; saveState(); renderVaccines(); }
 
-    /* FUNCIONES DE SINCRONIZACIÓN DIRECTA (SIN QR) */
     function shareViaWhatsApp() {
       try {
         const dataStr = JSON.stringify(appData, null, 2);

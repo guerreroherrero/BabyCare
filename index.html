@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 1.8.4 - Control Completo del Bebé</title>
+  <title>BabyCare 1.8.5 - Control Completo del Bebé</title>
   
   <!-- Forzamos el color pastel en la barra de estado del móvil para que coincida con el banner -->
   <meta name="theme-color" content="#FDE6E3">
@@ -189,7 +189,7 @@
   <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.8.4</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.8.5</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -569,6 +569,10 @@
     let selectedDate = new Date();
     let selectedMatrixWeekDate = new Date();
     let calDate = new Date(); 
+    let weightChartInstance = null; 
+    let heightChartInstance = null; 
+    let headChartInstance = null; 
+    let barRoutinesChartInstance = null;
 
     function getLocalDateStr(dInput) {
       if(!dInput) return '';
@@ -681,7 +685,7 @@
     });
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
+      const keys = ['babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -720,7 +724,7 @@
     }
     
     function saveState() { 
-      localStorage.setItem('babycare_data_v1_8_4', JSON.stringify(appData)); 
+      localStorage.setItem('babycare_data_v1_8_5', JSON.stringify(appData)); 
       populateBabySelector(); 
       renderBabyProfile(); 
       renderLogs(); 
@@ -915,6 +919,35 @@
       try { checkAlerts(); } catch(e){}
     }
 
+    function openModal(id) { 
+      const el = document.getElementById(`${id}Modal`);
+      if (el) el.classList.add('open'); 
+      if (id === 'alarms') {
+        renderAlarms();
+        const nowLocal = new Date();
+        nowLocal.setMinutes(nowLocal.getMinutes() + 30);
+        const hh = String(nowLocal.getHours()).padStart(2, '0');
+        const mm = String(nowLocal.getMinutes()).padStart(2, '0');
+        if(document.getElementById('newAlarmTime')) {
+            document.getElementById('newAlarmTime').value = `${hh}:${mm}`;
+        }
+      }
+    }
+
+    function closeModal(id) { 
+      const el = document.getElementById(`${id}Modal`);
+      if (el) el.classList.remove('open'); 
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      getActiveBaby().name = document.getElementById('profName').value;
+      getActiveBaby().dob = document.getElementById('profDob').value;
+      getActiveBaby().gender = document.getElementById('profGender').value;
+      saveState(); 
+      closeModal('profile');
+    }
+
     function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
     function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 180; canvas.height = 180; ctx.drawImage(img, 0, 0, 180, 180); getActiveBaby().photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
 
@@ -997,7 +1030,7 @@
           if (log.durationMins) totalSleepMins += parseInt(log.durationMins);
           else if (log.detail) {
             const matchH = log.detail.match(/(\d+)\s*h/i);
-            const matchM = log.detail.match(/(\d+)\s*m/i);
+            const matchM = l.detail.match(/(\d+)\s*m/i);
             let mins = 0;
             if (matchH) mins += parseInt(matchH[1]) * 60;
             if (matchM) mins += parseInt(matchM[1]);
@@ -1596,7 +1629,7 @@
         title.innerText = existingLog ? "Editar Evento" : "Registrar Evento";
         fields.innerHTML = `<div class="form-group"><label>Detalle</label><input type="text" class="form-control" id="fDetail" value="${existingLog ? existingLog.detail : ''}"></div>`;
       }
-      document.getElementById('formModal').classList.add('open');
+      openModal('form');
     }
 
     function calcSleepDuration() {
@@ -1615,7 +1648,7 @@
       document.getElementById('fSleepDurationDisplay').value = `${hours}h ${mins}m (${totalMins} mins)`;
     }
 
-    function closeFormModal() { document.getElementById('formModal').classList.remove('open'); }
+    function closeFormModal() { closeModal('form'); }
 
     function saveLogEntry(e) {
       e.preventDefault();
@@ -1663,223 +1696,6 @@
       }
       saveState(); closeFormModal();
     }
-
-    function shareViaWhatsApp() {
-      try {
-        const dataStr = JSON.stringify(appData, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const file = new File([blob], `babycare_${getActiveBaby().name}.json`, { type: 'application/json' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({
-            files: [file],
-            title: `BabyCare - ${getActiveBaby().name}`,
-            text: `Datos de ${getActiveBaby().name}`
-          }).catch(() => { fallbackWhatsApp(); });
-          return;
-        }
-      } catch(e) {}
-      
-      fallbackWhatsApp();
-    }
-
-    function fallbackWhatsApp() {
-      exportJSON();
-      const text = encodeURIComponent(`¡Hola! Te envío los datos de ${getActiveBaby().name} para BabyCare. Descarga el archivo adjunto y toca 'Cargar Archivo Recibido' en la app para sincronizar.`);
-      setTimeout(() => {
-        window.location.href = `https://api.whatsapp.com/send?text=${text}`;
-      }, 400);
-    }
-
-    function shareDataDirectly() {
-      try {
-        const dataStr = JSON.stringify(appData, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const file = new File([blob], `babycare_${getActiveBaby().name}.json`, { type: 'application/json' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({
-            files: [file],
-            title: `BabyCare - ${getActiveBaby().name}`,
-            text: `Sincronización de BabyCare`
-          }).catch(() => { exportJSON(); });
-          return;
-        }
-      } catch(e) {}
-
-      exportJSON();
-    }
-
-    function triggerFileInput() {
-      let fileInput = document.getElementById('syncFileInput');
-      if (!fileInput) {
-        fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.id = 'syncFileInput';
-        fileInput.accept = '*/*';
-        fileInput.style.display = 'none';
-        fileInput.onchange = (e) => importJSON(e);
-        document.body.appendChild(fileInput);
-      }
-      fileInput.value = '';
-      fileInput.click();
-    }
-
-    function exportJSON() {
-      try {
-        const dataStr = JSON.stringify(appData, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement('a');
-        anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v1.8.4_${getActiveBaby().name}.json`);
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 5000);
-      } catch(e) {
-        alert("Error al descargar archivo. Inténtelo de nuevo.");
-      }
-    }
-
-    function importJSON(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          let text = e.target.result.trim();
-          
-          if (text.startsWith('data:')) {
-             const commaIdx = text.indexOf(',');
-             if (commaIdx !== -1) text = decodeURIComponent(text.substring(commaIdx + 1));
-          }
-          if (text.startsWith('%7B')) {
-             text = decodeURIComponent(text);
-          }
-          
-          const firstBrace = text.indexOf('{');
-          const lastBrace = text.lastIndexOf('}');
-          if (firstBrace !== -1 && lastBrace !== -1) {
-            text = text.substring(firstBrace, lastBrace + 1);
-          }
-          
-          const imported = JSON.parse(text);
-          
-          if (imported.babies || imported.logs || (imported.baby && imported.logs)) {
-            if (imported.babies) {
-               appData = imported;
-            } else {
-               if (!appData.babies || appData.babies.length === 0) {
-                   appData.babies = [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }];
-               }
-               appData.babies[0].logs = imported.logs || [];
-               appData.babies[0].vaccines = imported.vaccines || {};
-               if (imported.baby) {
-                   appData.babies[0].name = imported.baby.name || 'Léo';
-                   appData.babies[0].dob = imported.baby.dob || '2026-07-19';
-                   appData.babies[0].gender = imported.baby.gender || 'male';
-               }
-            }
-            saveState();
-            closeModal('syncModal');
-            alert("¡Datos sincronizados con éxito!");
-          } else {
-            alert("El archivo no contiene registros válidos de BabyCare.");
-          }
-        } catch(err) {
-          alert("Error al leer el archivo JSON. Verifica que sea el correcto.");
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function addAlarm() {
-      const type = document.getElementById('newAlarmType').value;
-      const timeStr = document.getElementById('newAlarmTime').value;
-      const sound = document.getElementById('newAlarmSound').value;
-      
-      if (!timeStr) {
-        alert("Selecciona una hora válida");
-        return;
-      }
-      
-      const now = new Date();
-      const [hours, minutes] = timeStr.split(':');
-      let targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hours), parseInt(minutes), 0).getTime();
-      
-      if (targetTime < now.getTime()) {
-        targetTime += 24 * 60 * 60 * 1000;
-      }
-      
-      const newAlarm = { id: Date.now(), title: type, time: targetTime, sound: sound, triggered: false };
-      
-      getActiveBaby().alarms.push(newAlarm);
-      saveState();
-      renderAlarms();
-      alert(`Alarma añadida para las ${timeStr}.`);
-    }
-
-    function deleteAlarm(id) {
-      getActiveBaby().alarms = getActiveBaby().alarms.filter(a => a.id !== id);
-      saveState();
-      renderAlarms();
-    }
-
-    function renderAlarms() {
-      const container = document.getElementById('alarmsContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      
-      const activeAlarms = getActiveBaby().alarms.filter(a => !a.triggered).sort((a,b) => a.time - b.time);
-      if (activeAlarms.length === 0) {
-        container.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:var(--text-muted);">No hay alarmas pendientes.</p>`;
-        return;
-      }
-      
-      activeAlarms.forEach(al => {
-        const timeObj = new Date(al.time);
-        const dateStr = timeObj.toLocaleDateString([], { day: 'numeric', month: 'short' });
-        const timeStr = timeObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        container.innerHTML += `
-          <div class="alarm-item">
-            <div>
-              <strong style="font-size:0.85rem;">${al.title}</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">${dateStr}, a las ${timeStr}</div>
-            </div>
-            <button onclick="deleteAlarm(${al.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i data-lucide="trash-2" style="width:16px;"></i></button>
-          </div>
-        `;
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    function playAlarmSound(soundKey) {
-      const audioUrl = soundKey === 'chime' 
-        ? 'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg' 
-        : 'https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg';
-      const audio = new Audio(audioUrl);
-      audio.play().catch(e => console.log('Audio autoplay blocked by browser', e));
-    }
-
-    setInterval(() => {
-      const now = Date.now();
-      let changed = false;
-      appData.babies.forEach(baby => {
-        if (!baby.alarms) baby.alarms = [];
-        baby.alarms.forEach(al => {
-          if (!al.triggered && now >= al.time) {
-            al.triggered = true;
-            changed = true;
-            playAlarmSound(al.sound);
-            alert(`⏰ ¡Aviso para ${baby.name}!\n\n🔔 ${al.title}`);
-          }
-        });
-      });
-      if (changed) {
-        saveState();
-      }
-    }, 30000);
   </script>
 </body>
 </html>

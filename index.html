@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 1.8.2 - Control Completo del Bebé</title>
+  <title>BabyCare 1.8.3 - Control Completo del Bebé</title>
   
   <!-- Forzamos el color pastel en la barra de estado del móvil para que coincida con el banner -->
   <meta name="theme-color" content="#FDE6E3">
@@ -189,7 +189,7 @@
   <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.8.2</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.8.3</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -346,17 +346,14 @@
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Evolución de Peso (kg) vs Percentil 50 OMS</h3>
         <canvas id="weightChart" height="180"></canvas>
       </div>
-
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-height-chart">2. Evolución de Talla / Longitud (cm) vs OMS</h3>
         <canvas id="heightChart" height="180"></canvas>
       </div>
-
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-head-chart">3. Perímetro Cefálico (cm) vs OMS</h3>
         <canvas id="headChart" height="180"></canvas>
       </div>
-
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Control Diario de Tomas y Pañales</h3>
         <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias normales recomendadas según etapa OMS:</p>
@@ -381,7 +378,6 @@
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
           <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
         </h3>
-
         <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil y Foto del Bebé</h4><p id="mstep1-desc">Pulsa sobre la foto o avatar circular para subir la foto real de tu bebé. Toca el icono del lápiz ✏️ para editar su nombre.</p></div></div>
         <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido de Eventos</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior (Alimentación, Pañal, Sueño...). La hora actual se selecciona por defecto.</p></div></div>
         <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep3-title">Registro y Cálculo de Sueño</h4><p id="mstep3-desc">Al registrar el sueño, indica la 'Hora Inicio' y 'Hora Fin'. La app calculará automáticamente la duración de la siesta.</p></div></div>
@@ -411,9 +407,7 @@
             <button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button>
           </div>
         </div>
-        
         <input type="hidden" id="editingLogId"><input type="hidden" id="entryType">
-        
         <div class="modal-body" id="formModalBody">
           <div id="dynamicFormFields"></div>
           <div class="form-group" id="groupTimestampMain">
@@ -425,7 +419,6 @@
             <input type="text" class="form-control" id="entryNotes" placeholder="Ej: Agitado al inicio...">
           </div>
         </div>
-
         <div class="modal-footer">
           <button type="submit" class="btn-submit" id="btn-save-entry">✓ Guardar Registro</button>
         </div>
@@ -683,7 +676,7 @@
     });
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
+      const keys = ['babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -722,7 +715,7 @@
     }
     
     function saveState() { 
-      localStorage.setItem('babycare_data_v1_8_2', JSON.stringify(appData)); 
+      localStorage.setItem('babycare_data_v1_8_3', JSON.stringify(appData)); 
       populateBabySelector(); 
       renderBabyProfile(); 
       renderLogs(); 
@@ -1231,7 +1224,7 @@
           grid.innerHTML += colContent;
         });
       } catch(err) {
-        console.error("Error renderMatrix", err);
+        console.error("Error al renderizar Matriz 24h", err);
       }
     }
 
@@ -1249,8 +1242,6 @@
 
       alert(`${typeTitle}\n• Hora: ${timeStr} (${dateStr})\n• Detalle: ${log.detail || '-'}\n• Notas: ${log.notes || 'Sin observaciones'}`);
     }
-
-    let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null; let barRoutinesChartInstance = null;
 
     function getBarChartRealData(range) {
       const today = new Date();
@@ -1558,7 +1549,7 @@
         title.innerText = existingLog ? "Editar Evento" : "Registrar Evento";
         fields.innerHTML = `<div class="form-group"><label>Detalle</label><input type="text" class="form-control" id="fDetail" value="${existingLog ? existingLog.detail : ''}"></div>`;
       }
-      document.getElementById('formModal').classList.add('open');
+      openModal('form');
     }
 
     function calcSleepDuration() {
@@ -1577,7 +1568,7 @@
       document.getElementById('fSleepDurationDisplay').value = `${hours}h ${mins}m (${totalMins} mins)`;
     }
 
-    function closeFormModal() { document.getElementById('formModal').classList.remove('open'); }
+    function closeFormModal() { closeModal('form'); }
 
     function saveLogEntry(e) {
       e.preventDefault();
@@ -1624,6 +1615,34 @@
         getActiveBaby().logs.push({ id: Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins });
       }
       saveState(); closeFormModal();
+    }
+
+    function openModal(id) { 
+      const el = document.getElementById(`${id}Modal`);
+      if (el) el.classList.add('open'); 
+      if (id === 'alarms') {
+        renderAlarms();
+        const nowLocal = new Date();
+        nowLocal.setMinutes(nowLocal.getMinutes() + 30);
+        const hh = String(nowLocal.getHours()).padStart(2, '0');
+        const mm = String(nowLocal.getMinutes()).padStart(2, '0');
+        if(document.getElementById('newAlarmTime')) {
+            document.getElementById('newAlarmTime').value = `${hh}:${mm}`;
+        }
+      }
+    }
+    
+    function closeModal(id) { 
+      const el = document.getElementById(`${id}Modal`);
+      if (el) el.classList.remove('open'); 
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      getActiveBaby().name = document.getElementById('profName').value;
+      getActiveBaby().dob = document.getElementById('profDob').value;
+      getActiveBaby().gender = document.getElementById('profGender').value;
+      saveState(); closeModal('profile');
     }
 
     function shareViaWhatsApp() {
@@ -1694,7 +1713,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v1.8.2_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v1.8.3_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();
@@ -1744,7 +1763,7 @@
                }
             }
             saveState();
-            closeModal('syncModal');
+            closeModal('sync');
             alert("¡Datos sincronizados con éxito!");
           } else {
             alert("El archivo no contiene registros válidos de BabyCare.");

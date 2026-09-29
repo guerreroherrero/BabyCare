@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 1.8.3 - Control Completo del Bebé</title>
+  <title>BabyCare 1.8.6 - Control Completo del Bebé</title>
   
-  <!-- Forzamos el color pastel en la barra de estado del móvil para que coincida con el banner -->
   <meta name="theme-color" content="#FDE6E3">
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -186,15 +185,13 @@
 </head>
 <body>
 
-  <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.8.3</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.8.6</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
 
-  <!-- Drawer Menu -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -267,7 +264,6 @@
           <button class="date-nav-btn" onclick="changeSelectedDate(1)"><i data-lucide="chevron-right"></i></button>
         </div>
 
-        <!-- Resumen diario acumulado -->
         <div class="daily-summary-grid">
           <div class="summary-card">
             <h5 id="lbl-sum-feed">🍼 Leche (L)</h5>
@@ -283,7 +279,6 @@
           </div>
         </div>
 
-        <!-- Timeline Diario -->
         <div id="logsContainer" class="timeline-container"></div>
       </div>
     </div>
@@ -305,7 +300,8 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
           <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
           <select class="form-control" id="barRangeSelect" style="width:auto; padding:0.3rem 0.6rem; font-size:0.78rem;" onchange="updateBarChartRange(this.value)">
-            <option value="4weeks" id="opt-4weeks" selected>Últimas 4 semanas</option>
+            <option value="7days" id="opt-7days" selected>Últimos 7 días</option>
+            <option value="4weeks" id="opt-4weeks">Últimas 4 semanas</option>
             <option value="6months" id="opt-6months">Últimos 6 meses</option>
           </select>
         </div>
@@ -378,6 +374,7 @@
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
           <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
         </h3>
+
         <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil y Foto del Bebé</h4><p id="mstep1-desc">Pulsa sobre la foto o avatar circular para subir la foto real de tu bebé. Toca el icono del lápiz ✏️ para editar su nombre.</p></div></div>
         <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido de Eventos</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior (Alimentación, Pañal, Sueño...). La hora actual se selecciona por defecto.</p></div></div>
         <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep3-title">Registro y Cálculo de Sueño</h4><p id="mstep3-desc">Al registrar el sueño, indica la 'Hora Inicio' y 'Hora Fin'. La app calculará automáticamente la duración de la siesta.</p></div></div>
@@ -512,7 +509,7 @@
     </div>
   </div>
 
-  <!-- Modal Único de Sincronización Directa -->
+  <!-- Modal Sincronización Directa -->
   <div class="modal-overlay" id="syncModal">
     <div class="modal">
       <div class="modal-header">
@@ -564,6 +561,10 @@
     let selectedDate = new Date();
     let selectedMatrixWeekDate = new Date();
     let calDate = new Date(); 
+    let weightChartInstance = null; 
+    let heightChartInstance = null; 
+    let headChartInstance = null; 
+    let barRoutinesChartInstance = null;
 
     function getLocalDateStr(dInput) {
       if(!dInput) return '';
@@ -612,7 +613,7 @@
         ms6Title: "6. Gráficas de Crecimiento y Percentiles OMS", ms6Desc: "En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la mediana P50 de la OMS.",
         ms7Title: "7. Sincronización Directa por WhatsApp", ms7Desc: "Pulsa 'Sincronizar' en el menú inferior y envía el archivo JSON por WhatsApp. La pareja solo debe pulsar en 'Cargar Archivo Recibido'.",
         ms8Title: "8. Alarmas y Copias de Seguridad", ms8Desc: "Desde el menú lateral puedes crear alarmas que sonarán incluso en segundo plano, cambiar de idioma, activar el Modo Oscuro o exportar archivos de respaldo JSON.",
-        opt4w: "Últimas 4 semanas", opt6m: "Últimos 6 meses", legFeed: "Leche", legSleep: "Sueño", legDiaper: "Pañal",
+        opt4w: "Últimas 4 semanas", opt6m: "Últimos 6 meses", opt7d: "Últimos 7 días", legFeed: "Leche", legSleep: "Sueño", legDiaper: "Pañal",
         babySelect: "Bebé Activo", addBaby: "+ Añadir Bebé", newBabyTitle: "Añadir Nuevo Bebé", createBabyBtn: "Añadir Bebé", deleteBabyBtn: "Eliminar Bebé", menuAlarms: "Alarmas y Avisos", alarmTitle: "Alarmas y Avisos", newAlarmTitle: "Crear Nueva Alarma", alarmType: "Tipo de Aviso", alarmTime: "Hora Exacta", alarmSound: "Sonido", alarmSaveBtn: "Añadir Alarma",
         btnWa: "Enviar datos por WhatsApp", btnShare: "Compartir Archivo JSON", btnImport: "Cargar Archivo Recibido", syncImportTitle: "¿Recibiste el archivo de la pareja?",
         filterAll: "Mostrar Todos", filterFeed: "Solo Tomas", filterDiaper: "Solo Pañales", filterSleep: "Solo Sueño", filterBath: "Solo Baños"
@@ -630,7 +631,7 @@
         ms6Title: "6. Courbes de Croissance OMS", ms6Desc: "Observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS.",
         ms7Title: "7. Synchronisation directe", ms7Desc: "Appuyez sur 'Sync' et envoyez le fichier via WhatsApp.",
         ms8Title: "8. Alarmes et Paramètres", ms8Desc: "Créez des alarmes sonores, changez la langue ou le Mode Sombre.",
-        opt4w: "Dernières 4 semaines", opt6m: "Derniers 6 mois", legFeed: "Lait", legSleep: "Sommeil", legDiaper: "Couche",
+        opt4w: "Dernières 4 semaines", opt6m: "Derniers 6 mois", opt7d: "Derniers 7 jours", legFeed: "Lait", legSleep: "Sommeil", legDiaper: "Couche",
         babySelect: "Bébé Actif", addBaby: "+ Ajouter un bébé", newBabyTitle: "Ajouter un nouveau bébé", createBabyBtn: "Ajouter", deleteBabyBtn: "Supprimer le bébé", menuAlarms: "Alarmes", alarmTitle: "Alarmes et Avis", newAlarmTitle: "Créer une alarme", alarmType: "Type", alarmTime: "Heure exacte", alarmSound: "Son", alarmSaveBtn: "Ajouter l'alarme",
         btnWa: "Envoyer via WhatsApp", btnShare: "Partager JSON", btnImport: "Charger le fichier reçu", syncImportTitle: "Avez-vous reçu le fichier ?",
         filterAll: "Tout", filterFeed: "Lait", filterDiaper: "Couches", filterSleep: "Sommeil", filterBath: "Bains"
@@ -648,7 +649,7 @@
         ms6Title: "6. WHO Growth Percentile Charts", ms6Desc: "Under 'WHO Growth', view weight, height, and head circumference charts.",
         ms7Title: "7. Sync Between Phones", ms7Desc: "Tap 'Sync' and send the file via WhatsApp. On the other phone, tap 'Load Received File'.",
         ms8Title: "8. Alarms & Settings", ms8Desc: "From the side menu create background alarms, change language, toggle Dark Mode, or export/import JSON files.",
-        opt4w: "Last 4 weeks", opt6m: "Last 6 months", legFeed: "Milk", legSleep: "Sleep", legDiaper: "Diaper",
+        opt4w: "Last 4 weeks", opt6m: "Last 6 months", opt7d: "Last 7 days", legFeed: "Milk", legSleep: "Sleep", legDiaper: "Diaper",
         babySelect: "Active Baby", addBaby: "+ Add Baby", newBabyTitle: "Add New Baby", createBabyBtn: "Add Baby", deleteBabyBtn: "Delete Baby", menuAlarms: "Alarms & Alerts", alarmTitle: "Alarms & Alerts", newAlarmTitle: "Create New Alarm", alarmType: "Alert Type", alarmTime: "Exact Time", alarmSound: "Sound", alarmSaveBtn: "Add Alarm",
         btnWa: "Send via WhatsApp", btnShare: "Share JSON File", btnImport: "Load Received File", syncImportTitle: "Received partner's file?",
         filterAll: "Show All", filterFeed: "Feeds", filterDiaper: "Diapers", filterSleep: "Sleep", filterBath: "Baths"
@@ -676,7 +677,7 @@
     });
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
+      const keys = ['babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -715,7 +716,7 @@
     }
     
     function saveState() { 
-      localStorage.setItem('babycare_data_v1_8_3', JSON.stringify(appData)); 
+      localStorage.setItem('babycare_data_v1_8_6', JSON.stringify(appData)); 
       populateBabySelector(); 
       renderBabyProfile(); 
       renderLogs(); 
@@ -850,6 +851,7 @@
       setElText('txt-sync-title', t.scanTitle || "Sincronizar con Pareja");
       setElText('txt-sync-desc', t.scanDesc || "Comparte los datos actualizados de tu bebé.");
       
+      setElText('opt-7days', t.opt7d);
       setElText('opt-4weeks', t.opt4w);
       setElText('opt-6months', t.opt6m);
       setElText('leg-feed', `${t.legFeed} 🍼`);
@@ -907,6 +909,35 @@
       try { renderCalendar(); } catch(e){}
       try { renderWeeklyMatrix24h(); } catch(e){}
       try { checkAlerts(); } catch(e){}
+    }
+
+    function openModal(id) { 
+      const el = document.getElementById(`${id}Modal`);
+      if (el) el.classList.add('open'); 
+      if (id === 'alarms') {
+        renderAlarms();
+        const nowLocal = new Date();
+        nowLocal.setMinutes(nowLocal.getMinutes() + 30);
+        const hh = String(nowLocal.getHours()).padStart(2, '0');
+        const mm = String(nowLocal.getMinutes()).padStart(2, '0');
+        if(document.getElementById('newAlarmTime')) {
+            document.getElementById('newAlarmTime').value = `${hh}:${mm}`;
+        }
+      }
+    }
+
+    function closeModal(id) { 
+      const el = document.getElementById(`${id}Modal`);
+      if (el) el.classList.remove('open'); 
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      getActiveBaby().name = document.getElementById('profName').value;
+      getActiveBaby().dob = document.getElementById('profDob').value;
+      getActiveBaby().gender = document.getElementById('profGender').value;
+      saveState(); 
+      closeModal('profile');
     }
 
     function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
@@ -1249,8 +1280,48 @@
       let feedData = [];
       let diaperData = [];
       let sleepData = [];
+      const t = i18n[appData.lang] || i18n['es'];
 
-      if (range === '6months') {
+      if (range === '7days') {
+        const daysShort = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+          const dayOfWeek = d.getDay();
+          const adjustedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
+          labels.push(`${daysShort[adjustedDay]} ${d.getDate()}`);
+          
+          const dateStr = getLocalDateStr(d);
+          const dayLogs = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === dateStr);
+
+          let feedsMl = 0;
+          let diapers = 0;
+          let sleepMins = 0;
+
+          dayLogs.forEach(l => {
+            if (l.type === 'feeding') {
+              if (l.amount) feedsMl += parseFloat(l.amount);
+              else if (l.detail) {
+                const match = l.detail.match(/(\d+)\s*ml/i);
+                if (match) feedsMl += parseInt(match[1]);
+              }
+            } else if (l.type === 'diaper') {
+              diapers++;
+            } else if (l.type === 'sleep') {
+              if (l.durationMins) sleepMins += parseInt(l.durationMins);
+              else if (l.detail) {
+                const matchH = l.detail.match(/(\d+)\s*h/i);
+                const matchM = l.detail.match(/(\d+)\s*m/i);
+                if (matchH) sleepMins += parseInt(matchH[1]) * 60;
+                if (matchM) sleepMins += parseInt(matchM[1]);
+              }
+            }
+          });
+
+          feedData.push(parseFloat((feedsMl / 1000).toFixed(2)));
+          diaperData.push(diapers);
+          sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+        }
+      } else if (range === '6months') {
         const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
         for (let i = 5; i >= 0; i--) {
           const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
@@ -1346,7 +1417,8 @@
         if (typeof Chart === 'undefined') return;
         const ctxBar = document.getElementById('barRoutinesChart');
         if (!ctxBar) return;
-        const realData = getBarChartRealData('4weeks');
+        const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days';
+        const realData = getBarChartRealData(selectVal);
         const t = i18n[appData.lang] || i18n['es'];
 
         barRoutinesChartInstance = new Chart(ctxBar.getContext('2d'), {
@@ -1387,7 +1459,7 @@
 
     function updateBarChart() {
       if (barRoutinesChartInstance) {
-        const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '4weeks';
+        const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days';
         updateBarChartRange(selectVal);
       }
     }
@@ -1617,34 +1689,6 @@
       saveState(); closeFormModal();
     }
 
-    function openModal(id) { 
-      const el = document.getElementById(`${id}Modal`);
-      if (el) el.classList.add('open'); 
-      if (id === 'alarms') {
-        renderAlarms();
-        const nowLocal = new Date();
-        nowLocal.setMinutes(nowLocal.getMinutes() + 30);
-        const hh = String(nowLocal.getHours()).padStart(2, '0');
-        const mm = String(nowLocal.getMinutes()).padStart(2, '0');
-        if(document.getElementById('newAlarmTime')) {
-            document.getElementById('newAlarmTime').value = `${hh}:${mm}`;
-        }
-      }
-    }
-    
-    function closeModal(id) { 
-      const el = document.getElementById(`${id}Modal`);
-      if (el) el.classList.remove('open'); 
-    }
-
-    function saveProfile(e) {
-      e.preventDefault();
-      getActiveBaby().name = document.getElementById('profName').value;
-      getActiveBaby().dob = document.getElementById('profDob').value;
-      getActiveBaby().gender = document.getElementById('profGender').value;
-      saveState(); closeModal('profile');
-    }
-
     function shareViaWhatsApp() {
       try {
         const dataStr = JSON.stringify(appData, null, 2);
@@ -1713,7 +1757,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v1.8.3_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v1.8.6_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();
@@ -1763,7 +1807,7 @@
                }
             }
             saveState();
-            closeModal('sync');
+            closeModal('syncModal');
             alert("¡Datos sincronizados con éxito!");
           } else {
             alert("El archivo no contiene registros válidos de BabyCare.");

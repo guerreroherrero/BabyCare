@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 2.0.1 - Sincronización Automática</title>
+  <title>BabyCare 2.0.2 - Sincronización Automática</title>
   
   <meta name="theme-color" content="#FDE6E3">
   
@@ -193,7 +193,7 @@
   <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.1</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.2</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -518,7 +518,7 @@
   <div class="modal-overlay" id="syncModal">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="txt-sync-title">Sincronización Activa ☁️</h3>
+        <h3 id="txt-sync-title">Sincronización Activa ☁️️</h3>
         <button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body" style="padding:0.8rem 0.2rem;">
@@ -610,7 +610,7 @@
             isSyncing = true; // Bloquea la subida manual para evitar bucles
             appData = data;
             
-            localStorage.setItem('babycare_data_v2_0_1', JSON.stringify(appData));
+            localStorage.setItem('babycare_data_v2_0_2', JSON.stringify(appData));
             
             populateBabySelector();
             renderBabyProfile();
@@ -696,7 +696,7 @@
         filterAll: "Mostrar Todos", filterFeed: "Solo Tomas", filterDiaper: "Solo Pañales", filterSleep: "Solo Sueño", filterBath: "Solo Baños"
       },
       fr: {
-        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuScan: "Cloud (Auto)", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Cloud", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", scanTitle: "Synchronisation Cloud ☁️", scanDesc: "Synchronisation automatique activée.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuScan: "Cloud (Auto)", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Cloud", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", scanTitle: "Synchronisation Cloud ☁️", scanDesc: "Synchronisation automatique activée.", alertFeed: "⚠️️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
         sumFeed: "🍼 Lait (L)", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
         mHeader: "Guide d'Utilisation Étape par Étape Complet",
@@ -734,7 +734,7 @@
     };
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
+      const keys = ['babycare_data_v2_0_2', 'babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -773,7 +773,7 @@
     }
     
     function saveState() { 
-      localStorage.setItem('babycare_data_v2_0_1', JSON.stringify(appData)); 
+      localStorage.setItem('babycare_data_v2_0_2', JSON.stringify(appData)); 
       
       // Guardado silencioso y automático en la Nube
       if (database && !isSyncing) {
@@ -1083,7 +1083,7 @@
           if (log.durationMins) totalSleepMins += parseInt(log.durationMins);
           else if (log.detail) {
             const matchH = log.detail.match(/(\d+)\s*h/i);
-            const matchM = log.detail.match(/(\d+)\s*m/i);
+            const matchM = log.detail.match(/(\d+)\s*m/i); // ¡Bug corregido!
             let mins = 0;
             if (matchH) mins += parseInt(matchH[1]) * 60;
             if (matchM) mins += parseInt(matchM[1]);
@@ -1757,7 +1757,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v2.0.1_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v2.0.2_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();

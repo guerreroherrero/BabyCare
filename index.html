@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 2.0.5 - Sincronización Automática</title>
+  <title>BabyCare 2.0.6 - Sincronización Automática</title>
   
   <meta name="theme-color" content="#FDE6E3">
   
@@ -190,15 +190,13 @@
 </head>
 <body>
 
-  <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.5</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.6</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
 
-  <!-- Drawer Menu -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -372,14 +370,14 @@
       </div>
     </div>
 
-    <!-- TAB 5: Manual Completo Traducido -->
+    <!-- TAB 5: Manual -->
     <div class="tab-content" id="tab-manual">
       <div class="card">
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
           <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
         </h3>
         <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil y Foto del Bebé</h4><p id="mstep1-desc">Pulsa sobre la foto o avatar circular para subir la foto real de tu bebé. Toca el icono del lápiz ✏️ para editar su nombre.</p></div></div>
-        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido de Eventos</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior (Alimentación, Pañal, Sueño...). La hora actual se selecciona por defecto.</p></div></div>
+        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido de Eventos</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior. La hora actual se selecciona por defecto.</p></div></div>
         <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep3-title">Registro y Cálculo de Sueño</h4><p id="mstep3-desc">Al registrar el sueño, indica la 'Hora Inicio' y 'Hora Fin'. La app calculará automáticamente la duración de la siesta.</p></div></div>
         <div class="manual-step"><div class="step-number">4</div><div class="step-content"><h4 id="mstep4-title">Diario, Timeline y Totales Acumulados</h4><p id="mstep4-desc">Navega con las flechas día a día para consultar la secuencia cronológica de eventos.</p></div></div>
         <div class="manual-step"><div class="step-number">5</div><div class="step-content"><h4 id="mstep5-title">Calendario, Gráfico de Barras y Matriz 24h</h4><p id="mstep5-desc">En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa y la matriz visual de 24 horas.</p></div></div>
@@ -396,7 +394,7 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="cloud-lightning"></i><span id="bnav-share">Nube</span></div>
   </nav>
 
-  <!-- Modales con Doble Botón Guardar -->
+  <!-- Modales -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
@@ -449,7 +447,6 @@
     </div>
   </div>
 
-  <!-- Modal Añadir Nuevo Bebé -->
   <div class="modal-overlay" id="addBabyModal">
     <div class="modal">
       <form onsubmit="addBaby(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
@@ -471,7 +468,6 @@
     </div>
   </div>
 
-  <!-- Modal Alarmas y Avisos -->
   <div class="modal-overlay" id="alarmsModal">
     <div class="modal">
       <div class="modal-header">
@@ -512,7 +508,6 @@
     </div>
   </div>
 
-  <!-- Modal NUEVO de Panel de Nube Activa -->
   <div class="modal-overlay" id="syncModal">
     <div class="modal">
       <div class="modal-header">
@@ -520,7 +515,6 @@
         <button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body" style="padding:0.8rem 0.2rem;">
-        
         <div style="text-align:center; padding: 1rem 0;">
           <i data-lucide="cloud-lightning" style="width:48px; height:48px; color:var(--primary); margin-bottom:10px;"></i>
           <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-color);">Nube Conectada</h4>
@@ -528,19 +522,14 @@
             Cualquier cambio que hagáis se guarda y aparece automáticamente en el otro móvil al instante. ¡No tienes que hacer nada!
           </p>
         </div>
-
         <hr style="border:none; border-top:1px solid var(--border-color); margin:1rem 0;">
-
         <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:0.5rem;" id="txt-sync-import-title">Copias de Seguridad (Manual)</h4>
-        
         <button onclick="exportJSON()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.6rem;">
           📲 <span id="txt-btn-export">Guardar copia JSON local</span>
         </button>
-
         <button onclick="triggerFileInput()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
           📥 <span id="txt-btn-import">Cargar Archivo de Restauración</span>
         </button>
-
       </div>
     </div>
   </div>
@@ -564,11 +553,9 @@
     let database = null;
     let isSyncing = false; 
 
-    // Bloque Try-Catch vital: Previene que Firebase bloquee la App entera si es anulado por AdBlockers o por GitHub
     try {
       if (typeof firebase !== 'undefined') {
         const firebaseConfig = {
-          // ¡Truco Anti-GitHub! Partición de la clave API para eludir el autobloqueo de seguridad de GitHub
           apiKey: "AIzaSyA0" + "Pv37BQVN" + "3lP0ANrcK" + "m0wzBKozZyntPk", 
           authDomain: "babycarebd.firebaseapp.com",
           databaseURL: "https://babycarebd-default-rtdb.europe-west1.firebasedatabase.app",
@@ -581,7 +568,7 @@
         database = firebase.database();
       }
     } catch(e) {
-      console.error("Firebase ha sido bloqueado o anulado:", e);
+      console.error("Firebase ha sido bloqueado:", e);
     }
 
     let appData = { 
@@ -608,6 +595,31 @@
       { id: 'v9', age: '14 Años', name: 'Tétanos, Difteria' }
     ];
 
+    // =========================================================================
+    // FILTRO SANITIZADOR DE DATOS DE LA NUBE (TRADUCTOR FIREBASE)
+    // Firebase convierte los Arrays en Objetos cuando se borra algún elemento. 
+    // Esta función los vuelve a convertir en Listas para evitar errores fatales.
+    // =========================================================================
+    function sanitizeData(data) {
+      if (!data) return data;
+      // Convertir 'babies' a array si Firebase lo hizo objeto
+      if (data.babies && !Array.isArray(data.babies)) {
+        data.babies = Object.values(data.babies);
+      }
+      if (data.babies && Array.isArray(data.babies)) {
+        data.babies.forEach(b => {
+          // Convertir logs y alarmas a arrays si Firebase los hizo objetos
+          if (b.logs && !Array.isArray(b.logs)) b.logs = Object.values(b.logs);
+          if (b.alarms && !Array.isArray(b.alarms)) b.alarms = Object.values(b.alarms);
+          // Asegurar que siempre existan
+          if (!b.logs) b.logs = [];
+          if (!b.alarms) b.alarms = [];
+          if (!b.vaccines) b.vaccines = {};
+        });
+      }
+      return data;
+    }
+
     window.addEventListener('DOMContentLoaded', () => { 
       try { loadLocalStorageWithMigration(); } catch(e) { console.error(e); }
       try { setLanguage(appData.lang); } catch(e) { console.error(e); }
@@ -616,11 +628,12 @@
       if (database) {
         try {
           database.ref('babycare_data').on('value', (snapshot) => {
-            const data = snapshot.val();
+            let data = snapshot.val();
             if (data) {
               isSyncing = true;
-              appData = data;
-              try { localStorage.setItem('babycare_data_v2_0_5', JSON.stringify(appData)); } catch(e){}
+              appData = sanitizeData(data); // ¡Filtro Mágico Aplicado!
+              
+              try { localStorage.setItem('babycare_data_v2_0_6', JSON.stringify(appData)); } catch(e){}
               
               try { populateBabySelector(); } catch(e){}
               try { renderBabyProfile(); } catch(e){}
@@ -662,7 +675,7 @@
       } catch(e) { console.error("Lucide Error", e); }
     });
 
-    // MÁGIA AÑADIDA: AUTO-SCROLL EN PESTAÑAS
+    // MÁGIA AÑADIDA: AUTO-SCROLL INTELIGENTE EN PESTAÑAS
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -676,14 +689,16 @@
       if (targetTab) {
         targetTab.classList.add('active');
         
-        // El teléfono se deslizará hacia abajo para enseñar el contenido oculto
-        setTimeout(() => {
-          const nav = document.querySelector('.tabs-nav');
-          if(nav) {
-            const y = nav.getBoundingClientRect().top + window.scrollY - 10;
-            window.scrollTo({ top: y, behavior: 'smooth' });
-          }
-        }, 100);
+        // Auto-deslizamiento
+        if (tabId !== 'logs') {
+          setTimeout(() => {
+            const nav = document.querySelector('.tabs-nav');
+            if(nav) {
+              const y = nav.getBoundingClientRect().top + window.scrollY - 10;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+          }, 50);
+        }
       }
       
       document.getElementById('bnav-item-home').classList.remove('active');
@@ -718,6 +733,11 @@
       }
       let b = appData.babies.find(b => b.id === appData.activeBabyId);
       if (!b) b = appData.babies[0];
+      
+      // Sanitización al vuelo por si Firebase devuelve objetos directamente al leer
+      if (b.alarms && !Array.isArray(b.alarms)) b.alarms = Object.values(b.alarms);
+      if (b.logs && !Array.isArray(b.logs)) b.logs = Object.values(b.logs);
+
       if (!b.alarms) b.alarms = [];
       if (!b.vaccines) b.vaccines = {};
       if (!b.logs) b.logs = [];
@@ -783,7 +803,7 @@
 
     function loadLocalStorageWithMigration() {
       try {
-        const keys = ['babycare_data_v2_0_5', 'babycare_data_v2_0_4', 'babycare_data_v2_0_3', 'babycare_data_v2_0_2', 'babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2'];
+        const keys = ['babycare_data_v2_0_6', 'babycare_data_v2_0_5', 'babycare_data_v2_0_4', 'babycare_data_v2_0_3', 'babycare_data_v2_0_2', 'babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6'];
         let loaded = false;
         for (let key of keys) {
           try {
@@ -791,23 +811,7 @@
             if (saved) {
               const parsed = JSON.parse(saved);
               if (parsed && parsed.babies && Array.isArray(parsed.babies)) {
-                appData = parsed;
-                loaded = true;
-                break;
-              } else if (parsed && parsed.baby && parsed.logs) {
-                appData.lang = parsed.lang || 'es';
-                appData.theme = parsed.theme || 'light';
-                appData.babies = [{
-                  id: Date.now(),
-                  name: parsed.baby.name || 'Léo',
-                  dob: parsed.baby.dob || '2026-07-19',
-                  gender: parsed.baby.gender || 'male',
-                  photo: parsed.baby.photo || null,
-                  logs: parsed.logs || [],
-                  vaccines: parsed.vaccines || {},
-                  alarms: []
-                }];
-                appData.activeBabyId = appData.babies[0].id;
+                appData = sanitizeData(parsed);
                 loaded = true;
                 break;
               }
@@ -815,7 +819,7 @@
           } catch(errItem) {}
         }
       } catch(globalErr) {
-        console.warn("LocalStorage bloqueado por el navegador. Se usará memoria temporal.");
+        console.warn("LocalStorage bloqueado por el navegador.");
       }
       
       if (!appData || !appData.babies || appData.babies.length === 0) {
@@ -829,9 +833,10 @@
     
     function saveState() { 
       try {
-        localStorage.setItem('babycare_data_v2_0_5', JSON.stringify(appData)); 
+        localStorage.setItem('babycare_data_v2_0_6', JSON.stringify(appData)); 
       } catch(e) { console.warn("No se pudo guardar en LocalStorage:", e); }
       
+      // Guardado silencioso en Nube Protegido
       if (database && !isSyncing) {
         try {
           database.ref('babycare_data').set(appData).catch(e => console.error("Error Nube:", e));
@@ -1192,45 +1197,43 @@
           </div>
         `;
       });
-      if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+      try { if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons(); } catch(e){}
     }
 
     function renderCalendar() {
-      try {
-        const grid = document.getElementById('calendarGrid'); 
-        if(!grid) return;
-        grid.innerHTML = '';
-        
-        const year = calDate.getFullYear(); const month = calDate.getMonth();
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        setElText('calMonthTitle', `${monthNames[month]} ${year}`);
-        
-        const t = i18n[appData.lang] || i18n['es'];
-        const dayHeaders = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+      const grid = document.getElementById('calendarGrid'); 
+      if(!grid) return;
+      grid.innerHTML = '';
+      
+      const year = calDate.getFullYear(); const month = calDate.getMonth();
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      setElText('calMonthTitle', `${monthNames[month]} ${year}`);
+      
+      const t = i18n[appData.lang] || i18n['es'];
+      const dayHeaders = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-        dayHeaders.forEach(d => { grid.innerHTML += `<div class="cal-day-name">${d}</div>`; });
-        const firstDay = new Date(year, month, 1).getDay();
-        const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
-        const totalDays = new Date(year, month + 1, 0).getDate();
+      dayHeaders.forEach(d => { grid.innerHTML += `<div class="cal-day-name">${d}</div>`; });
+      const firstDay = new Date(year, month, 1).getDay();
+      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
+      const totalDays = new Date(year, month + 1, 0).getDate();
 
-        for (let i = 0; i < startingPos; i++) grid.innerHTML += `<div></div>`;
-        const today = new Date();
+      for (let i = 0; i < startingPos; i++) grid.innerHTML += `<div></div>`;
+      const today = new Date();
 
-        for (let day = 1; day <= totalDays; day++) {
-          const dateKey = getLocalDateStr(new Date(year, month, day));
-          const dayLogs = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
-          const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
-          let dotsHtml = '';
-          if (dayLogs.length > 0) {
-            dotsHtml = '<div class="cal-dots">';
-            if (dayLogs.some(l => l.type === 'feeding')) dotsHtml += '<div class="cal-dot" style="background:#FFE599"></div>';
-            if (dayLogs.some(l => l.type === 'diaper')) dotsHtml += '<div class="cal-dot" style="background:#C5E1A5"></div>';
-            if (dayLogs.some(l => l.type === 'sleep')) dotsHtml += '<div class="cal-dot" style="background:#D7BCE8"></div>';
-            dotsHtml += '</div>';
-          }
-          grid.innerHTML += `<div class="cal-cell ${isToday ? 'today' : ''}" onclick="selectCalendarDate(${year}, ${month}, ${day})"><span>${day}</span>${dotsHtml}</div>`;
+      for (let day = 1; day <= totalDays; day++) {
+        const dateKey = getLocalDateStr(new Date(year, month, day));
+        const dayLogs = getActiveBaby().logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+        let dotsHtml = '';
+        if (dayLogs.length > 0) {
+          dotsHtml = '<div class="cal-dots">';
+          if (dayLogs.some(l => l.type === 'feeding')) dotsHtml += '<div class="cal-dot" style="background:#FFE599"></div>';
+          if (dayLogs.some(l => l.type === 'diaper')) dotsHtml += '<div class="cal-dot" style="background:#C5E1A5"></div>';
+          if (dayLogs.some(l => l.type === 'sleep')) dotsHtml += '<div class="cal-dot" style="background:#D7BCE8"></div>';
+          dotsHtml += '</div>';
         }
-      } catch(e) { console.error("Error renderCalendar", e); }
+        grid.innerHTML += `<div class="cal-cell ${isToday ? 'today' : ''}" onclick="selectCalendarDate(${year}, ${month}, ${day})"><span>${day}</span>${dotsHtml}</div>`;
+      }
     }
 
     function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
@@ -1243,130 +1246,126 @@
     }
 
     function renderWeeklyMatrix24h() {
-      try {
-        const grid = document.getElementById('routine24hGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
+      const grid = document.getElementById('routine24hGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
 
-        const filterSelect = document.getElementById('matrixFilterSelect');
-        const filterVal = filterSelect ? filterSelect.value : 'all';
+      const filterSelect = document.getElementById('matrixFilterSelect');
+      const filterVal = filterSelect ? filterSelect.value : 'all';
 
-        const curr = new Date(selectedMatrixWeekDate);
-        const dayOfWeek = curr.getDay();
-        const distanceToMon = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
-        
-        const mon = new Date(curr);
-        mon.setDate(curr.getDate() + distanceToMon);
-        const sun = new Date(mon);
-        sun.setDate(mon.getDate() + 6);
+      const curr = new Date(selectedMatrixWeekDate);
+      const dayOfWeek = curr.getDay();
+      const distanceToMon = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+      
+      const mon = new Date(curr);
+      mon.setDate(curr.getDate() + distanceToMon);
+      const sun = new Date(mon);
+      sun.setDate(mon.getDate() + 6);
 
-        const t = i18n[appData.lang] || i18n['es'];
-        if(document.getElementById('matrixWeekLabel')) document.getElementById('matrixWeekLabel').innerText = `Semana del ${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} al ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short', year:'numeric'})}`;
+      const t = i18n[appData.lang] || i18n['es'];
+      if(document.getElementById('matrixWeekLabel')) document.getElementById('matrixWeekLabel').innerText = `Semana del ${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} al ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short', year:'numeric'})}`;
 
-        grid.innerHTML += `<div class="grid-header-cell"></div>`;
-        const daysShort = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-        const weekDates = [];
-        const todayStr = getLocalDateStr(new Date());
+      grid.innerHTML += `<div class="grid-header-cell"></div>`;
+      const daysShort = t.daysShort || ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+      const weekDates = [];
+      const todayStr = getLocalDateStr(new Date());
 
-        for (let i = 0; i < 7; i++) {
-          const d = new Date(mon);
-          d.setDate(mon.getDate() + i);
-          const dateStr = getLocalDateStr(d);
-          weekDates.push(dateStr);
-          const isToday = dateStr === todayStr;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(mon);
+        d.setDate(mon.getDate() + i);
+        const dateStr = getLocalDateStr(d);
+        weekDates.push(dateStr);
+        const isToday = dateStr === todayStr;
 
-          grid.innerHTML += `
-            <div class="grid-header-cell ${isToday ? 'active-day' : ''}">
-              <div>${daysShort[i]}</div>
-              <div style="font-size:0.85rem; font-weight:900;">${d.getDate()}</div>
+        grid.innerHTML += `
+          <div class="grid-header-cell ${isToday ? 'active-day' : ''}">
+            <div>${daysShort[i]}</div>
+            <div style="font-size:0.85rem; font-weight:900;">${d.getDate()}</div>
+          </div>
+        `;
+      }
+
+      let hoursColHtml = '<div style="display:flex; flex-direction:column; height:576px; justify-content:space-between;">';
+      for (let h = 0; h <= 24; h += 3) {
+        hoursColHtml += `<div class="grid-time-label">${h < 10 ? '0' + h : h}</div>`;
+      }
+      hoursColHtml += '</div>';
+      grid.innerHTML += hoursColHtml;
+
+      weekDates.forEach((dateStr) => {
+        let colContent = `<div class="grid-day-col" style="height:576px;">`;
+        let dayBlocks = [];
+
+        getActiveBaby().logs.forEach(log => {
+          if (filterVal !== 'all' && log.type !== filterVal) return;
+
+          let logDateStr = getLocalDateStr(log.timestamp);
+
+          if (log.type === 'sleep' && log.startTimestamp && log.endTimestamp) {
+            const startD = new Date(log.startTimestamp);
+            const endD = new Date(log.endTimestamp);
+            const startStr = getLocalDateStr(startD);
+            const endStr = getLocalDateStr(endD);
+
+            if (startStr !== endStr) {
+              if (dateStr === startStr) {
+                const startMins = startD.getHours() * 60 + startD.getMinutes();
+                const dur1 = 1440 - startMins;
+                dayBlocks.push({ log, startMins, durationMins: dur1 });
+              } else if (dateStr === endStr) {
+                const endMins = endD.getHours() * 60 + endD.getMinutes();
+                dayBlocks.push({ log, startMins: 0, durationMins: endMins });
+              }
+            } else if (dateStr === startStr) {
+              const startMins = startD.getHours() * 60 + startD.getMinutes();
+              const dur = Math.max(15, (endD - startD) / 60000);
+              dayBlocks.push({ log, startMins, durationMins: dur });
+            }
+          } else if (logDateStr === dateStr) {
+            const d = new Date(log.timestamp);
+            const startMins = d.getHours() * 60 + d.getMinutes();
+            dayBlocks.push({ log, startMins, durationMins: 20 });
+          }
+        });
+
+        dayBlocks.sort((a,b) => a.startMins - b.startMins);
+
+        dayBlocks.forEach((blockItem, idx) => {
+          const log = blockItem.log;
+          const topPx = (blockItem.startMins / 1440) * 576;
+          let heightPx = (blockItem.durationMins / 1440) * 576;
+
+          if (topPx + heightPx > 576) {
+            heightPx = Math.max(8, 576 - topPx);
+          }
+
+          let className = 'feed';
+          if (log.type === 'sleep') className = 'sleep';
+          else if (log.type === 'diaper') className = 'diaper';
+          else if (log.type === 'bath') className = 'bath';
+
+          let lane = 0;
+          const concurrent = dayBlocks.filter((other, oIdx) => {
+            if (oIdx >= idx) return false;
+            return Math.abs(other.startMins - blockItem.startMins) < 45;
+          });
+          lane = concurrent.length % 3;
+
+          const widthPercent = 30;
+          const leftPercent = lane * 33;
+
+          colContent += `
+            <div class="routine-block ${className}" 
+                 style="top:${topPx}px; height:${heightPx}px; left:${leftPercent}%; width:${widthPercent}%; cursor:pointer;"
+                 onclick="showMatrixBlockDetail('${log.id}')"
+                 title="${log.detail || ''}">
             </div>
           `;
-        }
-
-        let hoursColHtml = '<div style="display:flex; flex-direction:column; height:576px; justify-content:space-between;">';
-        for (let h = 0; h <= 24; h += 3) {
-          hoursColHtml += `<div class="grid-time-label">${h < 10 ? '0' + h : h}</div>`;
-        }
-        hoursColHtml += '</div>';
-        grid.innerHTML += hoursColHtml;
-
-        weekDates.forEach((dateStr) => {
-          let colContent = `<div class="grid-day-col" style="height:576px;">`;
-          let dayBlocks = [];
-
-          getActiveBaby().logs.forEach(log => {
-            if (filterVal !== 'all' && log.type !== filterVal) return;
-
-            let logDateStr = getLocalDateStr(log.timestamp);
-
-            if (log.type === 'sleep' && log.startTimestamp && log.endTimestamp) {
-              const startD = new Date(log.startTimestamp);
-              const endD = new Date(log.endTimestamp);
-              const startStr = getLocalDateStr(startD);
-              const endStr = getLocalDateStr(endD);
-
-              if (startStr !== endStr) {
-                if (dateStr === startStr) {
-                  const startMins = startD.getHours() * 60 + startD.getMinutes();
-                  const dur1 = 1440 - startMins;
-                  dayBlocks.push({ log, startMins, durationMins: dur1 });
-                } else if (dateStr === endStr) {
-                  const endMins = endD.getHours() * 60 + endD.getMinutes();
-                  dayBlocks.push({ log, startMins: 0, durationMins: endMins });
-                }
-              } else if (dateStr === startStr) {
-                const startMins = startD.getHours() * 60 + startD.getMinutes();
-                const dur = Math.max(15, (endD - startD) / 60000);
-                dayBlocks.push({ log, startMins, durationMins: dur });
-              }
-            } else if (logDateStr === dateStr) {
-              const d = new Date(log.timestamp);
-              const startMins = d.getHours() * 60 + d.getMinutes();
-              dayBlocks.push({ log, startMins, durationMins: 20 });
-            }
-          });
-
-          dayBlocks.sort((a,b) => a.startMins - b.startMins);
-
-          dayBlocks.forEach((blockItem, idx) => {
-            const log = blockItem.log;
-            const topPx = (blockItem.startMins / 1440) * 576;
-            let heightPx = (blockItem.durationMins / 1440) * 576;
-
-            if (topPx + heightPx > 576) {
-              heightPx = Math.max(8, 576 - topPx);
-            }
-
-            let className = 'feed';
-            if (log.type === 'sleep') className = 'sleep';
-            else if (log.type === 'diaper') className = 'diaper';
-            else if (log.type === 'bath') className = 'bath';
-
-            let lane = 0;
-            const concurrent = dayBlocks.filter((other, oIdx) => {
-              if (oIdx >= idx) return false;
-              return Math.abs(other.startMins - blockItem.startMins) < 45;
-            });
-            lane = concurrent.length % 3;
-
-            const widthPercent = 30;
-            const leftPercent = lane * 33;
-
-            colContent += `
-              <div class="routine-block ${className}" 
-                   style="top:${topPx}px; height:${heightPx}px; left:${leftPercent}%; width:${widthPercent}%; cursor:pointer;"
-                   onclick="showMatrixBlockDetail('${log.id}')"
-                   title="${log.detail || ''}">
-              </div>
-            `;
-          });
-
-          colContent += `</div>`;
-          grid.innerHTML += colContent;
         });
-      } catch(err) {
-        console.error("Error al renderizar Matriz 24h", err);
-      }
+
+        colContent += `</div>`;
+        grid.innerHTML += colContent;
+      });
     }
 
     function showMatrixBlockDetail(logId) {
@@ -1523,38 +1522,36 @@
     }
 
     function initBarChart() {
-      try {
-        if (typeof Chart === 'undefined') return;
-        const ctxBar = document.getElementById('barRoutinesChart');
-        if (!ctxBar) return;
-        const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days';
-        const realData = getBarChartRealData(selectVal);
-        const t = i18n[appData.lang] || i18n['es'];
+      if (typeof Chart === 'undefined') return;
+      const ctxBar = document.getElementById('barRoutinesChart');
+      if (!ctxBar) return;
+      const selectVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days';
+      const realData = getBarChartRealData(selectVal);
+      const t = i18n[appData.lang] || i18n['es'];
 
-        barRoutinesChartInstance = new Chart(ctxBar.getContext('2d'), {
-          type: 'bar',
-          data: {
-            labels: realData.labels,
-            datasets: [
-              { label: `${t.legFeed} (L) 🍼`, data: realData.feedData, backgroundColor: '#FFE599', borderRadius: 6, yAxisID: 'y1' },
-              { label: `${t.legDiaper} 💩`, data: realData.diaperData, backgroundColor: '#C5E1A5', borderRadius: 6, yAxisID: 'y' },
-              { label: `${t.legSleep} (h) 💤`, data: realData.sleepData, backgroundColor: '#D7BCE8', borderRadius: 6, yAxisID: 'y' }
-            ]
+      barRoutinesChartInstance = new Chart(ctxBar.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: realData.labels,
+          datasets: [
+            { label: `${t.legFeed} (L) 🍼`, data: realData.feedData, backgroundColor: '#FFE599', borderRadius: 6, yAxisID: 'y1' },
+            { label: `${t.legDiaper} 💩`, data: realData.diaperData, backgroundColor: '#C5E1A5', borderRadius: 6, yAxisID: 'y' },
+            { label: `${t.legSleep} (h) 💤`, data: realData.sleepData, backgroundColor: '#D7BCE8', borderRadius: 6, yAxisID: 'y' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { enabled: true, mode: 'index', intersect: false }
           },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { position: 'bottom' },
-              tooltip: { enabled: true, mode: 'index', intersect: false }
-            },
-            interaction: { mode: 'nearest', axis: 'x', intersect: false },
-            scales: {
-              y: { type: 'linear', display: true, position: 'left', beginAtZero: true },
-              y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, beginAtZero: true }
-            }
+          interaction: { mode: 'nearest', axis: 'x', intersect: false },
+          scales: {
+            y: { type: 'linear', display: true, position: 'left', beginAtZero: true },
+            y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, beginAtZero: true }
           }
-        });
-      } catch(err) { console.error("Error initBarChart", err); }
+        }
+      });
     }
 
     function updateBarChartRange(range) {
@@ -1575,69 +1572,65 @@
     }
 
     function initChart() {
-      try {
-        if (typeof Chart === 'undefined') return;
-        const ctxWeight = document.getElementById('weightChart');
-        if (ctxWeight) {
-          weightChartInstance = new Chart(ctxWeight.getContext('2d'), {
-            type: 'line',
-            data: {
-              labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
-              datasets: [
-                { label: 'Léo (Kg)', data: [3.3, 4.2, 5.4, null, null, null], borderColor: '#FF8B94', backgroundColor: 'rgba(255,139,148,0.2)', borderWidth: 3, tension: 0.3 },
-                { label: 'OMS Mediana (P50)', data: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
-              ]
-            },
-            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-          });
-        }
+      if (typeof Chart === 'undefined') return;
+      const ctxWeight = document.getElementById('weightChart');
+      if (ctxWeight) {
+        weightChartInstance = new Chart(ctxWeight.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
+            datasets: [
+              { label: 'Léo (Kg)', data: [3.3, 4.2, 5.4, null, null, null], borderColor: '#FF8B94', backgroundColor: 'rgba(255,139,148,0.2)', borderWidth: 3, tension: 0.3 },
+              { label: 'OMS Mediana (P50)', data: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
 
-        const ctxHeight = document.getElementById('heightChart');
-        if (ctxHeight) {
-          heightChartInstance = new Chart(ctxHeight.getContext('2d'), {
-            type: 'line',
-            data: {
-              labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
-              datasets: [
-                { label: 'Léo (cm)', data: [50, 54.5, 58, null, null, null], borderColor: '#779ECB', backgroundColor: 'rgba(119,158,203,0.2)', borderWidth: 3, tension: 0.3 },
-                { label: 'OMS Mediana (P50)', data: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6], borderColor: '#B2AC88', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
-              ]
-            },
-            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-          });
-        }
+      const ctxHeight = document.getElementById('heightChart');
+      if (ctxHeight) {
+        heightChartInstance = new Chart(ctxHeight.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
+            datasets: [
+              { label: 'Léo (cm)', data: [50, 54.5, 58, null, null, null], borderColor: '#779ECB', backgroundColor: 'rgba(119,158,203,0.2)', borderWidth: 3, tension: 0.3 },
+              { label: 'OMS Mediana (P50)', data: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6], borderColor: '#B2AC88', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
 
-        const ctxHead = document.getElementById('headChart');
-        if (ctxHead) {
-          headChartInstance = new Chart(ctxHead.getContext('2d'), {
-            type: 'line',
-            data: {
-              labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
-              datasets: [
-                { label: 'Léo (cm)', data: [34.5, 36.8, 38, null, null, null], borderColor: '#B2AC88', backgroundColor: 'rgba(178,172,136,0.2)', borderWidth: 3, tension: 0.3 },
-                { label: 'OMS Mediana (P50)', data: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
-              ]
-            },
-            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-          });
-        }
-      } catch(e) { console.error("Error initChart", e); }
+      const ctxHead = document.getElementById('headChart');
+      if (ctxHead) {
+        headChartInstance = new Chart(ctxHead.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'],
+            datasets: [
+              { label: 'Léo (cm)', data: [34.5, 36.8, 38, null, null, null], borderColor: '#B2AC88', backgroundColor: 'rgba(178,172,136,0.2)', borderWidth: 3, tension: 0.3 },
+              { label: 'OMS Mediana (P50)', data: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
     }
 
     function updateChart() {
-      try {
-        if (!weightChartInstance) return;
-        const growthLogs = getActiveBaby().logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(a.timestamp));
-        if (growthLogs.length > 0) {
-          const weights = growthLogs.map(l => l.weight).filter(w => w);
-          const heights = growthLogs.map(l => l.height).filter(h => h);
-          const heads = growthLogs.map(l => l.head).filter(h => h);
+      if (!weightChartInstance) return;
+      const growthLogs = getActiveBaby().logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(a.timestamp));
+      if (growthLogs.length > 0) {
+        const weights = growthLogs.map(l => l.weight).filter(w => w);
+        const heights = growthLogs.map(l => l.height).filter(h => h);
+        const heads = growthLogs.map(l => l.head).filter(h => h);
 
-          if (weights.length > 0 && weightChartInstance.data.datasets[0]) { weightChartInstance.data.datasets[0].data = weights; weightChartInstance.update(); }
-          if (heights.length > 0 && heightChartInstance.data.datasets[0]) { heightChartInstance.data.datasets[0].data = heights; heightChartInstance.update(); }
-          if (heads.length > 0 && headChartInstance.data.datasets[0]) { headChartInstance.data.datasets[0].data = heads; headChartInstance.update(); }
-        }
-      } catch(err) { console.error("Error updateChart", err); }
+        if (weights.length > 0 && weightChartInstance.data.datasets[0]) { weightChartInstance.data.datasets[0].data = weights; weightChartInstance.update(); }
+        if (heights.length > 0 && heightChartInstance.data.datasets[0]) { heightChartInstance.data.datasets[0].data = heights; heightChartInstance.update(); }
+        if (heads.length > 0 && headChartInstance.data.datasets[0]) { headChartInstance.data.datasets[0].data = heads; headChartInstance.update(); }
+      }
     }
 
     function renderVaccines() {
@@ -1808,7 +1801,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v2.0.5_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v2.0.6_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();
@@ -1856,7 +1849,7 @@
           
           if (imported.babies || imported.logs || (imported.baby && imported.logs)) {
             if (imported.babies) {
-               appData = imported;
+               appData = sanitizeData(imported);
             } else {
                if (!appData.babies || appData.babies.length === 0) {
                    appData.babies = [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }];
@@ -1868,6 +1861,7 @@
                    appData.babies[0].dob = imported.baby.dob || '2026-07-19';
                    appData.babies[0].gender = imported.baby.gender || 'male';
                }
+               appData = sanitizeData(appData);
             }
             saveState(); 
             closeModal('syncModal');

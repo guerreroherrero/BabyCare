@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 2.0.0 - Sincronización Automática</title>
+  <title>BabyCare 2.0.1 - Sincronización Automática</title>
   
-  <!-- Forzamos el color pastel en la barra de estado del móvil para que coincida con el banner -->
   <meta name="theme-color" content="#FDE6E3">
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -194,7 +193,7 @@
   <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.1</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -563,21 +562,28 @@
   </script>
 
   <script>
-    // --- INICIALIZACIÓN DE FIREBASE AUTO-SYNC ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyA0Pv37BQVN3lP0ANrcKm0wzBKozZyntPk",
-      authDomain: "babycarebd.firebaseapp.com",
-      databaseURL: "https://babycarebd-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "babycarebd",
-      storageBucket: "babycarebd.firebasestorage.app",
-      messagingSenderId: "960072637608",
-      appId: "1:960072637608:web:4668d5cef6783e74bf369d"
-    };
-    
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    // --- INICIALIZACIÓN DE FIREBASE AUTO-SYNC SEGURO ---
+    let database = null;
     let isSyncing = false; // Bloqueo de seguridad anti-bucle
+
+    // Envolvemos Firebase en un try-catch para que si el navegador lo bloquea, la app siga funcionando
+    try {
+      if (typeof firebase !== 'undefined') {
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0Pv37BQVN3lP0ANrcKm0wzBKozZyntPk",
+          authDomain: "babycarebd.firebaseapp.com",
+          databaseURL: "https://babycarebd-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "babycarebd",
+          storageBucket: "babycarebd.firebasestorage.app",
+          messagingSenderId: "960072637608",
+          appId: "1:960072637608:web:4668d5cef6783e74bf369d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+      }
+    } catch(e) {
+      console.error("Firebase ha sido bloqueado por el navegador:", e);
+    }
 
     let appData = { 
       lang: 'es', theme: 'light', activeBabyId: 1, 
@@ -590,6 +596,52 @@
     let heightChartInstance = null; 
     let headChartInstance = null; 
     let barRoutinesChartInstance = null;
+
+    window.addEventListener('DOMContentLoaded', () => { 
+      loadLocalStorageWithMigration(); 
+      setLanguage(appData.lang); 
+      applyTheme(appData.theme); 
+      
+      // Si Firebase se ha cargado correctamente, activamos la sincronización en tiempo real
+      if (database) {
+        database.ref('babycare_data').on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            isSyncing = true; // Bloquea la subida manual para evitar bucles
+            appData = data;
+            
+            localStorage.setItem('babycare_data_v2_0_1', JSON.stringify(appData));
+            
+            populateBabySelector();
+            renderBabyProfile();
+            renderLogs();
+            try { renderCalendar(); } catch(e){}
+            try { checkAlerts(); } catch(e){}
+            try { updateChart(); } catch(e){}
+            try { updateBarChart(); } catch(e){}
+            try { renderWeeklyMatrix24h(); } catch(e){}
+            try { renderAlarms(); } catch(e){}
+            try { renderVaccines(); } catch(e){}
+            
+            isSyncing = false; // Desbloquea
+          }
+        });
+      } else {
+        // Si Firebase falló, avisamos visualmente en el menú de la nube
+        const syncDesc = document.getElementById('txt-sync-desc');
+        if (syncDesc) syncDesc.innerHTML = "⚠️ <b>Conexión a la nube bloqueada</b> por el navegador (es posible que tengas un bloqueador de anuncios activado). La app está guardando los datos en modo local de forma segura.";
+      }
+
+      renderBabyProfile(); 
+      renderLogs(); 
+      try { renderCalendar(); } catch(e){ console.error("Error Calendar:", e); }
+      try { renderVaccines(); } catch(e){ console.error("Error Vaccines:", e); }
+      try { initChart(); } catch(e){ console.error("Error Chart:", e); }
+      try { initBarChart(); } catch(e){ console.error("Error BarChart:", e); }
+      try { renderWeeklyMatrix24h(); } catch(e){ console.error("Error Matrix:", e); }
+      try { checkAlerts(); } catch(e){ console.error("Error Alerts:", e); }
+      if (typeof lucide !== 'undefined') lucide.createIcons(); 
+    });
 
     function getLocalDateStr(dInput) {
       if(!dInput) return '';
@@ -626,7 +678,7 @@
 
     const i18n = {
       es: {
-        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuScan: "Nube (Auto)", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Nube", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", scanTitle: "Sincronización Activa ☁️️", scanDesc: "Cualquier cambio que hagáis se guarda y aparece automáticamente en el otro móvil. ¡No tienes que hacer nada!", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuScan: "Nube (Auto)", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Nube", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", scanTitle: "Sincronización Activa ☁", scanDesc: "Cualquier cambio que hagáis se guarda y aparece automáticamente en el otro móvil. ¡No tienes que hacer nada!", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche (L)", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
         mHeader: "Manual de Uso Paso a Paso Completo",
@@ -681,48 +733,8 @@
       }
     };
 
-    window.addEventListener('DOMContentLoaded', () => { 
-      loadLocalStorageWithMigration(); 
-      setLanguage(appData.lang); 
-      applyTheme(appData.theme); 
-      
-      // Activar Escuchador en Tiempo Real de Firebase
-      database.ref('babycare_data').on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          isSyncing = true; // Bloquea la subida manual para evitar bucles
-          appData = data;
-          
-          localStorage.setItem('babycare_data_v2_0_0', JSON.stringify(appData));
-          
-          populateBabySelector();
-          renderBabyProfile();
-          renderLogs();
-          try { renderCalendar(); } catch(e){}
-          try { checkAlerts(); } catch(e){}
-          try { updateChart(); } catch(e){}
-          try { updateBarChart(); } catch(e){}
-          try { renderWeeklyMatrix24h(); } catch(e){}
-          try { renderAlarms(); } catch(e){}
-          try { renderVaccines(); } catch(e){}
-          
-          isSyncing = false; // Desbloquea
-        }
-      });
-
-      renderBabyProfile(); 
-      renderLogs(); 
-      try { renderCalendar(); } catch(e){ console.error("Error Calendar:", e); }
-      try { renderVaccines(); } catch(e){ console.error("Error Vaccines:", e); }
-      try { initChart(); } catch(e){ console.error("Error Chart:", e); }
-      try { initBarChart(); } catch(e){ console.error("Error BarChart:", e); }
-      try { renderWeeklyMatrix24h(); } catch(e){ console.error("Error Matrix:", e); }
-      try { checkAlerts(); } catch(e){ console.error("Error Alerts:", e); }
-      if (typeof lucide !== 'undefined') lucide.createIcons(); 
-    });
-
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
+      const keys = ['babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -761,10 +773,10 @@
     }
     
     function saveState() { 
-      localStorage.setItem('babycare_data_v2_0_0', JSON.stringify(appData)); 
+      localStorage.setItem('babycare_data_v2_0_1', JSON.stringify(appData)); 
       
       // Guardado silencioso y automático en la Nube
-      if (!isSyncing) {
+      if (database && !isSyncing) {
         database.ref('babycare_data').set(appData).catch(e => console.error("Error Nube:", e));
       }
 
@@ -900,7 +912,7 @@
       setElText('opt-female', t.optFemale);
 
       setElText('txt-sync-title', t.scanTitle || "Sincronización Automática ☁️");
-      setElText('txt-sync-desc', t.scanDesc || "Tus datos se guardan solos.");
+      if(database) setElText('txt-sync-desc', t.scanDesc || "Tus datos se guardan solos.");
       setElText('txt-btn-export', t.btnExport || "Guardar copia JSON local");
       setElText('txt-btn-import', t.btnImport || "Cargar Archivo de Restauración");
       setElText('txt-sync-import-title', t.syncImportTitle || "Copias Manuales");
@@ -1745,7 +1757,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v2.0.0_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v2.0.1_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 2.0.6 - Sincronización Automática</title>
+  <title>BabyCare 2.0.7 - Sincronización Automática</title>
   
   <meta name="theme-color" content="#FDE6E3">
   
@@ -192,7 +192,7 @@
 
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.6</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.7</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -549,7 +549,6 @@
   </script>
 
   <script>
-    // --- INICIALIZACIÓN DE FIREBASE AUTO-SYNC SEGURO ---
     let database = null;
     let isSyncing = false; 
 
@@ -567,9 +566,7 @@
         firebase.initializeApp(firebaseConfig);
         database = firebase.database();
       }
-    } catch(e) {
-      console.error("Firebase ha sido bloqueado:", e);
-    }
+    } catch(e) { console.error("Firebase ha sido bloqueado:", e); }
 
     let appData = { 
       lang: 'es', theme: 'light', activeBabyId: 1, 
@@ -596,24 +593,32 @@
     ];
 
     // =========================================================================
-    // FILTRO SANITIZADOR DE DATOS DE LA NUBE (TRADUCTOR FIREBASE)
-    // Firebase convierte los Arrays en Objetos cuando se borra algún elemento. 
-    // Esta función los vuelve a convertir en Listas para evitar errores fatales.
+    // FILTRO SANITIZADOR DE DATOS DE LA NUBE (EL ASPIRADOR DE HUECOS NULOS)
     // =========================================================================
     function sanitizeData(data) {
       if (!data) return data;
-      // Convertir 'babies' a array si Firebase lo hizo objeto
-      if (data.babies && !Array.isArray(data.babies)) {
-        data.babies = Object.values(data.babies);
-      }
-      if (data.babies && Array.isArray(data.babies)) {
+      
+      if (data.babies) {
+        if (!Array.isArray(data.babies)) data.babies = Object.values(data.babies);
+        
+        // ¡Magia! Aspiramos cualquier hueco nulo provocado por Firebase al borrar perfiles
+        data.babies = data.babies.filter(b => b !== null && b !== undefined);
+        
         data.babies.forEach(b => {
-          // Convertir logs y alarmas a arrays si Firebase los hizo objetos
-          if (b.logs && !Array.isArray(b.logs)) b.logs = Object.values(b.logs);
-          if (b.alarms && !Array.isArray(b.alarms)) b.alarms = Object.values(b.alarms);
-          // Asegurar que siempre existan
-          if (!b.logs) b.logs = [];
-          if (!b.alarms) b.alarms = [];
+          if (b.logs) {
+            if (!Array.isArray(b.logs)) b.logs = Object.values(b.logs);
+            b.logs = b.logs.filter(l => l !== null && l !== undefined);
+          } else {
+            b.logs = [];
+          }
+          
+          if (b.alarms) {
+            if (!Array.isArray(b.alarms)) b.alarms = Object.values(b.alarms);
+            b.alarms = b.alarms.filter(a => a !== null && a !== undefined);
+          } else {
+            b.alarms = [];
+          }
+          
           if (!b.vaccines) b.vaccines = {};
         });
       }
@@ -631,9 +636,11 @@
             let data = snapshot.val();
             if (data) {
               isSyncing = true;
-              appData = sanitizeData(data); // ¡Filtro Mágico Aplicado!
               
-              try { localStorage.setItem('babycare_data_v2_0_6', JSON.stringify(appData)); } catch(e){}
+              // Pasamos los datos crudos por el Aspirador de Nulos antes de usarlos
+              appData = sanitizeData(data); 
+              
+              try { localStorage.setItem('babycare_data_v2_0_7', JSON.stringify(appData)); } catch(e){}
               
               try { populateBabySelector(); } catch(e){}
               try { renderBabyProfile(); } catch(e){}
@@ -668,14 +675,9 @@
       try { renderWeeklyMatrix24h(); } catch(e){}
       try { checkAlerts(); } catch(e){}
       
-      try {
-        if (typeof lucide !== 'undefined' && lucide.createIcons) {
-          lucide.createIcons();
-        }
-      } catch(e) { console.error("Lucide Error", e); }
+      try { if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons(); } catch(e) {}
     });
 
-    // MÁGIA AÑADIDA: AUTO-SCROLL INTELIGENTE EN PESTAÑAS
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -688,8 +690,6 @@
       const targetTab = document.getElementById(`tab-${tabId}`);
       if (targetTab) {
         targetTab.classList.add('active');
-        
-        // Auto-deslizamiento
         if (tabId !== 'logs') {
           setTimeout(() => {
             const nav = document.querySelector('.tabs-nav');
@@ -731,12 +731,21 @@
         appData.babies = [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }];
         appData.activeBabyId = 1;
       }
-      let b = appData.babies.find(b => b.id === appData.activeBabyId);
+      
+      // Segunda barrera de seguridad: limpiamos de nuevo por si se cuela algo en memoria local
+      appData.babies = appData.babies.filter(b => b !== null && b !== undefined);
+      if (appData.babies.length === 0) {
+        appData.babies = [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }];
+        appData.activeBabyId = 1;
+      }
+      
+      let b = appData.babies.find(b => b && b.id === appData.activeBabyId);
       if (!b) b = appData.babies[0];
       
-      // Sanitización al vuelo por si Firebase devuelve objetos directamente al leer
       if (b.alarms && !Array.isArray(b.alarms)) b.alarms = Object.values(b.alarms);
       if (b.logs && !Array.isArray(b.logs)) b.logs = Object.values(b.logs);
+      if (b.alarms && Array.isArray(b.alarms)) b.alarms = b.alarms.filter(a => a !== null && a !== undefined);
+      if (b.logs && Array.isArray(b.logs)) b.logs = b.logs.filter(l => l !== null && l !== undefined);
 
       if (!b.alarms) b.alarms = [];
       if (!b.vaccines) b.vaccines = {};
@@ -803,7 +812,7 @@
 
     function loadLocalStorageWithMigration() {
       try {
-        const keys = ['babycare_data_v2_0_6', 'babycare_data_v2_0_5', 'babycare_data_v2_0_4', 'babycare_data_v2_0_3', 'babycare_data_v2_0_2', 'babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6'];
+        const keys = ['babycare_data_v2_0_7', 'babycare_data_v2_0_6', 'babycare_data_v2_0_5', 'babycare_data_v2_0_4', 'babycare_data_v2_0_3', 'babycare_data_v2_0_2', 'babycare_data_v2_0_1', 'babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6'];
         let loaded = false;
         for (let key of keys) {
           try {
@@ -819,7 +828,7 @@
           } catch(errItem) {}
         }
       } catch(globalErr) {
-        console.warn("LocalStorage bloqueado por el navegador.");
+        console.warn("LocalStorage bloqueado.");
       }
       
       if (!appData || !appData.babies || appData.babies.length === 0) {
@@ -833,16 +842,13 @@
     
     function saveState() { 
       try {
-        localStorage.setItem('babycare_data_v2_0_6', JSON.stringify(appData)); 
-      } catch(e) { console.warn("No se pudo guardar en LocalStorage:", e); }
+        localStorage.setItem('babycare_data_v2_0_7', JSON.stringify(appData)); 
+      } catch(e) {}
       
-      // Guardado silencioso en Nube Protegido
       if (database && !isSyncing) {
         try {
           database.ref('babycare_data').set(appData).catch(e => console.error("Error Nube:", e));
-        } catch(e) {
-          console.error("Error síncrono al subir a la nube:", e);
-        }
+        } catch(e) {}
       }
 
       try { populateBabySelector(); } catch(e){}
@@ -1020,10 +1026,6 @@
       }
 
       if(document.getElementById('langSelect')) document.getElementById('langSelect').value = lang;
-      
-      try { renderCalendar(); } catch(e){}
-      try { renderWeeklyMatrix24h(); } catch(e){}
-      try { checkAlerts(); } catch(e){}
     }
 
     function openModal(id) { 
@@ -1801,7 +1803,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v2.0.6_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v2.0.7_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();

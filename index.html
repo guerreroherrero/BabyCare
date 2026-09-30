@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 1.9.0 - Control Completo del Bebé</title>
+  <title>BabyCare 2.0.0 - Sincronización Automática</title>
   
-  <!-- Forzamos el color pastel en la barra de estado del móvil -->
+  <!-- Forzamos el color pastel en la barra de estado del móvil para que coincida con el banner -->
   <meta name="theme-color" content="#FDE6E3">
   
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
@@ -194,7 +194,7 @@
   <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.9.0</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -217,7 +217,6 @@
     <div class="drawer-item" onclick="closeDrawer(); openModal('alarms');"><i data-lucide="bell"></i><span id="txt-menu-alarms">Alarmas y Avisos</span></div>
     <div class="drawer-item" onclick="closeDrawer(); switchTab('manual');"><i data-lucide="book-open"></i><span id="txt-menu-manual">Manual de Uso</span></div>
     
-    <!-- Mantenemos la opción manual escondida en el menú por si falla internet -->
     <div class="drawer-item" onclick="exportJSON()"><i data-lucide="download"></i><span id="txt-menu-export">Exportar Archivo JSON</span></div>
     <div class="drawer-item" onclick="closeDrawer(); triggerFileInput()"><i data-lucide="upload"></i><span id="txt-menu-import">Importar Archivo JSON</span></div>
     <hr style="border:none; border-top:1px solid var(--border-color); margin: 0.4rem 0;">
@@ -296,7 +295,6 @@
 
     <!-- TAB 2: Calendario, Gráfico de Barras y Matriz Semanal de 24h -->
     <div class="tab-content" id="tab-calendar">
-      <!-- Vista Mensual -->
       <div class="card">
         <div class="calendar-header">
           <button class="burger-btn" onclick="prevMonth()"><i data-lucide="chevron-left"></i></button>
@@ -306,7 +304,6 @@
         <div class="calendar-grid" id="calendarGrid"></div>
       </div>
 
-      <!-- Gráfico de Barras -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
           <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
@@ -319,7 +316,6 @@
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
 
-      <!-- Matriz Semanal 24 Horas -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:6px;">
           <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de 24 Horas</h3>
@@ -391,7 +387,7 @@
         <div class="manual-step"><div class="step-number">4</div><div class="step-content"><h4 id="mstep4-title">Diario, Timeline y Totales Acumulados</h4><p id="mstep4-desc">Navega con las flechas día a día para consultar la secuencia cronológica de eventos.</p></div></div>
         <div class="manual-step"><div class="step-number">5</div><div class="step-content"><h4 id="mstep5-title">Calendario, Gráfico de Barras y Matriz 24h</h4><p id="mstep5-desc">En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa y la matriz visual de 24 horas.</p></div></div>
         <div class="manual-step"><div class="step-number">6</div><div class="step-content"><h4 id="mstep6-title">Gráficas de Crecimiento y Percentiles OMS</h4><p id="mstep6-desc">En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la OMS.</p></div></div>
-        <div class="manual-step"><div class="step-number">7</div><div class="step-content"><h4 id="mstep7-title">Sincronización en la Nube</h4><p id="mstep7-desc">Pulsa 'Sincronizar' en el menú inferior y usa los botones de subir o bajar datos de la nube para mantener tu app al día.</p></div></div>
+        <div class="manual-step"><div class="step-number">7</div><div class="step-content"><h4 id="mstep7-title">Sincronización Automática</h4><p id="mstep7-desc">Todo lo que guardes se sincronizará mágicamente en el otro móvil sin tocar ningún botón. Totalmente transparente.</p></div></div>
         <div class="manual-step"><div class="step-number">8</div><div class="step-content"><h4 id="mstep8-title">Alarmas y Copias de Seguridad</h4><p id="mstep8-desc">Desde el menú lateral puedes crear alarmas que sonarán incluso en segundo plano, cambiar de idioma, o exportar archivos JSON.</p></div></div>
       </div>
     </div>
@@ -400,7 +396,7 @@
   <nav class="bottom-nav">
     <div class="nav-item active" id="bnav-item-home" onclick="switchTab('logs')"><i data-lucide="list"></i><span id="bnav-home">Inicio</span></div>
     <div class="nav-item" onclick="openFormModal('feeding')"><i data-lucide="plus-circle" style="width:28px; height:28px; color:var(--primary);"></i><span id="bnav-add">Añadir</span></div>
-    <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="share-2"></i><span id="bnav-share">Sincronizar</span></div>
+    <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="cloud-lightning"></i><span id="bnav-share">Nube</span></div>
   </nav>
 
   <!-- Modales con Doble Botón Guardar -->
@@ -519,25 +515,35 @@
     </div>
   </div>
 
-  <!-- Modal NUEVO de Sincronización CLOUD -->
+  <!-- Modal NUEVO de Panel de Nube Activa -->
   <div class="modal-overlay" id="syncModal">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="txt-sync-title">Sincronización en la Nube ☁️</h3>
+        <h3 id="txt-sync-title">Sincronización Activa ☁️</h3>
         <button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body" style="padding:0.8rem 0.2rem;">
-        <p style="font-size:0.88rem; color:var(--text-color); margin-bottom:1.2rem; text-align:center; line-height:1.4;" id="txt-sync-desc">
-          Conectado a la base de datos segura de Firebase. Sube tus cambios o descarga los de tu pareja al instante.
-        </p>
+        
+        <div style="text-align:center; padding: 1rem 0;">
+          <i data-lucide="cloud-lightning" style="width:48px; height:48px; color:var(--primary); margin-bottom:10px;"></i>
+          <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-color);">Nube Conectada</h4>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.4;" id="txt-sync-desc">
+            Cualquier cambio que hagáis se guarda y aparece automáticamente en el otro móvil al instante. ¡No tienes que hacer nada!
+          </p>
+        </div>
 
-        <button onclick="uploadToCloud()" id="btn-upload-cloud" style="background:var(--primary); color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.8rem; box-shadow:0 4px 12px rgba(122,162,247,0.25);">
-          ☁️ <span id="txt-btn-upload">Subir a la nube</span>
+        <hr style="border:none; border-top:1px solid var(--border-color); margin:1rem 0;">
+
+        <h4 style="font-size:0.9rem; font-weight:800; margin-bottom:0.5rem;" id="txt-sync-import-title">Copias de Seguridad (Manual)</h4>
+        
+        <button onclick="exportJSON()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.6rem;">
+          📲 <span id="txt-btn-export">Guardar copia JSON local</span>
         </button>
 
-        <button onclick="downloadFromCloud()" id="btn-download-cloud" style="background:#C5E1A5; color:#3F6212; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1rem; box-shadow:0 4px 12px rgba(197,225,165,0.4);">
-          ⬇️ <span id="txt-btn-download">Descargar de la nube</span>
+        <button onclick="triggerFileInput()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem 1rem; border-radius:14px; font-weight:800; font-size:0.85rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
+          📥 <span id="txt-btn-import">Cargar Archivo de Restauración</span>
         </button>
+
       </div>
     </div>
   </div>
@@ -557,7 +563,7 @@
   </script>
 
   <script>
-    // --- INICIALIZACIÓN DE FIREBASE CLOUD SYNC ---
+    // --- INICIALIZACIÓN DE FIREBASE AUTO-SYNC ---
     const firebaseConfig = {
       apiKey: "AIzaSyA0Pv37BQVN3lP0ANrcKm0wzBKozZyntPk",
       authDomain: "babycarebd.firebaseapp.com",
@@ -571,7 +577,7 @@
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-
+    let isSyncing = false; // Bloqueo de seguridad anti-bucle
 
     let appData = { 
       lang: 'es', theme: 'light', activeBabyId: 1, 
@@ -620,7 +626,7 @@
 
     const i18n = {
       es: {
-        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuScan: "Sincronizar", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Sincronizar", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", scanTitle: "Sincronización en la Nube ☁️", scanDesc: "Conectado a la base de datos segura. Sube tus cambios o descarga los de tu pareja al instante.", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuScan: "Nube (Auto)", menuManual: "Manual de Uso", menuExport: "Exportar JSON", menuImport: "Importar JSON", langLabel: "Idioma", themeLabel: "Apariencia", themeBtn: "Modo Claro/Oscuro", quickActions: "Registrar Evento", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Frecuencia Diaria de Eventos (Comparativa)", weightChart: "1. Evolución de Peso (kg) vs OMS", heightChart: "2. Evolución de Talla / Longitud (cm) vs OMS", headChart: "3. Perímetro Cefálico (cm) vs OMS", weeklyMatrixTitle: "Matriz Semanal de Rutina de 24 Horas", whoRoutines: "4. Control Diario de Tomas y Pañales", whoRoutinesDesc: "Frecuencias normales recomendadas según etapa OMS:", vaccineTitle: "Calendario Vacunal Recomendado", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Nube", saveEntry: "Guardar Registro", saveProfile: "Actualizar Perfil", lblTimestamp: "Fecha y Hora", lblNotes: "Notas / Observaciones", scanTitle: "Sincronización Activa ☁️️", scanDesc: "Cualquier cambio que hagáis se guarda y aparece automáticamente en el otro móvil. ¡No tienes que hacer nada!", alertFeed: "⚠️ Alerta: Han pasado más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         lblBabyName: "Nombre del Bebé", lblBabyDob: "Fecha de Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧",
         sumFeed: "🍼 Leche (L)", sumSleep: "💤 Sueño total", sumDiaper: "💦 Pañales",
         mHeader: "Manual de Uso Paso a Paso Completo",
@@ -630,15 +636,15 @@
         ms4Title: "4. Diario, Timeline y Totales Acumulados", ms4Desc: "Navega con las flechas día a día para consultar la secuencia cronológica de eventos. En la parte superior verás el resumen acumulado de L de leche, horas de sueño y pañales.",
         ms5Title: "5. Calendario, Gráfico y Matriz 24h", ms5Desc: "En la pestaña 'Calendario', consulta el calendario mensual, la gráfica comparativa (con filtro de semanas o meses) y la matriz de 24 horas con filtros específicos por evento.",
         ms6Title: "6. Gráficas de Crecimiento y Percentiles OMS", ms6Desc: "En la pestaña 'Curvas OMS', examina las 3 gráficas independientes de Peso, Talla y Perímetro Cefálico comparadas con la mediana P50 de la OMS.",
-        ms7Title: "7. Sincronización Directa por WhatsApp", ms7Desc: "Pulsa 'Sincronizar' en el menú inferior y envía el archivo JSON por WhatsApp. La pareja solo debe pulsar en 'Cargar Archivo Recibido'.",
+        ms7Title: "7. Sincronización Automática", ms7Desc: "Todo lo que guardes se sincronizará mágicamente en el otro móvil sin tocar ningún botón. Totalmente transparente.",
         ms8Title: "8. Alarmas y Copias de Seguridad", ms8Desc: "Desde el menú lateral puedes crear alarmas que sonarán incluso en segundo plano, cambiar de idioma, activar el Modo Oscuro o exportar archivos de respaldo JSON.",
         opt4w: "Últimas 4 semanas", opt6m: "Últimos 6 meses", opt7d: "Últimos 7 días", legFeed: "Leche", legSleep: "Sueño", legDiaper: "Pañal",
         babySelect: "Bebé Activo", addBaby: "+ Añadir Bebé", newBabyTitle: "Añadir Nuevo Bebé", createBabyBtn: "Añadir Bebé", deleteBabyBtn: "Eliminar Bebé", menuAlarms: "Alarmas y Avisos", alarmTitle: "Alarmas y Avisos", newAlarmTitle: "Crear Nueva Alarma", alarmType: "Tipo de Aviso", alarmTime: "Hora Exacta", alarmSound: "Sonido", alarmSaveBtn: "Añadir Alarma",
-        btnUpload: "Subir a la nube", btnDownload: "Descargar de la nube",
+        btnExport: "Guardar copia JSON local", btnImport: "Cargar Archivo de Restauración", syncImportTitle: "Copias de Seguridad (Manual)",
         filterAll: "Mostrar Todos", filterFeed: "Solo Tomas", filterDiaper: "Solo Pañales", filterSleep: "Solo Sueño", filterBath: "Solo Baños"
       },
       fr: {
-        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuScan: "Synchroniser", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Synchroniser", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", scanTitle: "Synchronisation Cloud ☁️", scanDesc: "Connecté à la base de données sécurisée.", alertFeed: "⚠️️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        menuTitle: "Menu BabyCare", menuProfile: "Profil du Bébé", menuScan: "Cloud (Auto)", menuManual: "Guide d'utilisation", menuExport: "Exporter JSON", menuImport: "Importer JSON", langLabel: "Langue", themeLabel: "Apparence", themeBtn: "Mode Clair/Sombre", quickActions: "Enregistrer Événement", actFeed: "Alimentation", actDiaper: "Couche", actSleep: "Sommeil", actGrowth: "Croissance", actHealth: "Santé / Temp", actBath: "Bain / Douche", tabLogs: "Journal", tabCal: "Calendrier", tabCharts: "Courbes OMS", tabVac: "Vaccins", recentLogs: "Activité Récente", today: "Aujourd'hui", barChartTitle: "Fréquence Quotidienne des Événements", weightChart: "1. Évolution du Poids (kg) vs OMS", heightChart: "2. Évolution de la Taille (cm) vs OMS", headChart: "3. Périmètre Crânien (cm) vs OMS", weeklyMatrixTitle: "Matrice Hebdomadaire de Routine (24h)", whoRoutines: "4. Contrôle Quotidien des Tétées et Couches", whoRoutinesDesc: "Fréquences recommandées selon l'OMS :", vaccineTitle: "Calendrier Vaccinal Recommandé", bnavHome: "Accueil", bnavAdd: "Ajouter", bnavShare: "Cloud", saveEntry: "Sauvegarder", saveProfile: "Mettre à jour", lblTimestamp: "Date et Heure", lblNotes: "Notes / Observations", scanTitle: "Synchronisation Cloud ☁️", scanDesc: "Synchronisation automatique activée.", alertFeed: "⚠️ Attention : Plus de 3,5 h depuis la dernière tétée.", daysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         lblBabyName: "Nom du Bébé", lblBabyDob: "Date de Naissance", lblBabyGender: "Sexe", optMale: "Garçon 👦", optFemale: "Fille 👧",
         sumFeed: "🍼 Lait (L)", sumSleep: "💤 Sommeil total", sumDiaper: "💦 Couches",
         mHeader: "Guide d'Utilisation Étape par Étape Complet",
@@ -648,15 +654,15 @@
         ms4Title: "4. Journal et Totaux Quotidiens", ms4Desc: "Consultez la chronologie quotidienne et le résumé des L de lait, heures de sommeil et couches.",
         ms5Title: "5. Calendrier, Graphique et Matrice 24h", ms5Desc: "Consultez le calendrier, le graphique comparatif et la matrice 24h avec filtre par évènement.",
         ms6Title: "6. Courbes de Croissance OMS", ms6Desc: "Observez les graphiques de poids, taille et périmètre crânien par rapport aux normes OMS.",
-        ms7Title: "7. Synchronisation directe", ms7Desc: "Appuyez sur 'Sync' et envoyez le fichier via WhatsApp.",
+        ms7Title: "7. Synchronisation Auto", ms7Desc: "Les modifications sont enregistrées et synchronisées automatiquement.",
         ms8Title: "8. Alarmes et Paramètres", ms8Desc: "Créez des alarmes sonores, changez la langue ou le Mode Sombre.",
         opt4w: "Dernières 4 semaines", opt6m: "Derniers 6 mois", opt7d: "Derniers 7 jours", legFeed: "Lait", legSleep: "Sommeil", legDiaper: "Couche",
         babySelect: "Bébé Actif", addBaby: "+ Ajouter un bébé", newBabyTitle: "Ajouter un nouveau bébé", createBabyBtn: "Ajouter", deleteBabyBtn: "Supprimer le bébé", menuAlarms: "Alarmes", alarmTitle: "Alarmes et Avis", newAlarmTitle: "Créer une alarme", alarmType: "Type", alarmTime: "Heure exacte", alarmSound: "Son", alarmSaveBtn: "Ajouter l'alarme",
-        btnUpload: "Sauvegarder (Cloud)", btnDownload: "Télécharger (Cloud)",
+        btnExport: "Exporter JSON", btnImport: "Importer JSON", syncImportTitle: "Sauvegardes (Manuel)",
         filterAll: "Tout", filterFeed: "Lait", filterDiaper: "Couches", filterSleep: "Sommeil", filterBath: "Bains"
       },
       en: {
-        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuScan: "Sync", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Sync", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", scanTitle: "Cloud Sync ☁️", scanDesc: "Connected to secure database.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        menuTitle: "BabyCare Menu", menuProfile: "Baby Profile", menuScan: "Cloud (Auto)", menuManual: "User Manual", menuExport: "Export JSON", menuImport: "Import JSON", langLabel: "Language", themeLabel: "Appearance", themeBtn: "Light/Dark Mode", quickActions: "Log Event", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health / Temp", actBath: "Bath / Shower", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent Activity", today: "Today", barChartTitle: "Daily Events Frequency (Comparison)", weightChart: "1. Weight Progress (kg) vs WHO", heightChart: "2. Height Progress (cm) vs WHO", headChart: "3. Head Circumference (cm) vs WHO", weeklyMatrixTitle: "24-Hour Weekly Routine Matrix", whoRoutines: "4. Daily Feedings & Diapers Control", whoRoutinesDesc: "Recommended WHO daily frequencies:", vaccineTitle: "Recommended Immunization Schedule", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Cloud", saveEntry: "Save Entry", saveProfile: "Update Profile", lblTimestamp: "Date & Time", lblNotes: "Notes / Details", scanTitle: "Cloud Sync ☁️", scanDesc: "Real-time sync is active. Changes magically appear on the other phone.", alertFeed: "⚠️ Warning: Over 3.5h since last feeding session.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         lblBabyName: "Baby Name", lblBabyDob: "Date of Birth", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧",
         sumFeed: "🍼 Total Milk (L)", sumSleep: "💤 Total Sleep", sumDiaper: "💦 Diapers",
         mHeader: "Complete Step-by-Step User Manual",
@@ -666,24 +672,44 @@
         ms4Title: "4. Daily Timeline & Totals", ms4Desc: "Check total milk intake in Liters, total sleep, and diaper counts at a glance.",
         ms5Title: "5. Calendar, Bar Chart & 24h Matrix", ms5Desc: "Examine monthly calendar, comparative bar chart, and 24h matrix grid. Use the filter to isolate specific events.",
         ms6Title: "6. WHO Growth Percentile Charts", ms6Desc: "Under 'WHO Growth', view weight, height, and head circumference charts.",
-        ms7Title: "7. Sync Between Phones", ms7Desc: "Tap 'Sync' and send the file via WhatsApp. On the other phone, tap 'Load Received File'.",
+        ms7Title: "7. Automatic Cloud Sync", ms7Desc: "Everything is synced seamlessly across devices without lifting a finger.",
         ms8Title: "8. Alarms & Settings", ms8Desc: "From the side menu create background alarms, change language, toggle Dark Mode, or export/import JSON files.",
         opt4w: "Last 4 weeks", opt6m: "Last 6 months", opt7d: "Last 7 days", legFeed: "Milk", legSleep: "Sleep", legDiaper: "Diaper",
         babySelect: "Active Baby", addBaby: "+ Add Baby", newBabyTitle: "Add New Baby", createBabyBtn: "Add Baby", deleteBabyBtn: "Delete Baby", menuAlarms: "Alarms & Alerts", alarmTitle: "Alarms & Alerts", newAlarmTitle: "Create New Alarm", alarmType: "Alert Type", alarmTime: "Exact Time", alarmSound: "Sound", alarmSaveBtn: "Add Alarm",
-        btnUpload: "Upload to Cloud", btnDownload: "Download from Cloud",
+        btnExport: "Export local JSON copy", btnImport: "Load Restore File", syncImportTitle: "Manual Backups",
         filterAll: "Show All", filterFeed: "Feeds", filterDiaper: "Diapers", filterSleep: "Sleep", filterBath: "Baths"
       }
     };
-
-    function setElText(id, text) {
-      const el = document.getElementById(id);
-      if (el && text !== undefined) el.innerText = text;
-    }
 
     window.addEventListener('DOMContentLoaded', () => { 
       loadLocalStorageWithMigration(); 
       setLanguage(appData.lang); 
       applyTheme(appData.theme); 
+      
+      // Activar Escuchador en Tiempo Real de Firebase
+      database.ref('babycare_data').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          isSyncing = true; // Bloquea la subida manual para evitar bucles
+          appData = data;
+          
+          localStorage.setItem('babycare_data_v2_0_0', JSON.stringify(appData));
+          
+          populateBabySelector();
+          renderBabyProfile();
+          renderLogs();
+          try { renderCalendar(); } catch(e){}
+          try { checkAlerts(); } catch(e){}
+          try { updateChart(); } catch(e){}
+          try { updateBarChart(); } catch(e){}
+          try { renderWeeklyMatrix24h(); } catch(e){}
+          try { renderAlarms(); } catch(e){}
+          try { renderVaccines(); } catch(e){}
+          
+          isSyncing = false; // Desbloquea
+        }
+      });
+
       renderBabyProfile(); 
       renderLogs(); 
       try { renderCalendar(); } catch(e){ console.error("Error Calendar:", e); }
@@ -696,7 +722,7 @@
     });
 
     function loadLocalStorageWithMigration() {
-      const keys = ['babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
+      const keys = ['babycare_data_v2_0_0', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6', 'babycare_data_v1_8_5', 'babycare_data_v1_8_4', 'babycare_data_v1_8_3', 'babycare_data_v1_8_2', 'babycare_data_v1_8_1', 'babycare_data_v1_8_0', 'babycare_data_v1_7_0', 'babycare_data_v1_6_0', 'babycare_data_v1_5_1', 'babycare_data_v1_5_0', 'babycare_data_v1_4_0', 'babycare_data_v1_3_1', 'babycare_data_v1_3_0', 'babycare_data_v1_2_2', 'babycare_data_v40_1_0', 'babycare_data_v40', 'babycare_data_v37'];
       let loaded = false;
       for (let key of keys) {
         const saved = localStorage.getItem(key);
@@ -735,7 +761,13 @@
     }
     
     function saveState() { 
-      localStorage.setItem('babycare_data_v1_9_0', JSON.stringify(appData)); 
+      localStorage.setItem('babycare_data_v2_0_0', JSON.stringify(appData)); 
+      
+      // Guardado silencioso y automático en la Nube
+      if (!isSyncing) {
+        database.ref('babycare_data').set(appData).catch(e => console.error("Error Nube:", e));
+      }
+
       populateBabySelector(); 
       renderBabyProfile(); 
       renderLogs(); 
@@ -867,10 +899,11 @@
       setElText('opt-male', t.optMale);
       setElText('opt-female', t.optFemale);
 
-      setElText('txt-sync-title', t.scanTitle || "Sincronización en la Nube ☁️");
-      setElText('txt-sync-desc', t.scanDesc || "Conectado a la base de datos segura.");
-      setElText('txt-btn-upload', t.btnUpload || "Subir a la nube");
-      setElText('txt-btn-download', t.btnDownload || "Descargar de la nube");
+      setElText('txt-sync-title', t.scanTitle || "Sincronización Automática ☁️");
+      setElText('txt-sync-desc', t.scanDesc || "Tus datos se guardan solos.");
+      setElText('txt-btn-export', t.btnExport || "Guardar copia JSON local");
+      setElText('txt-btn-import', t.btnImport || "Cargar Archivo de Restauración");
+      setElText('txt-sync-import-title', t.syncImportTitle || "Copias Manuales");
       
       setElText('opt-7days', t.opt7d);
       setElText('opt-4weeks', t.opt4w);
@@ -1705,53 +1738,6 @@
       saveState(); closeFormModal();
     }
 
-    // --- FUNCIONES DE SINCRONIZACIÓN EN LA NUBE ---
-    
-    function uploadToCloud() {
-      if (!confirm("¿Seguro que quieres subir los datos a la nube? Esto reemplazará los datos guardados allí con tu versión actual.")) return;
-      
-      const btn = document.getElementById('btn-upload-cloud');
-      if (btn) btn.innerText = "Subiendo datos...";
-      
-      database.ref('babycare_data').set(appData)
-        .then(() => {
-          alert("¡Datos subidos con éxito a la nube! ☁️");
-          closeModal('sync');
-        })
-        .catch((error) => {
-          alert("Error al subir a la nube: " + error.message);
-        })
-        .finally(() => {
-          if (btn) btn.innerHTML = '☁️ <span id="txt-btn-upload">Subir a la nube</span>';
-        });
-    }
-
-    function downloadFromCloud() {
-      if (!confirm("¿Seguro que quieres descargar los datos? Esto borrará tus datos locales actuales y los reemplazará por los de la nube.")) return;
-      
-      const btn = document.getElementById('btn-download-cloud');
-      if (btn) btn.innerText = "Descargando datos...";
-
-      database.ref('babycare_data').once('value')
-        .then((snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            appData = data;
-            saveState(); // Esto guarda los datos descargados en la memoria local y recarga la pantalla
-            alert("¡Datos descargados y sincronizados correctamente! ⬇️");
-            closeModal('sync');
-          } else {
-            alert("No se han encontrado datos en la nube. Sube los datos desde el otro dispositivo primero.");
-          }
-        })
-        .catch((error) => {
-          alert("Error al descargar de la nube: " + error.message);
-        })
-        .finally(() => {
-          if (btn) btn.innerHTML = '⬇️ <span id="txt-btn-download">Descargar de la nube</span>';
-        });
-    }
-
     function exportJSON() {
       try {
         const dataStr = JSON.stringify(appData, null, 2);
@@ -1759,7 +1745,7 @@
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `babycare_v1.9.0_${getActiveBaby().name}.json`);
+        anchor.setAttribute("download", `babycare_v2.0.0_${getActiveBaby().name}.json`);
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();
@@ -1820,8 +1806,9 @@
                    appData.babies[0].gender = imported.baby.gender || 'male';
                }
             }
-            saveState();
-            alert("¡Datos locales restaurados con éxito!");
+            saveState(); // Esto forzará la subida a la nube
+            closeModal('syncModal');
+            alert("¡Datos locales restaurados y enviados a la nube con éxito!");
           } else {
             alert("El archivo no contiene registros válidos de BabyCare.");
           }
@@ -1831,6 +1818,93 @@
       };
       reader.readAsText(file);
     }
+
+    function addAlarm() {
+      const type = document.getElementById('newAlarmType').value;
+      const timeStr = document.getElementById('newAlarmTime').value;
+      const sound = document.getElementById('newAlarmSound').value;
+      
+      if (!timeStr) {
+        alert("Selecciona una hora válida");
+        return;
+      }
+      
+      const now = new Date();
+      const [hours, minutes] = timeStr.split(':');
+      let targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hours), parseInt(minutes), 0).getTime();
+      
+      if (targetTime < now.getTime()) {
+        targetTime += 24 * 60 * 60 * 1000;
+      }
+      
+      const newAlarm = { id: Date.now(), title: type, time: targetTime, sound: sound, triggered: false };
+      
+      getActiveBaby().alarms.push(newAlarm);
+      saveState();
+      renderAlarms();
+      alert(`Alarma añadida para las ${timeStr}.`);
+    }
+
+    function deleteAlarm(id) {
+      getActiveBaby().alarms = getActiveBaby().alarms.filter(a => a.id !== id);
+      saveState();
+      renderAlarms();
+    }
+
+    function renderAlarms() {
+      const container = document.getElementById('alarmsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      const activeAlarms = getActiveBaby().alarms.filter(a => !a.triggered).sort((a,b) => a.time - b.time);
+      if (activeAlarms.length === 0) {
+        container.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:var(--text-muted);">No hay alarmas pendientes.</p>`;
+        return;
+      }
+      
+      activeAlarms.forEach(al => {
+        const timeObj = new Date(al.time);
+        const dateStr = timeObj.toLocaleDateString([], { day: 'numeric', month: 'short' });
+        const timeStr = timeObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        container.innerHTML += `
+          <div class="alarm-item">
+            <div>
+              <strong style="font-size:0.85rem;">${al.title}</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${dateStr}, a las ${timeStr}</div>
+            </div>
+            <button onclick="deleteAlarm(${al.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i data-lucide="trash-2" style="width:16px;"></i></button>
+          </div>
+        `;
+      });
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function playAlarmSound(soundKey) {
+      const audioUrl = soundKey === 'chime' 
+        ? 'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg' 
+        : 'https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg';
+      const audio = new Audio(audioUrl);
+      audio.play().catch(e => console.log('Audio autoplay blocked by browser', e));
+    }
+
+    setInterval(() => {
+      const now = Date.now();
+      let changed = false;
+      appData.babies.forEach(baby => {
+        if (!baby.alarms) baby.alarms = [];
+        baby.alarms.forEach(al => {
+          if (!al.triggered && now >= al.time) {
+            al.triggered = true;
+            changed = true;
+            playAlarmSound(al.sound);
+            alert(`⏰ ¡Aviso para ${baby.name}!\n\n🔔 ${al.title}`);
+          }
+        });
+      });
+      if (changed) {
+        saveState();
+      }
+    }, 30000);
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 1.9.1 - Nube Manual (Estable)</title>
+  <title>BabyCare 3.0.0 - Cloud Native Sync</title>
   
   <meta name="theme-color" content="#FDE6E3">
   
@@ -19,168 +19,69 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <style>
-    :root {
-      --bg-color: #FDFBF7; --card-bg: #FFFFFF; --text-color: #4A4E69; --text-muted: #8E94A2;
-      --primary: #7AA2F7; --secondary: #AEC6CF; --accent-green: #C5E1A5; --accent-yellow: #FFE599;
-      --accent-purple: #D7BCE8; --warning: #FFF2B2; --warning-border: #F7D070; --danger: #FFB3BA;
-      --border-color: #F0EAE1; --shadow: 0 8px 24px rgba(149, 157, 165, 0.1); --radius: 20px;
-    }
-
-    [data-theme="dark"] {
-      --bg-color: #1A1B26; --card-bg: #24283B; --text-color: #C0CAF5; --text-muted: #7AA2F7;
-      --primary: #7AA2F7; --secondary: #7AA2F7; --accent-green: #9ECE6A; --accent-yellow: #E0AF68;
-      --accent-purple: #BB9AF7; --warning: #3D3B30; --warning-border: #E0AF68; --danger: #F7768E;
-      --border-color: #2F354F; --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    }
-
+    :root { --bg-color: #FDFBF7; --card-bg: #FFFFFF; --text-color: #4A4E69; --text-muted: #8E94A2; --primary: #7AA2F7; --secondary: #AEC6CF; --accent-green: #C5E1A5; --accent-yellow: #FFE599; --accent-purple: #D7BCE8; --warning: #FFF2B2; --warning-border: #F7D070; --danger: #FFB3BA; --border-color: #F0EAE1; --shadow: 0 8px 24px rgba(149, 157, 165, 0.1); --radius: 20px; }
+    [data-theme="dark"] { --bg-color: #1A1B26; --card-bg: #24283B; --text-color: #C0CAF5; --text-muted: #7AA2F7; --primary: #7AA2F7; --secondary: #7AA2F7; --accent-green: #9ECE6A; --accent-yellow: #E0AF68; --accent-purple: #BB9AF7; --warning: #3D3B30; --warning-border: #E0AF68; --danger: #F7768E; --border-color: #2F354F; --shadow: 0 8px 24px rgba(0, 0, 0, 0.3); }
     * { box-sizing: border-box; font-family: 'Nunito', sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; padding-bottom: 90px; transition: background 0.3s, color 0.3s; }
-
     header { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 1.25rem; background: linear-gradient(135deg, rgba(253, 230, 227, 0.94), rgba(245, 235, 245, 0.94)), url('https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=800&q=80') center/cover no-repeat; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); border-radius: 0 0 20px 20px; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-title { font-size: 1.85rem; font-weight: 900; color: #4A4E69; text-shadow: 0 2px 8px rgba(255,255,255,0.9); letter-spacing: -0.5px; }
-    .burger-btn { background: rgba(255, 255, 255, 0.85); border: 1px solid var(--border-color); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #4A4E69; }
-
-    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
-    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--card-bg); z-index: 201; transition: right 0.3s; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; overflow-y: auto; }
-    .drawer.open { right: 0; }
-    .drawer-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); }
-    .close-btn { background: none; border: none; cursor: pointer; color: var(--text-color); }
+    .brand { display: flex; align-items: center; gap: 12px; } .brand-title { font-size: 1.85rem; font-weight: 900; color: #4A4E69; text-shadow: 0 2px 8px rgba(255,255,255,0.9); letter-spacing: -0.5px; } .burger-btn { background: rgba(255, 255, 255, 0.85); border: 1px solid var(--border-color); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #4A4E69; }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; } .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--card-bg); z-index: 201; transition: right 0.3s; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; overflow-y: auto; } .drawer.open { right: 0; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); } .close-btn { background: none; border: none; cursor: pointer; color: var(--text-color); }
     .drawer-item { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1rem; border-radius: 12px; background: var(--bg-color); color: var(--text-color); font-weight: 700; cursor: pointer; border: 1px solid var(--border-color); }
-
     .container { max-width: 600px; margin: 0 auto; padding: 1.25rem; }
     .baby-profile-card { background: var(--card-bg); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1rem; }
     .baby-avatar-container { position: relative; cursor: pointer; width: 68px; height: 68px; flex-shrink: 0; }
     .baby-avatar { width: 100%; height: 100%; border-radius: 50%; background: #FFE599; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 3px solid var(--primary); overflow: hidden; }
-    .baby-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .avatar-edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--card-bg); }
-    .baby-info h2 { font-size: 1.3rem; font-weight: 800; }
-    .baby-info p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-
-    .alert-banner { background: var(--warning); border: 1px solid var(--warning-border); border-radius: 16px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 700; }
-    .alert-banner.hidden { display: none; }
-
+    .baby-avatar img { width: 100%; height: 100%; object-fit: cover; } .avatar-edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--card-bg); }
+    .baby-info h2 { font-size: 1.3rem; font-weight: 800; } .baby-info p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .alert-banner { background: var(--warning); border: 1px solid var(--warning-border); border-radius: 16px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 700; } .alert-banner.hidden { display: none; }
     .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; display: flex; justify-content: space-between; }
     .grid-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
     .action-btn { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 1rem 0.5rem; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; box-shadow: var(--shadow); }
-    .action-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
-    .action-btn span { font-size: 0.8rem; font-weight: 700; }
-
+    .action-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; } .action-btn span { font-size: 0.8rem; font-weight: 700; }
     .tabs-nav { display: flex; background: var(--card-bg); padding: 4px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 1.25rem; gap: 4px; }
-    .tab-btn { flex: 1; padding: 0.65rem 0.5rem; text-align: center; font-weight: 700; font-size: 0.85rem; border-radius: 12px; border: none; background: transparent; color: var(--text-color); cursor: pointer; }
-    .tab-btn.active { background: var(--primary); color: white; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
+    .tab-btn { flex: 1; padding: 0.65rem 0.5rem; text-align: center; font-weight: 700; font-size: 0.85rem; border-radius: 12px; border: none; background: transparent; color: var(--text-color); cursor: pointer; } .tab-btn.active { background: var(--primary); color: white; }
+    .tab-content { display: none; } .tab-content.active { display: block; }
     .card { background: var(--card-bg); border-radius: var(--radius); padding: 1.25rem; border: 1px solid var(--border-color); box-shadow: var(--shadow); margin-bottom: 1.25rem; }
     .date-nav-bar { display: flex; align-items: center; justify-content: space-between; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.4rem 0.8rem; margin-bottom: 1rem; }
     .date-nav-btn { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .date-display { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; }
-    .today-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
-
-    .daily-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1.2rem; }
-    .summary-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.6rem; text-align: center; }
-    .summary-card h5 { font-size: 0.72rem; color: var(--text-muted); font-weight: 800; margin-bottom: 2px; }
-    .summary-card p { font-size: 0.95rem; font-weight: 900; color: var(--text-color); }
-
-    .timeline-container { position: relative; padding-left: 1rem; margin-top: 0.8rem; }
-    .timeline-container::before { content: ''; position: absolute; left: 18px; top: 15px; bottom: 15px; width: 2px; background: var(--border-color); }
-    .timeline-item { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 0.6rem 0; }
-    .timeline-point { width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid var(--card-bg); box-shadow: 0 0 0 2px var(--primary); z-index: 2; margin-top: 4px; flex-shrink: 0; }
-    .timeline-content { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.7rem 0.9rem; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; }
-    .timeline-main-info h4 { font-size: 0.88rem; font-weight: 800; }
-    .timeline-main-info p { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
-
-    .time-ago-badge { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; color: var(--primary); margin-left: 4px; }
-    .log-actions { display: flex; align-items: center; gap: 6px; }
-    .log-time { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
-    .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; }
-    .icon-btn.edit { color: var(--secondary); }
-    .icon-btn.delete { color: var(--danger); }
-
-    .routine-24h-grid { display: grid; grid-template-columns: 36px repeat(7, 1fr); background: var(--bg-color); border-radius: 16px; padding: 0.8rem 0.3rem; border: 1px solid var(--border-color); gap: 2px; font-size: 0.7rem; }
-    .grid-header-cell { text-align: center; font-weight: 800; color: var(--text-muted); padding-bottom: 6px; }
-    .grid-header-cell.active-day { color: var(--primary); background: rgba(122, 162, 247, 0.2); border-radius: 6px; }
-    .grid-time-label { color: var(--text-muted); font-weight: 800; text-align: right; padding-right: 4px; line-height: 24px; height: 24px; font-size: 0.65rem; }
-    .grid-day-col { position: relative; height: 576px; background: rgba(0,0,0,0.02); border-radius: 4px; border-left: 1px dashed var(--border-color); overflow: hidden; }
-    .routine-block { position: absolute; border-radius: 3px; min-height: 8px; opacity: 0.92; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.15s; }
-    .routine-block:active { transform: scale(1.1); z-index: 10; }
-    .routine-block.feed { background: #F59E0B; }
-    .routine-block.sleep { background: #818CF8; }
-    .routine-block.diaper { background: #34D399; }
-    .routine-block.bath { background: #38BDF8; }
-
-    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-    .cal-day-name { font-size: 0.78rem; font-weight: 800; color: var(--primary); padding: 6px 0; background: var(--bg-color); border-radius: 8px; }
-    .cal-cell { aspect-ratio: 1; border-radius: 12px; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; cursor: pointer; position: relative; border: 1px solid var(--border-color); }
-    .cal-cell.today { background: var(--accent-yellow) !important; border: 2px solid #F59E0B !important; font-weight: 900 !important; color: #78350F !important; }
-    .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
-    .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
-
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; }
-    @media(min-width: 600px) { .modal-overlay { align-items: center; } }
-    .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 20px 20px 0 0; padding: 0.9rem 1.1rem; max-height: 96vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s; }
-    @media(min-width: 600px) { .modal { border-radius: 20px; transform: translateY(20px); } }
-    .modal-overlay.open .modal { transform: translateY(0); }
-    
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-shrink: 0; }
-    .modal-header h3 { font-size: 1.05rem; font-weight: 800; }
-    .modal-header-actions { display: flex; align-items: center; gap: 8px; }
-    
-    .btn-header-save { background: var(--primary); color: white; border: none; padding: 0.35rem 0.8rem; border-radius: 10px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
-    .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; -webkit-overflow-scrolling: touch; }
-    .modal-footer { flex-shrink: 0; padding-top: 0.4rem; background: var(--card-bg); }
-    
-    .form-group { margin-bottom: 0.35rem; }
-    .form-group label { display: block; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.15rem; }
-    .form-control { width: 100%; padding: 0.42rem 0.65rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none; }
-    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
-
-    .btn-submit { width: 100%; padding: 0.65rem; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 0.9rem; font-weight: 800; cursor: pointer; }
-    .btn-danger { background: var(--danger); color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.8rem; margin-top: 10px; width: 100%; }
-
-    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 800; cursor: pointer; text-decoration: none; }
-    .nav-item.active { color: var(--primary); }
-
-    .vaccine-item { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: var(--bg-color); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); }
-    .checkbox-custom { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; }
-    .vaccine-item.done .checkbox-custom { background: var(--primary); color: white; }
-
-    .who-indicator-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.9rem 1.1rem; margin-top: 1rem; font-size: 0.88rem; }
-    .manual-step { display: flex; gap: 1rem; margin-bottom: 1.2rem; }
-    .step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .step-content h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; }
-    .step-content p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; }
-
-    .alarm-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.8rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;}
+    .date-display { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 8px; } .today-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
+    .daily-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1.2rem; } .summary-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.6rem; text-align: center; } .summary-card h5 { font-size: 0.72rem; color: var(--text-muted); font-weight: 800; margin-bottom: 2px; } .summary-card p { font-size: 0.95rem; font-weight: 900; color: var(--text-color); }
+    .timeline-container { position: relative; padding-left: 1rem; margin-top: 0.8rem; } .timeline-container::before { content: ''; position: absolute; left: 18px; top: 15px; bottom: 15px; width: 2px; background: var(--border-color); }
+    .timeline-item { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 0.6rem 0; } .timeline-point { width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid var(--card-bg); box-shadow: 0 0 0 2px var(--primary); z-index: 2; margin-top: 4px; flex-shrink: 0; }
+    .timeline-content { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.7rem 0.9rem; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; } .timeline-main-info h4 { font-size: 0.88rem; font-weight: 800; } .timeline-main-info p { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
+    .time-ago-badge { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; color: var(--primary); margin-left: 4px; } .log-actions { display: flex; align-items: center; gap: 6px; } .log-time { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; } .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; } .icon-btn.edit { color: var(--secondary); } .icon-btn.delete { color: var(--danger); }
+    .routine-24h-grid { display: grid; grid-template-columns: 36px repeat(7, 1fr); background: var(--bg-color); border-radius: 16px; padding: 0.8rem 0.3rem; border: 1px solid var(--border-color); gap: 2px; font-size: 0.7rem; } .grid-header-cell { text-align: center; font-weight: 800; color: var(--text-muted); padding-bottom: 6px; } .grid-header-cell.active-day { color: var(--primary); background: rgba(122, 162, 247, 0.2); border-radius: 6px; } .grid-time-label { color: var(--text-muted); font-weight: 800; text-align: right; padding-right: 4px; line-height: 24px; height: 24px; font-size: 0.65rem; } .grid-day-col { position: relative; height: 576px; background: rgba(0,0,0,0.02); border-radius: 4px; border-left: 1px dashed var(--border-color); overflow: hidden; }
+    .routine-block { position: absolute; border-radius: 3px; min-height: 8px; opacity: 0.92; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.15s; } .routine-block:active { transform: scale(1.1); z-index: 10; } .routine-block.feed { background: #F59E0B; } .routine-block.sleep { background: #818CF8; } .routine-block.diaper { background: #34D399; } .routine-block.bath { background: #38BDF8; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; } .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; } .cal-day-name { font-size: 0.78rem; font-weight: 800; color: var(--primary); padding: 6px 0; background: var(--bg-color); border-radius: 8px; } .cal-cell { aspect-ratio: 1; border-radius: 12px; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; cursor: pointer; position: relative; border: 1px solid var(--border-color); } .cal-cell.today { background: var(--accent-yellow) !important; border: 2px solid #F59E0B !important; font-weight: 900 !important; color: #78350F !important; } .cal-dots { display: flex; gap: 2px; margin-top: 2px; } .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: flex-end; justify-content: center; } @media(min-width: 600px) { .modal-overlay { align-items: center; } } .modal-overlay.open { opacity: 1; pointer-events: auto; } .modal { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 20px 20px 0 0; padding: 0.9rem 1.1rem; max-height: 96vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s; } @media(min-width: 600px) { .modal { border-radius: 20px; transform: translateY(20px); } } .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-shrink: 0; } .modal-header h3 { font-size: 1.05rem; font-weight: 800; } .modal-header-actions { display: flex; align-items: center; gap: 8px; } .btn-header-save { background: var(--primary); color: white; border: none; padding: 0.35rem 0.8rem; border-radius: 10px; font-weight: 800; font-size: 0.82rem; cursor: pointer; } .modal-body { overflow-y: auto; flex-grow: 1; padding-right: 2px; -webkit-overflow-scrolling: touch; } .modal-footer { flex-shrink: 0; padding-top: 0.4rem; background: var(--card-bg); }
+    .form-group { margin-bottom: 0.35rem; } .form-group label { display: block; font-size: 0.75rem; font-weight: 800; margin-bottom: 0.15rem; } .form-control { width: 100%; padding: 0.42rem 0.65rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none; } .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; } .btn-submit { width: 100%; padding: 0.65rem; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 0.9rem; font-weight: 800; cursor: pointer; } .btn-danger { background: var(--danger); color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.8rem; margin-top: 10px; width: 100%; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; } .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 800; cursor: pointer; text-decoration: none; } .nav-item.active { color: var(--primary); }
+    .vaccine-item { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: var(--bg-color); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); } .checkbox-custom { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; } .vaccine-item.done .checkbox-custom { background: var(--primary); color: white; }
+    .who-indicator-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.9rem 1.1rem; margin-top: 1rem; font-size: 0.88rem; } .manual-step { display: flex; gap: 1rem; margin-bottom: 1.2rem; } .step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; } .step-content h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; } .step-content p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; } .alarm-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.8rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;}
   </style>
 </head>
 <body>
 
+  <!-- Header Banner -->
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v1.9.1</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v3.0</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
 
+  <!-- Drawer Menu -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
   <div class="drawer" id="drawer">
-    <div class="drawer-header">
-      <h3 id="txt-menu-title" style="font-weight:900;">Menú BabyCare</h3>
-      <button class="close-btn" onclick="closeDrawer()"><i data-lucide="x"></i></button>
-    </div>
-    
+    <div class="drawer-header"><h3 id="txt-menu-title" style="font-weight:900;">Menú BabyCare</h3><button class="close-btn" onclick="closeDrawer()"><i data-lucide="x"></i></button></div>
     <div class="form-group" style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border-color);">
       <label id="txt-baby-select-label" style="font-size:0.7rem; color:var(--text-muted);">Bebé Activo</label>
       <select class="form-control" id="babySelector" onchange="switchBaby(this.value)" style="margin-bottom:6px; font-weight:800;"></select>
       <button onclick="closeDrawer(); openModal('addBaby');" style="background:var(--bg-color); border:1px dashed var(--primary); color:var(--primary); padding:6px; width:100%; border-radius:8px; font-weight:800; cursor:pointer;" id="txt-btn-add-baby">+ Añadir Bebé</button>
     </div>
-
     <div class="drawer-item" onclick="closeDrawer(); openModal('profile');"><i data-lucide="user"></i><span id="txt-menu-profile">Perfil del Bebé</span></div>
     <div class="drawer-item" onclick="closeDrawer(); openModal('alarms');"><i data-lucide="bell"></i><span id="txt-menu-alarms">Alarmas y Avisos</span></div>
     <div class="drawer-item" onclick="closeDrawer(); switchTab('manual');"><i data-lucide="book-open"></i><span id="txt-menu-manual">Manual de Uso</span></div>
@@ -190,9 +91,7 @@
     <div class="form-group">
       <label id="txt-lang-label">Idioma / Language</label>
       <select class="form-control" id="langSelect" onchange="setLanguage(this.value)">
-        <option value="es">Español 🇪🇸</option>
-        <option value="fr">Français 🇫🇷</option>
-        <option value="en">English 🇬🇧</option>
+        <option value="es">Español 🇪🇸</option><option value="fr">Français 🇫🇷</option><option value="en">English 🇬🇧</option>
       </select>
     </div>
     <div class="form-group"><label id="txt-theme-label">Apariencia</label><button class="drawer-item" style="width:100%; justify-content:center;" onclick="toggleTheme()"><i data-lucide="moon"></i><span id="txt-theme-btn">Modo Claro/Oscuro</span></button></div>
@@ -205,11 +104,11 @@
         <div class="avatar-edit-badge"><i data-lucide="camera" style="width:12px; height:12px;"></i></div>
         <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadBabyPhoto(event)">
       </div>
-      <div class="baby-info"><h2 id="babyNameDisplay">Léo</h2><p id="babyAgeDisplay">Calculando edad...</p></div>
+      <div class="baby-info"><h2 id="babyNameDisplay">Cargando...</h2><p id="babyAgeDisplay">Calculando edad...</p></div>
       <button style="margin-left:auto; background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="openModal('profile')"><i data-lucide="edit-3"></i></button>
     </div>
 
-    <div class="alert-banner" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText">Atención: Se recomienda verificar la toma de leche.</span></div>
+    <div class="alert-banner hidden" id="alertBanner"><i data-lucide="alert-circle" style="color: #D97706; flex-shrink:0;"></i><span id="alertText"></span></div>
 
     <!-- Acciones Rápidas -->
     <div class="section-title"><span id="txt-quick-actions">Registrar Evento</span></div>
@@ -229,13 +128,13 @@
       <button class="tab-btn" onclick="switchTab('vaccinesList')" id="tab-vac-btn">Vacunas</button>
     </div>
 
-    <!-- TAB 1: Diario & Timeline -->
+    <!-- TAB 1: Diario -->
     <div class="tab-content active" id="tab-logs">
       <div class="card">
         <div class="section-title"><span id="txt-recent-logs">Actividad Reciente</span></div>
         <div class="date-nav-bar">
           <button class="date-nav-btn" onclick="changeSelectedDate(-1)"><i data-lucide="chevron-left"></i></button>
-          <div class="date-display"><span id="currentDateText">27 Sep 2026</span><span class="today-tag" id="todayTag" onclick="resetToToday()">Hoy</span></div>
+          <div class="date-display"><span id="currentDateText"></span><span class="today-tag" id="todayTag" onclick="resetToToday()">Hoy</span></div>
           <button class="date-nav-btn" onclick="changeSelectedDate(1)"><i data-lucide="chevron-right"></i></button>
         </div>
         <div class="daily-summary-grid">
@@ -247,45 +146,37 @@
       </div>
     </div>
 
-    <!-- TAB 2: Calendario, Gráfico de Barras y Matriz Semanal de 24h -->
+    <!-- TAB 2: Calendario y Matriz -->
     <div class="tab-content" id="tab-calendar">
       <div class="card">
         <div class="calendar-header">
           <button class="burger-btn" onclick="prevMonth()"><i data-lucide="chevron-left"></i></button>
-          <h3 id="calMonthTitle" style="font-weight:800;">Septiembre 2026</h3>
+          <h3 id="calMonthTitle" style="font-weight:800;"></h3>
           <button class="burger-btn" onclick="nextMonth()"><i data-lucide="chevron-right"></i></button>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
       </div>
-
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
           <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis Semanal</h3>
           <select class="form-control" id="barRangeSelect" style="width:auto; padding:0.3rem 0.6rem; font-size:0.78rem;" onchange="updateBarChart()">
-            <option value="7days" id="opt-7days" selected>Últimos 7 días</option>
-            <option value="4weeks" id="opt-4weeks">Últimas 4 semanas</option>
-            <option value="6months" id="opt-6months">Últimos 6 meses</option>
+            <option value="7days" id="opt-7days" selected>Últimos 7 días</option><option value="4weeks" id="opt-4weeks">Últimas 4 semanas</option><option value="6months" id="opt-6months">Últimos 6 meses</option>
           </select>
         </div>
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
-
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:6px;">
           <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz 24 Horas</h3>
           <select class="form-control" id="matrixFilterSelect" onchange="renderWeeklyMatrix24h()" style="width:auto; padding:0.3rem 0.6rem; font-size:0.75rem;">
-            <option value="all" id="opt-filter-all" selected>Mostrar Todos</option>
-            <option value="feeding" id="opt-filter-feed">Solo Tomas</option>
-            <option value="diaper" id="opt-filter-diaper">Solo Pañales</option>
-            <option value="sleep" id="opt-filter-sleep">Solo Sueño</option>
-            <option value="bath" id="opt-filter-bath">Solo Baños</option>
+            <option value="all" id="opt-filter-all" selected>Mostrar Todos</option><option value="feeding" id="opt-filter-feed">Solo Tomas</option><option value="diaper" id="opt-filter-diaper">Solo Pañales</option><option value="sleep" id="opt-filter-sleep">Solo Sueño</option><option value="bath" id="opt-filter-bath">Solo Baños</option>
           </select>
           <div style="display:flex; gap:4px;">
             <button class="date-nav-btn" onclick="changeMatrixWeek(-1)" style="width:28px;height:28px;"><i data-lucide="chevron-left" style="width:16px;"></i></button>
             <button class="date-nav-btn" onclick="changeMatrixWeek(1)" style="width:28px;height:28px;"><i data-lucide="chevron-right" style="width:16px;"></i></button>
           </div>
         </div>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;" id="matrixWeekLabel">Semana del 21 al 27 de Septiembre</p>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;" id="matrixWeekLabel"></p>
         <div id="routine24hGrid" class="routine-24h-grid"></div>
         <div style="display:flex; justify-content:center; gap:12px; margin-top:0.8rem; font-size:0.72rem; color:var(--text-muted);">
           <span><span style="display:inline-block; width:10px; height:10px; background:#F59E0B; border-radius:2px; margin-right:4px;"></span><span id="leg-feed">Leche 🍼</span></span>
@@ -295,39 +186,33 @@
       </div>
     </div>
 
-    <!-- TAB 3: Curvas OMS -->
+    <!-- TAB 3: Curvas -->
     <div class="tab-content" id="tab-charts">
       <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Peso (kg) vs OMS</h3><canvas id="weightChart" height="180"></canvas></div>
       <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-height-chart">2. Talla (cm) vs OMS</h3><canvas id="heightChart" height="180"></canvas></div>
       <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-head-chart">3. Perímetro Cefálico vs OMS</h3><canvas id="headChart" height="180"></canvas></div>
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Tomas y Pañales</h3>
-        <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias normales recomendadas según etapa OMS:</p>
+        <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias recomendadas:</p>
         <div class="who-indicator-card">
-          <p id="lbl-who-feeds">🍼 <strong>Tomas/día:</strong> <span id="val-feed-count">0 hoy</span> (Rango OMS: 6 - 10 tomas en lactantes)</p>
-          <p style="margin-top:6px;" id="lbl-who-diapers">💦 <strong>Pañales/día:</strong> <span id="val-diaper-count">0 hoy</span> (Rango OMS: 4 - 8 pañales húmedos)</p>
+          <p id="lbl-who-feeds">🍼 <strong>Tomas/día:</strong> <span id="val-feed-count">0 hoy</span> (Rango OMS: 6 - 10)</p>
+          <p style="margin-top:6px;" id="lbl-who-diapers">💦 <strong>Pañales/día:</strong> <span id="val-diaper-count">0 hoy</span> (Rango OMS: 4 - 8)</p>
         </div>
       </div>
     </div>
 
     <!-- TAB 4: Vacunas -->
     <div class="tab-content" id="tab-vaccinesList">
-      <div class="card">
-        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-vaccine-title">Calendario Vacunal Recomendado</h3>
-        <div id="vaccinesListContainer"></div>
-      </div>
+      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-vaccine-title">Calendario Vacunal Recomendado</h3><div id="vaccinesListContainer"></div></div>
     </div>
 
     <!-- TAB 5: Manual -->
     <div class="tab-content" id="tab-manual">
       <div class="card">
-        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
-          <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso
-        </h3>
-        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil</h4><p id="mstep1-desc">Pulsa sobre el avatar para subir la foto de tu bebé y editar su nombre.</p></div></div>
-        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior para registrar un evento.</p></div></div>
-        <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep3-title">Registro de Sueño</h4><p id="mstep3-desc">Indica la 'Hora Inicio' y 'Hora Fin'. La app calculará automáticamente la duración.</p></div></div>
-        <div class="manual-step"><div class="step-number">4</div><div class="step-content"><h4 id="mstep4-title">Sincronización Manual en la Nube</h4><p id="mstep4-desc">Usa el botón 'Nube' del menú inferior para Subir o Descargar los datos manualmente con tu pareja.</p></div></div>
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header"><i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso</h3>
+        <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil</h4><p id="mstep1-desc">Sube foto de tu bebé y edita su nombre.</p></div></div>
+        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido</h4><p id="mstep2-desc">Pulsa en cualquier icono superior para registrar.</p></div></div>
+        <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep7-title">Sincronización Automática</h4><p id="mstep7-desc">Todo se guardará en la nube sin tocar ningún botón.</p></div></div>
       </div>
     </div>
   </div>
@@ -335,300 +220,155 @@
   <nav class="bottom-nav">
     <div class="nav-item active" id="bnav-item-home" onclick="switchTab('logs')"><i data-lucide="list"></i><span id="bnav-home">Inicio</span></div>
     <div class="nav-item" onclick="openFormModal('feeding')"><i data-lucide="plus-circle" style="width:28px; height:28px; color:var(--primary);"></i><span id="bnav-add">Añadir</span></div>
-    <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="cloud"></i><span id="bnav-share">Nube</span></div>
+    <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="cloud-lightning"></i><span id="bnav-share">Nube</span></div>
   </nav>
 
-  <!-- Modales -->
-  <div class="modal-overlay" id="formModal">
-    <div class="modal">
-      <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
-        <div class="modal-header"><h3 id="modalFormTitle">Nuevo Registro</h3><div class="modal-header-actions"><button type="submit" class="btn-header-save" id="btn-save-header">✓ Guardar</button><button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button></div></div>
-        <input type="hidden" id="editingLogId"><input type="hidden" id="entryType">
-        <div class="modal-body" id="formModalBody">
-          <div id="dynamicFormFields"></div>
-          <div class="form-group" id="groupTimestampMain"><label id="lbl-timestamp">Fecha y Hora</label><input type="datetime-local" class="form-control" id="entryTimestamp" required></div>
-          <div class="form-group"><label id="lbl-notes">Notas / Observaciones</label><input type="text" class="form-control" id="entryNotes" placeholder="Ej: Agitado..."></div>
-        </div>
-        <div class="modal-footer"><button type="submit" class="btn-submit" id="btn-save-entry">✓ Guardar Registro</button></div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="profileModal">
-    <div class="modal">
-      <form onsubmit="saveProfile(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
-        <div class="modal-header"><h3 id="txt-profile-title">Perfil del Bebé</h3><div class="modal-header-actions"><button type="submit" class="btn-header-save" id="btn-save-prof-header">✓ Guardar</button><button type="button" class="close-btn" onclick="closeModal('profile')"><i data-lucide="x"></i></button></div></div>
-        <div class="modal-body">
-          <div class="form-group"><label id="lbl-baby-name">Nombre</label><input type="text" class="form-control" id="profName" required></div>
-          <div class="form-group"><label id="lbl-baby-dob">Nacimiento</label><input type="date" class="form-control" id="profDob" required></div>
-          <div class="form-group"><label id="lbl-baby-gender">Género</label><select class="form-control" id="profGender"><option value="male" id="opt-male">Niño 👦</option><option value="female" id="opt-female">Niña 👧</option></select></div>
-        </div>
-        <div class="modal-footer"><button type="submit" class="btn-submit" id="btn-save-profile">Actualizar Perfil</button><button type="button" class="btn-danger" id="btn-delete-baby" onclick="deleteActiveBaby()">Eliminar Bebé</button></div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="addBabyModal">
-    <div class="modal">
-      <form onsubmit="addBaby(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
-        <div class="modal-header"><h3 id="txt-add-baby-title">Añadir Nuevo Bebé</h3><div class="modal-header-actions"><button type="button" class="close-btn" onclick="closeModal('addBaby')"><i data-lucide="x"></i></button></div></div>
-        <div class="modal-body">
-          <div class="form-group"><label id="lbl-new-baby-name">Nombre</label><input type="text" class="form-control" id="newBabyName" required></div>
-          <div class="form-group"><label id="lbl-new-baby-dob">Nacimiento</label><input type="date" class="form-control" id="newBabyDob" required></div>
-          <div class="form-group"><label id="lbl-new-baby-gender">Género</label><select class="form-control" id="newBabyGender"><option value="male" id="opt-new-male">Niño 👦</option><option value="female" id="opt-new-female">Niña 👧</option></select></div>
-        </div>
-        <div class="modal-footer"><button type="submit" class="btn-submit" id="btn-create-baby">Añadir Bebé</button></div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="alarmsModal">
-    <div class="modal">
-      <div class="modal-header"><h3 id="txt-alarms-title">Alarmas y Avisos</h3><div class="modal-header-actions"><button type="button" class="close-btn" onclick="closeModal('alarms')"><i data-lucide="x"></i></button></div></div>
-      <div class="modal-body" id="alarmsContainer" style="padding-bottom:10px;"></div>
-      <div class="modal-footer">
-        <div style="background:var(--bg-color); padding:10px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:10px;">
-          <h4 style="font-size:0.85rem; font-weight:800; margin-bottom:10px;" id="txt-new-alarm">Crear Nueva Alarma</h4>
-          <div class="form-group">
-            <select class="form-control" id="newAlarmType"><option>Toma / Biberón 🍼</option><option>Pañal 💩</option><option>Despertar de Siesta 💤</option><option>Medicina 🌡️</option></select>
-          </div>
-          <div class="form-grid-2">
-            <input type="time" class="form-control" id="newAlarmTime" required>
-            <select class="form-control" id="newAlarmSound"><option value="watch">Reloj Digital</option><option value="chime">Campana</option></select>
-          </div>
-          <button onclick="addAlarm()" style="background:var(--primary); color:white; border:none; padding:0.6rem; border-radius:10px; font-weight:800; margin-top:8px; width:100%;" id="btn-save-alarm">Añadir Alarma</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Nube MANUAL (Restaurada desde v1.9) -->
-  <div class="modal-overlay" id="syncModal">
-    <div class="modal">
-      <div class="modal-header"><h3 id="txt-sync-title">Sincronización en la Nube ☁</h3><button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button></div>
-      <div class="modal-body" style="padding:0.8rem 0.2rem;">
-        <p style="font-size:0.88rem; color:var(--text-color); margin-bottom:1.2rem; text-align:center; line-height:1.4;" id="txt-sync-desc">
-          Conectado a la base de datos segura. Sube tus cambios o descarga los de tu pareja manualmente.
-        </p>
-
-        <button onclick="uploadToCloud()" id="btn-upload-cloud" style="background:var(--primary); color:white; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:0.8rem; box-shadow:0 4px 12px rgba(122,162,247,0.25);">
-          ☁️ <span id="txt-btn-upload">Subir a la nube</span>
-        </button>
-
-        <button onclick="downloadFromCloud()" id="btn-download-cloud" style="background:#C5E1A5; color:#3F6212; border:none; padding:0.85rem 1rem; border-radius:14px; font-weight:800; font-size:0.92rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1rem; box-shadow:0 4px 12px rgba(197,225,165,0.4);">
-          ⬇️ <span id="txt-btn-download">Descargar de la nube</span>
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- Modales Generales -->
+  <div class="modal-overlay" id="formModal"><div class="modal"><form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%;"><div class="modal-header"><h3 id="modalFormTitle">Registro</h3><div class="modal-header-actions"><button type="submit" class="btn-header-save" id="btn-save-header">✓ Guardar</button><button type="button" class="close-btn" onclick="closeFormModal()"><i data-lucide="x"></i></button></div></div><input type="hidden" id="editingLogId"><input type="hidden" id="entryType"><div class="modal-body" id="formModalBody"><div id="dynamicFormFields"></div><div class="form-group" id="groupTimestampMain"><label id="lbl-timestamp">Fecha y Hora</label><input type="datetime-local" class="form-control" id="entryTimestamp" required></div><div class="form-group"><label id="lbl-notes">Notas / Observaciones</label><input type="text" class="form-control" id="entryNotes" placeholder="Opcional..."></div></div><div class="modal-footer"><button type="submit" class="btn-submit" id="btn-save-entry">✓ Guardar</button></div></form></div></div>
+  <div class="modal-overlay" id="profileModal"><div class="modal"><form onsubmit="saveProfile(event)" style="display:flex; flex-direction:column; height:100%;"><div class="modal-header"><h3 id="txt-profile-title">Perfil</h3><div class="modal-header-actions"><button type="submit" class="btn-header-save" id="btn-save-prof-header">✓ Guardar</button><button type="button" class="close-btn" onclick="closeModal('profile')"><i data-lucide="x"></i></button></div></div><div class="modal-body"><div class="form-group"><label id="lbl-baby-name">Nombre</label><input type="text" class="form-control" id="profName" required></div><div class="form-group"><label id="lbl-baby-dob">Nacimiento</label><input type="date" class="form-control" id="profDob" required></div><div class="form-group"><label id="lbl-baby-gender">Género</label><select class="form-control" id="profGender"><option value="male" id="opt-male">Niño 👦</option><option value="female" id="opt-female">Niña 👧</option></select></div></div><div class="modal-footer"><button type="submit" class="btn-submit" id="btn-save-profile">Actualizar</button><button type="button" class="btn-danger" id="btn-delete-baby" onclick="deleteActiveBaby()">Eliminar Bebé</button></div></form></div></div>
+  <div class="modal-overlay" id="addBabyModal"><div class="modal"><form onsubmit="addBaby(event)" style="display:flex; flex-direction:column; height:100%;"><div class="modal-header"><h3 id="txt-add-baby-title">Nuevo Bebé</h3><div class="modal-header-actions"><button type="button" class="close-btn" onclick="closeModal('addBaby')"><i data-lucide="x"></i></button></div></div><div class="modal-body"><div class="form-group"><label id="lbl-new-baby-name">Nombre</label><input type="text" class="form-control" id="newBabyName" required></div><div class="form-group"><label id="lbl-new-baby-dob">Nacimiento</label><input type="date" class="form-control" id="newBabyDob" required></div><div class="form-group"><label id="lbl-new-baby-gender">Género</label><select class="form-control" id="newBabyGender"><option value="male" id="opt-new-male">Niño 👦</option><option value="female" id="opt-new-female">Niña 👧</option></select></div></div><div class="modal-footer"><button type="submit" class="btn-submit" id="btn-create-baby">Añadir</button></div></form></div></div>
+  <div class="modal-overlay" id="alarmsModal"><div class="modal"><div class="modal-header"><h3 id="txt-alarms-title">Alarmas</h3><div class="modal-header-actions"><button type="button" class="close-btn" onclick="closeModal('alarms')"><i data-lucide="x"></i></button></div></div><div class="modal-body" id="alarmsContainer" style="padding-bottom:10px;"></div><div class="modal-footer"><div style="background:var(--bg-color); padding:10px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:10px;"><h4 style="font-size:0.85rem; font-weight:800; margin-bottom:10px;" id="txt-new-alarm">Nueva Alarma</h4><div class="form-group"><select class="form-control" id="newAlarmType"><option>Toma / Biberón 🍼</option><option>Pañal 💩</option><option>Despertar de Siesta 💤</option><option>Medicina 🌡️</option></select></div><div class="form-grid-2"><input type="time" class="form-control" id="newAlarmTime" required><select class="form-control" id="newAlarmSound"><option value="watch">Reloj</option><option value="chime">Campana</option></select></div><button onclick="addAlarm()" style="background:var(--primary); color:white; border:none; padding:0.6rem; border-radius:10px; font-weight:800; margin-top:8px; width:100%;" id="btn-save-alarm">Añadir</button></div></div></div></div>
+  <div class="modal-overlay" id="syncModal"><div class="modal"><div class="modal-header"><h3 id="txt-sync-title">Nube Activa ☁</h3><button class="close-btn" onclick="closeModal('sync')"><i data-lucide="x"></i></button></div><div class="modal-body" style="padding:0.8rem 0.2rem;"><div style="text-align:center; padding: 1rem 0;"><i data-lucide="cloud-lightning" style="width:48px; height:48px; color:var(--primary); margin-bottom:10px;"></i><h4 style="font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-color);">Nube Conectada</h4><p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem;" id="txt-sync-desc">Sincronización en tiempo real funcionando.</p></div><hr style="border:none; border-top:1px solid var(--border-color); margin:1rem 0;"><h4 style="font-size:0.9rem; font-weight:800; margin-bottom:0.5rem;" id="txt-sync-import-title">Copias de Seguridad (Manual)</h4><button onclick="exportJSON()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem; border-radius:14px; font-weight:800; width:100%; margin-bottom:0.6rem;">📲 <span id="txt-btn-export">Guardar JSON local</span></button><button onclick="triggerFileInput()" style="background:var(--bg-color); color:var(--text-color); border:1px solid var(--border-color); padding:0.75rem; border-radius:14px; font-weight:800; width:100%;">📥 <span id="txt-btn-import">Restaurar JSON</span></button></div></div></div>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      const swCode = `self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));`;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
-    }
-  </script>
+    // PWA Service Worker
+    if ('serviceWorker' in navigator) { const swCode = `self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));`; navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(()=>{}); }
 
-  <script>
-    // --- CONEXIÓN FIREBASE (MANUAL) ---
-    let database = null;
-
-    try {
-      if (typeof firebase !== 'undefined') {
-        const firebaseConfig = {
-          apiKey: "AIzaSyA0" + "Pv37BQVN" + "3lP0ANrcK" + "m0wzBKozZyntPk", 
-          authDomain: "babycarebd.firebaseapp.com",
-          databaseURL: "https://babycarebd-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "babycarebd",
-          storageBucket: "babycarebd.firebasestorage.app",
-          messagingSenderId: "960072637608",
-          appId: "1:960072637608:web:4668d5cef6783e74bf369d"
-        };
-        firebase.initializeApp(firebaseConfig);
-        database = firebase.database();
-      }
-    } catch(e) {
-      console.log("Firebase no pudo inicializarse");
-    }
-
+    // --- VARIABLES Y TRADUCCIONES GLOBALES ---
+    let database = null; let isSyncing = false; 
     let appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [] };
     let selectedDate = new Date(); let selectedMatrixWeekDate = new Date(); let calDate = new Date(); 
     let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null; let barRoutinesChartInstance = null;
 
-    const standardVaccines = [
-      { id: 'v1', age: '2 Meses', name: 'Hexavalente, Neumococo' },
-      { id: 'v2', age: '4 Meses', name: 'Hexavalente, Neumococo, Meningococo C' },
-      { id: 'v3', age: '11 Meses', name: 'Hexavalente, Neumococo' },
-      { id: 'v4', age: '12 Meses', name: 'Triple Vírica, Meningococo ACWY' },
-      { id: 'v5', age: '15 Meses', name: 'Varicela' },
-      { id: 'v6', age: '4 Años', name: 'Triple Vírica, Varicela' },
-      { id: 'v7', age: '6 Años', name: 'DTPa-VPI' },
-      { id: 'v8', age: '12 Años', name: 'Meningococo ACWY, VPH' },
-      { id: 'v9', age: '14 Años', name: 'Tétanos, Difteria' }
-    ];
-
+    const standardVaccines = [ { id: 'v1', age: '2 Meses', name: 'Hexavalente, Neumococo' }, { id: 'v2', age: '4 Meses', name: 'Hexavalente, Neumococo, Meningococo C' }, { id: 'v3', age: '11 Meses', name: 'Hexavalente, Neumococo' }, { id: 'v4', age: '12 Meses', name: 'Triple Vírica, Meningococo ACWY' }, { id: 'v5', age: '15 Meses', name: 'Varicela' }, { id: 'v6', age: '4 Años', name: 'Triple Vírica, Varicela' }, { id: 'v7', age: '6 Años', name: 'DTPa-VPI' }, { id: 'v8', age: '12 Años', name: 'Meningococo ACWY, VPH' }, { id: 'v9', age: '14 Años', name: 'Tétanos, Difteria' } ];
     const i18n = {
-      es: { menuTitle: "Menú BabyCare", menuProfile: "Perfil del Bebé", menuScan: "Sincronizar", menuManual: "Manual de Uso", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Análisis Semanal", weightChart: "1. Peso (kg) vs OMS", heightChart: "2. Talla (cm) vs OMS", headChart: "3. Perímetro Cefálico vs OMS", weeklyMatrixTitle: "Matriz 24 Horas", whoRoutines: "4. Tomas y Pañales", vaccineTitle: "Vacunas", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Nube", saveEntry: "Guardar", saveProfile: "Actualizar", lblTimestamp: "Fecha y Hora", lblNotes: "Notas", scanTitle: "Sincronización ☁️", scanDesc: "Sube o descarga datos manualmente con tu pareja.", alertFeed: "⚠️ Alerta: Más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], lblBabyName: "Nombre", lblBabyDob: "Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧", sumFeed: "🍼 Leche (L)", sumSleep: "💤 Sueño", sumDiaper: "💦 Pañales", mHeader: "Manual", opt4w: "4 semanas", opt6m: "6 meses", opt7d: "7 días", legFeed: "Leche", legSleep: "Sueño", legDiaper: "Pañal", babySelect: "Bebé Activo", addBaby: "+ Añadir Bebé", newBabyTitle: "Nuevo Bebé", createBabyBtn: "Añadir", deleteBabyBtn: "Eliminar", menuAlarms: "Alarmas", alarmTitle: "Alarmas", newAlarmTitle: "Nueva Alarma", alarmType: "Tipo", alarmTime: "Hora", alarmSound: "Sonido", alarmSaveBtn: "Añadir", btnExport: "Guardar JSON local", btnImport: "Restaurar JSON", syncImportTitle: "Copias de Seguridad", filterAll: "Todos", filterFeed: "Tomas", filterDiaper: "Pañales", filterSleep: "Sueño", filterBath: "Baños" }
+      es: { menuTitle: "Menú", menuProfile: "Perfil", menuScan: "Nube (Auto)", menuManual: "Manual", actFeed: "Alimentación", actDiaper: "Pañal", actSleep: "Sueño", actGrowth: "Crecimiento", actHealth: "Salud / Temp", actBath: "Baño / Ducha", tabLogs: "Diario", tabCal: "Calendario", tabCharts: "Curvas OMS", tabVac: "Vacunas", recentLogs: "Actividad Reciente", today: "Hoy", barChartTitle: "Análisis Semanal", weightChart: "1. Peso (kg) vs OMS", heightChart: "2. Talla (cm) vs OMS", headChart: "3. Perímetro Cefálico", weeklyMatrixTitle: "Matriz 24 Horas", whoRoutines: "4. Tomas y Pañales", vaccineTitle: "Vacunas", bnavHome: "Inicio", bnavAdd: "Añadir", bnavShare: "Nube", saveEntry: "Guardar", saveProfile: "Actualizar", lblTimestamp: "Fecha y Hora", lblNotes: "Notas", scanTitle: "Sincronización Activa", scanDesc: "Cambios guardados en tiempo real.", alertFeed: "⚠️ Alerta: Más de 3.5h desde la última toma.", daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], lblBabyName: "Nombre", lblBabyDob: "Nacimiento", lblBabyGender: "Género", optMale: "Niño 👦", optFemale: "Niña 👧", sumFeed: "🍼 Leche (L)", sumSleep: "💤 Sueño", sumDiaper: "💦 Pañales", mHeader: "Manual", opt4w: "4 semanas", opt6m: "6 meses", opt7d: "7 días", legFeed: "Leche", legSleep: "Sueño", legDiaper: "Pañal", babySelect: "Bebé Activo", addBaby: "+ Añadir Bebé", newBabyTitle: "Nuevo Bebé", createBabyBtn: "Añadir", deleteBabyBtn: "Eliminar", menuAlarms: "Alarmas", alarmTitle: "Alarmas", newAlarmTitle: "Nueva Alarma", alarmType: "Tipo", alarmTime: "Hora", alarmSound: "Sonido", alarmSaveBtn: "Añadir", btnExport: "Guardar JSON", btnImport: "Restaurar JSON", syncImportTitle: "Copias de Seguridad", filterAll: "Todos", filterFeed: "Tomas", filterDiaper: "Pañales", filterSleep: "Sueño", filterBath: "Baños" },
+      en: { menuTitle: "Menu", menuProfile: "Profile", menuScan: "Cloud (Auto)", menuManual: "Manual", actFeed: "Feeding", actDiaper: "Diaper", actSleep: "Sleep", actGrowth: "Growth", actHealth: "Health", actBath: "Bath", tabLogs: "Logs", tabCal: "Calendar", tabCharts: "WHO Growth", tabVac: "Vaccines", recentLogs: "Recent", today: "Today", barChartTitle: "Weekly Stats", weightChart: "1. Weight vs WHO", heightChart: "2. Height vs WHO", headChart: "3. Head vs WHO", weeklyMatrixTitle: "24h Matrix", whoRoutines: "4. Feed & Diaper", vaccineTitle: "Vaccines", bnavHome: "Home", bnavAdd: "Add", bnavShare: "Cloud", saveEntry: "Save", saveProfile: "Update", lblTimestamp: "Date", lblNotes: "Notes", scanTitle: "Cloud Active", scanDesc: "Real-time sync.", alertFeed: "⚠️ Over 3.5h since last feed.", daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], lblBabyName: "Name", lblBabyDob: "DOB", lblBabyGender: "Gender", optMale: "Boy 👦", optFemale: "Girl 👧", sumFeed: "🍼 Milk (L)", sumSleep: "💤 Sleep", sumDiaper: "💦 Diapers", mHeader: "Manual", opt4w: "4 weeks", opt6m: "6 months", opt7d: "7 days", legFeed: "Milk", legSleep: "Sleep", legDiaper: "Diaper", babySelect: "Active Baby", addBaby: "+ Add Baby", newBabyTitle: "New Baby", createBabyBtn: "Add", deleteBabyBtn: "Delete", menuAlarms: "Alarms", alarmTitle: "Alarms", newAlarmTitle: "New Alarm", alarmType: "Type", alarmTime: "Time", alarmSound: "Sound", alarmSaveBtn: "Add", btnExport: "Export JSON", btnImport: "Import JSON", syncImportTitle: "Backups", filterAll: "All", filterFeed: "Feeds", filterDiaper: "Diapers", filterSleep: "Sleep", filterBath: "Baths" }
     };
 
-    function getActiveBaby() { 
-      try {
-        if (!appData || typeof appData !== 'object') appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [] };
-        if (!Array.isArray(appData.babies)) appData.babies = [];
-        appData.babies = appData.babies.filter(b => b && typeof b === 'object');
-        
-        if (appData.babies.length === 0) {
-          appData.babies.push({ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] });
-          appData.activeBabyId = 1;
-        }
-        let b = appData.babies.find(b => String(b.id) === String(appData.activeBabyId));
-        if (!b) b = appData.babies[0];
-        
-        if (!Array.isArray(b.logs)) b.logs = (b.logs && typeof b.logs === 'object') ? Object.values(b.logs) : [];
-        if (!Array.isArray(b.alarms)) b.alarms = (b.alarms && typeof b.alarms === 'object') ? Object.values(b.alarms) : [];
-        b.logs = b.logs.filter(l => l && typeof l === 'object');
-        b.alarms = b.alarms.filter(a => a && typeof a === 'object');
-        if (!b.vaccines || typeof b.vaccines !== 'object') b.vaccines = {};
-        return b;
-      } catch(err) {
-        return { id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] };
-      }
+    // =========================================================================
+    // ESCUDO ANTI-FIREBASE (FORCE-ARRAY)
+    // Transforma cualquier objeto degenerado de Firebase en una Lista estricta.
+    // =========================================================================
+    function forceArray(obj) {
+      if (!obj) return [];
+      if (Array.isArray(obj)) return obj.filter(item => item !== null && item !== undefined);
+      return Object.values(obj).filter(item => item !== null && item !== undefined);
     }
 
+    function sanitizeData(data) {
+      if (!data) return { lang: 'es', theme: 'light', activeBabyId: 1, babies: [] };
+      let safe = { ...data };
+      safe.babies = forceArray(safe.babies);
+      if (safe.babies.length === 0) safe.babies.push({ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] });
+      safe.babies.forEach(b => {
+        b.logs = forceArray(b.logs);
+        b.alarms = forceArray(b.alarms);
+        if (!b.vaccines) b.vaccines = {};
+      });
+      return safe;
+    }
+
+    function getActiveBaby() {
+      let b = appData.babies.find(b => String(b.id) === String(appData.activeBabyId));
+      return b || appData.babies[0];
+    }
+
+    // --- INICIALIZACIÓN ---
     window.addEventListener('DOMContentLoaded', () => { 
-      loadLocalStorageWithMigration();
-      setLanguage(appData.lang);
-      applyTheme(appData.theme);
+      try {
+        const local = localStorage.getItem('babycare_data_v3_0_0');
+        if (local) appData = sanitizeData(JSON.parse(local));
+        else appData = sanitizeData(appData);
+      } catch(e) { appData = sanitizeData(null); }
+      
+      setLanguage(appData.lang); applyTheme(appData.theme);
+      
+      // Conexión Firebase con protección Anti-Bloqueos
+      try {
+        if (typeof firebase !== 'undefined') {
+          firebase.initializeApp({
+            apiKey: "AIzaSyA0Pv37" + "BQVN3lP0ANrcK" + "m0wzBKozZyntPk", 
+            authDomain: "babycarebd.firebaseapp.com",
+            databaseURL: "https://babycarebd-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "babycarebd",
+            storageBucket: "babycarebd.firebasestorage.app",
+            messagingSenderId: "960072637608",
+            appId: "1:960072637608:web:4668d5cef6783e74bf369d"
+          });
+          database = firebase.database();
+          
+          database.ref('babycare_data').on('value', (snapshot) => {
+            let data = snapshot.val();
+            if (data) {
+              isSyncing = true;
+              appData = sanitizeData(data); 
+              try { localStorage.setItem('babycare_data_v3_0_0', JSON.stringify(appData)); } catch(e){}
+              triggerFullRender();
+              isSyncing = false; 
+            }
+          });
+        }
+      } catch(e) { 
+        document.getElementById('txt-sync-desc').innerHTML = "⚠️ <b>Conexión a la nube bloqueada</b>."; 
+      }
+      
       triggerFullRender();
       if (typeof lucide !== 'undefined') lucide.createIcons();
     });
 
     function triggerFullRender() {
-      populateBabySelector();
-      renderBabyProfile();
-      renderLogs();
-      renderCalendar();
-      checkAlerts();
-      initChart();
-      initBarChart();
-      renderWeeklyMatrix24h();
-      renderAlarms();
-      renderVaccines();
+      populateBabySelector(); renderBabyProfile(); renderLogs(); renderCalendar();
+      checkAlerts(); initChart(); initBarChart(); renderWeeklyMatrix24h(); renderAlarms(); renderVaccines();
     }
 
+    function saveState() { 
+      try { localStorage.setItem('babycare_data_v3_0_0', JSON.stringify(appData)); } catch(e) {}
+      if (database && !isSyncing) { try { database.ref('babycare_data').set(appData).catch(()=>{}); } catch(e) {} }
+      triggerFullRender();
+    }
+
+    // --- FUNCIONES UI ---
+    function populateBabySelector() {
+      const sel = document.getElementById('babySelector'); if(!sel) return; sel.innerHTML = '';
+      appData.babies.forEach(b => { const opt = document.createElement('option'); opt.value = b.id; opt.text = b.name; if(String(b.id) === String(appData.activeBabyId)) opt.selected = true; sel.appendChild(opt); });
+    }
+    function switchBaby(id) { appData.activeBabyId = parseInt(id); saveState(); }
+    function addBaby(e) { e.preventDefault(); appData.babies.push({ id: Date.now(), name: document.getElementById('newBabyName').value, dob: document.getElementById('newBabyDob').value, gender: document.getElementById('newBabyGender').value, photo: null, logs: [], vaccines: {}, alarms: [] }); appData.activeBabyId = appData.babies[appData.babies.length-1].id; saveState(); closeModal('addBaby'); }
+    function deleteActiveBaby() {
+      if (appData.babies.length <= 1) { alert("No puedes eliminar el único perfil."); return; }
+      if (confirm(`¿Eliminar a ${getActiveBaby().name}?`)) { appData.babies = appData.babies.filter(b => String(b.id) !== String(appData.activeBabyId)); appData.activeBabyId = appData.babies[0].id; saveState(); closeModal('profile'); }
+    }
+    function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+    function toggleTheme() { appData.theme = appData.theme === 'light' ? 'dark' : 'light'; applyTheme(appData.theme); saveState(); }
+    function applyTheme(theme) { if (theme === 'dark') document.body.setAttribute('data-theme', 'dark'); else document.body.removeAttribute('data-theme'); }
+    function setLanguage(lang) { appData.lang = lang; const t = i18n[lang] || i18n['es']; setElText('txt-menu-title', t.menuTitle); if(document.getElementById('langSelect')) document.getElementById('langSelect').value = lang; }
+    function openModal(id) { const el = document.getElementById(`${id}Modal`); if (el) el.classList.add('open'); if (id === 'alarms') { renderAlarms(); const now = new Date(); now.setMinutes(now.getMinutes() + 30); if(document.getElementById('newAlarmTime')) document.getElementById('newAlarmTime').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`; } }
+    function closeModal(id) { const el = document.getElementById(`${id}Modal`); if (el) el.classList.remove('open'); }
+    function saveProfile(e) { e.preventDefault(); getActiveBaby().name = document.getElementById('profName').value; getActiveBaby().dob = document.getElementById('profDob').value; getActiveBaby().gender = document.getElementById('profGender').value; saveState(); closeModal('profile'); }
+    function triggerPhotoUpload() { document.getElementById('photoInput').click(); }
+    function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = 180; canvas.height = 180; canvas.getContext('2d').drawImage(img, 0, 0, 180, 180); getActiveBaby().photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
+
+    function getLocalDateStr(dInput) { if(!dInput) return ''; const d = new Date(dInput); if(isNaN(d.getTime())) return ''; return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+    function calculateAgeInDays(dobStr) { if (!dobStr) return 0; const parts = dobStr.split('-'); if (parts.length !== 3) return 0; const dobDate = new Date(parts[0], parts[1] - 1, parts[2], 0, 0, 0); const today = new Date(); today.setHours(0, 0, 0, 0); return Math.max(0, Math.round((today - dobDate) / (1000 * 60 * 60 * 24))); }
+    function setElText(id, text) { const el = document.getElementById(id); if (el && text !== undefined) el.innerText = text; }
+
     function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       const tabMap = { 'logs': 0, 'calendar': 1, 'charts': 2, 'vaccinesList': 3 };
       if (tabMap[tabId] !== undefined) document.querySelectorAll('.tab-btn')[tabMap[tabId]].classList.add('active');
       const targetTab = document.getElementById(`tab-${tabId}`);
       if (targetTab) {
         targetTab.classList.add('active');
-        if (tabId !== 'logs') {
-          setTimeout(() => {
-            const nav = document.querySelector('.tabs-nav');
-            if(nav) window.scrollTo({ top: nav.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' });
-          }, 50);
-        }
+        if (tabId !== 'logs') setTimeout(() => { const nav = document.querySelector('.tabs-nav'); if(nav) window.scrollTo({ top: nav.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' }); }, 50);
       }
-      document.getElementById('bnav-item-home').classList.remove('active');
-      document.getElementById('bnav-item-sync').classList.remove('active');
+      document.getElementById('bnav-item-home').classList.remove('active'); document.getElementById('bnav-item-sync').classList.remove('active');
       if (tabId === 'logs') document.getElementById('bnav-item-home').classList.add('active');
     }
 
-    function getLocalDateStr(dInput) {
-      if(!dInput) return ''; const d = new Date(dInput); if(isNaN(d.getTime())) return '';
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
-
-    function calculateAgeInDays(dobStr) {
-      if (!dobStr || typeof dobStr !== 'string') return 0;
-      const parts = dobStr.split('-'); if (parts.length !== 3) return 0;
-      const dobDate = new Date(parts[0], parts[1] - 1, parts[2], 0, 0, 0);
-      const today = new Date(); today.setHours(0, 0, 0, 0);
-      return Math.max(0, Math.round((today - dobDate) / (1000 * 60 * 60 * 24)));
-    }
-
-    function setElText(id, text) { const el = document.getElementById(id); if (el && text !== undefined) el.innerText = text; }
-
-    function loadLocalStorageWithMigration() {
-      try {
-        const keys = ['babycare_data_v1_9_1', 'babycare_data_v2_0_9', 'babycare_data_v2_0_8', 'babycare_data_v2_0_7', 'babycare_data_v1_9_0', 'babycare_data_v1_8_6'];
-        let loaded = false;
-        for (let key of keys) {
-          const saved = localStorage.getItem(key);
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed && parsed.babies && Array.isArray(parsed.babies)) { appData = parsed; loaded = true; break; }
-          }
-        }
-      } catch(e) {}
-      if (!appData || !appData.babies || appData.babies.length === 0) appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }] };
-      populateBabySelector();
-    }
-    
-    function saveState() { 
-      localStorage.setItem('babycare_data_v1_9_1', JSON.stringify(appData)); 
-      triggerFullRender();
-    }
-
-    function populateBabySelector() {
-      const sel = document.getElementById('babySelector'); if(!sel) return; sel.innerHTML = '';
-      appData.babies.forEach(b => { const opt = document.createElement('option'); opt.value = b.id; opt.text = b.name; if(String(b.id) === String(appData.activeBabyId)) opt.selected = true; sel.appendChild(opt); });
-    }
-
-    function switchBaby(id) { appData.activeBabyId = parseInt(id); saveState(); }
-
-    function addBaby(e) {
-      e.preventDefault();
-      appData.babies.push({ id: Date.now(), name: document.getElementById('newBabyName').value, dob: document.getElementById('newBabyDob').value, gender: document.getElementById('newBabyGender').value, photo: null, logs: [], vaccines: {}, alarms: [] });
-      appData.activeBabyId = appData.babies[appData.babies.length-1].id;
-      saveState(); closeModal('addBaby');
-    }
-
-    function deleteActiveBaby() {
-      if (appData.babies.length <= 1) { alert(appData.lang === 'es' ? "No puedes eliminar el único perfil." : "You cannot delete the only profile."); return; }
-      if (confirm(appData.lang === 'es' ? `¿Eliminar a ${getActiveBaby().name}?` : `Delete ${getActiveBaby().name}?`)) {
-        appData.babies = appData.babies.filter(b => String(b.id) !== String(appData.activeBabyId));
-        appData.activeBabyId = appData.babies[0].id; saveState(); closeModal('profile');
-      }
-    }
-
-    function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
-    function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
-    function toggleTheme() { appData.theme = appData.theme === 'light' ? 'dark' : 'light'; applyTheme(appData.theme); saveState(); }
-    function applyTheme(theme) { if (theme === 'dark') document.body.setAttribute('data-theme', 'dark'); else document.body.removeAttribute('data-theme'); }
-
-    function setLanguage(lang) {
-      appData.lang = lang; const t = i18n[lang] || i18n['es'];
-      // Solo configuramos lo basico, para mantener simpleza y no romper js
-      setElText('txt-menu-title', t.menuTitle);
-      if(document.getElementById('langSelect')) document.getElementById('langSelect').value = lang;
-    }
-
-    function openModal(id) { 
-      const el = document.getElementById(`${id}Modal`); if (el) el.classList.add('open'); 
-      if (id === 'alarms') { renderAlarms(); const now = new Date(); now.setMinutes(now.getMinutes() + 30); if(document.getElementById('newAlarmTime')) document.getElementById('newAlarmTime').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`; }
-    }
-
-    function closeModal(id) { const el = document.getElementById(`${id}Modal`); if (el) el.classList.remove('open'); }
-
-    function saveProfile(e) {
-      e.preventDefault();
-      getActiveBaby().name = document.getElementById('profName').value;
-      getActiveBaby().dob = document.getElementById('profDob').value;
-      getActiveBaby().gender = document.getElementById('profGender').value;
-      saveState(); closeModal('profile');
-    }
-
-    function triggerPhotoUpload() { const input = document.getElementById('photoInput'); input.value = ''; input.click(); }
-    function uploadBabyPhoto(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = 180; canvas.height = 180; canvas.getContext('2d').drawImage(img, 0, 0, 180, 180); getActiveBaby().photo = canvas.toDataURL('image/jpeg', 0.8); saveState(); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
-
     function renderBabyProfile() {
-      const baby = getActiveBaby();
-      setElText('babyNameDisplay', baby.name || 'Léo');
-      const diffDays = calculateAgeInDays(baby.dob);
+      const baby = getActiveBaby(); setElText('babyNameDisplay', baby.name || 'Léo'); const diffDays = calculateAgeInDays(baby.dob);
       setElText('babyAgeDisplay', `${Math.floor(diffDays / 30.4)}m ${Math.floor(diffDays % 30.4)}d (${diffDays} días de vida)`);
       const avatarDiv = document.getElementById('babyAvatarDisplay');
       if (avatarDiv) avatarDiv.innerHTML = baby.photo ? `<img src="${baby.photo}" alt="Bebé">` : (baby.gender === 'female' ? '👧' : '👦');
@@ -639,21 +379,18 @@
 
     function checkAlerts() {
       const banner = document.getElementById('alertBanner'); const text = document.getElementById('alertText'); if (!banner || !text) return;
-      const feedings = getActiveBaby().logs.filter(l => l && l.type === 'feeding').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const feedings = getActiveBaby().logs.filter(l => l.type === 'feeding').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
       if (feedings.length > 0 && (new Date() - new Date(feedings[0].timestamp)) / 3600000 > 3.5) { banner.classList.remove('hidden'); text.innerText = "⚠️ Alerta: Más de 3.5h desde la última toma."; return; }
       banner.classList.add('hidden');
     }
 
     function changeSelectedDate(days) { selectedDate.setDate(selectedDate.getDate() + days); renderLogs(); }
     function resetToToday() { selectedDate = new Date(); renderLogs(); }
-
     function getTimeAgoString(timestamp) {
       const diffMins = Math.floor((new Date() - new Date(timestamp)) / 60000); if (diffMins < 0) return '';
       const hours = Math.floor(diffMins / 60); const mins = diffMins % 60;
       if (hours === 0 && mins < 2) return 'Hace un momento';
-      if (hours === 0) return `Hace ${mins}m`;
-      if (hours < 24) return `Hace ${hours}h ${mins}m`;
-      return `Hace ${Math.floor(hours / 24)}d`;
+      if (hours === 0) return `Hace ${mins}m`; if (hours < 24) return `Hace ${hours}h ${mins}m`; return `Hace ${Math.floor(hours / 24)}d`;
     }
 
     function renderLogs() {
@@ -661,25 +398,17 @@
       const targetKey = getLocalDateStr(selectedDate);
       setElText('currentDateText', selectedDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }));
       setElText('todayTag', targetKey === getLocalDateStr(new Date()) ? "Hoy" : "Ir a Hoy");
-
       const baby = getActiveBaby();
-      const filtered = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const filtered = baby.logs.filter(l => getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
       let ml = 0, sleepM = 0, diapers = 0;
       filtered.forEach(log => {
-        if (log.type === 'feeding') { 
-          let parsedAm = parseFloat(log.amount); 
-          ml += !isNaN(parsedAm) ? parsedAm : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); 
-        }
-        else if (log.type === 'sleep') { 
-          let parsedDur = parseInt(log.durationMins);
-          sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); 
-        }
+        if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
+        else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
         else if (log.type === 'diaper') { diapers++; }
       });
 
       setElText('val-sum-feed', `${(ml/1000).toFixed(2)} L`); setElText('val-sum-sleep', `${Math.floor(sleepM/60)}h ${sleepM%60}m`); setElText('val-sum-diaper', `${diapers} t`);
-
       if (filtered.length === 0) { container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`; return; }
 
       let html = '';
@@ -697,18 +426,14 @@
       const grid = document.getElementById('calendarGrid'); if(!grid) return;
       const year = calDate.getFullYear(); const month = calDate.getMonth();
       setElText('calMonthTitle', `${["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][month]} ${year}`);
-      
-      let html = '';
-      ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
-      
-      const firstDay = new Date(year, month, 1).getDay();
-      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
+      let html = ''; ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
+      const firstDay = new Date(year, month, 1).getDay(); const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
       for (let i = 0; i < startingPos; i++) html += `<div></div>`;
       
       const today = new Date(); const baby = getActiveBaby();
       for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
         const dateKey = getLocalDateStr(new Date(year, month, day));
-        const dayLogs = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === dateKey);
+        const dayLogs = baby.logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
         let dotsHtml = '';
         if (dayLogs.length > 0) {
           dotsHtml = '<div class="cal-dots">';
@@ -725,53 +450,39 @@
     function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
     function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
     function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
-
     function changeMatrixWeek(weeksOffset) { selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7)); renderWeeklyMatrix24h(); }
 
     function renderWeeklyMatrix24h() {
       const grid = document.getElementById('routine24hGrid'); if (!grid) return;
       const filterVal = document.getElementById('matrixFilterSelect') ? document.getElementById('matrixFilterSelect').value : 'all';
-      const curr = new Date(selectedMatrixWeekDate);
-      const mon = new Date(curr); mon.setDate(curr.getDate() + (curr.getDay() === 0 ? -6 : 1 - curr.getDay()));
+      const curr = new Date(selectedMatrixWeekDate); const mon = new Date(curr); mon.setDate(curr.getDate() + (curr.getDay() === 0 ? -6 : 1 - curr.getDay()));
       const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
-
       if(document.getElementById('matrixWeekLabel')) document.getElementById('matrixWeekLabel').innerText = `Semana del ${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} al ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short', year:'numeric'})}`;
 
       let html = `<div class="grid-header-cell"></div>`;
       const weekDates = []; const todayStr = getLocalDateStr(new Date());
-
       for (let i = 0; i < 7; i++) {
-        const d = new Date(mon); d.setDate(mon.getDate() + i);
-        const dateStr = getLocalDateStr(d); weekDates.push(dateStr);
+        const d = new Date(mon); d.setDate(mon.getDate() + i); const dateStr = getLocalDateStr(d); weekDates.push(dateStr);
         html += `<div class="grid-header-cell ${dateStr === todayStr ? 'active-day' : ''}"><div>${['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]}</div><div style="font-size:0.85rem; font-weight:900;">${d.getDate()}</div></div>`;
       }
-
       html += '<div style="display:flex; flex-direction:column; height:576px; justify-content:space-between;">';
       for (let h = 0; h <= 24; h += 3) html += `<div class="grid-time-label">${h < 10 ? '0' + h : h}</div>`;
       html += '</div>';
 
       const baby = getActiveBaby();
       weekDates.forEach((dateStr) => {
-        let colContent = `<div class="grid-day-col" style="height:576px;">`;
-        let dayBlocks = [];
-
+        let colContent = `<div class="grid-day-col" style="height:576px;">`; let dayBlocks = [];
         baby.logs.forEach(log => {
-          if (!log || (filterVal !== 'all' && log.type !== filterVal)) return;
+          if (filterVal !== 'all' && log.type !== filterVal) return;
           const logDateStr = getLocalDateStr(log.timestamp);
-
           if (log.type === 'sleep' && log.startTimestamp && log.endTimestamp) {
             const startD = new Date(log.startTimestamp); const endD = new Date(log.endTimestamp);
             if (getLocalDateStr(startD) !== getLocalDateStr(endD)) {
               if (dateStr === getLocalDateStr(startD)) dayBlocks.push({ log, startMins: startD.getHours() * 60 + startD.getMinutes(), durationMins: 1440 - (startD.getHours() * 60 + startD.getMinutes()) });
               else if (dateStr === getLocalDateStr(endD)) dayBlocks.push({ log, startMins: 0, durationMins: endD.getHours() * 60 + endD.getMinutes() });
-            } else if (dateStr === getLocalDateStr(startD)) {
-              dayBlocks.push({ log, startMins: startD.getHours() * 60 + startD.getMinutes(), durationMins: Math.max(15, (endD - startD) / 60000) });
-            }
-          } else if (logDateStr === dateStr) {
-            dayBlocks.push({ log, startMins: new Date(log.timestamp).getHours() * 60 + new Date(log.timestamp).getMinutes(), durationMins: 20 });
-          }
+            } else if (dateStr === getLocalDateStr(startD)) { dayBlocks.push({ log, startMins: startD.getHours() * 60 + startD.getMinutes(), durationMins: Math.max(15, (endD - startD) / 60000) }); }
+          } else if (logDateStr === dateStr) { dayBlocks.push({ log, startMins: new Date(log.timestamp).getHours() * 60 + new Date(log.timestamp).getMinutes(), durationMins: 20 }); }
         });
-
         dayBlocks.sort((a,b) => a.startMins - b.startMins).forEach((blockItem, idx) => {
           let heightPx = Math.min((blockItem.durationMins / 1440) * 576, 576 - ((blockItem.startMins / 1440) * 576));
           colContent += `<div class="routine-block ${blockItem.log.type === 'sleep' ? 'sleep' : (blockItem.log.type === 'diaper' ? 'diaper' : (blockItem.log.type === 'bath' ? 'bath' : 'feed'))}" style="top:${(blockItem.startMins / 1440) * 576}px; height:${Math.max(8, heightPx)}px; left:${(dayBlocks.filter((o, oIdx) => oIdx < idx && Math.abs(o.startMins - blockItem.startMins) < 45).length % 3) * 33}%; width:30%; cursor:pointer;" onclick="showMatrixBlockDetail('${blockItem.log.id}')"></div>`;
@@ -782,38 +493,35 @@
     }
 
     function showMatrixBlockDetail(logId) {
-      const log = getActiveBaby().logs.find(l => l && String(l.id) === String(logId)); if (!log) return;
+      const log = getActiveBaby().logs.find(l => String(l.id) === String(logId)); if (!log) return;
       alert(`${{feeding:'Alimentación 🍼', sleep:'Sueño 💤', diaper:'Pañal 💩', growth:'Crecimiento 📏', bath:'Baño 🧼'}[log.type]||'Evento'}\n• Hora: ${new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n• Detalle: ${log.detail || '-'}\n• Notas: ${log.notes || 'Sin observaciones'}`);
     }
 
     function getBarChartRealData(range) {
       const today = new Date(); let labels = []; let feedData = []; let diaperData = []; let sleepData = [];
       const baby = getActiveBaby(); const daysShort = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-
       if (range === '7days') {
         for (let i = 6; i >= 0; i--) {
-          const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
-          labels.push(`${daysShort[d.getDay()===0?6:d.getDay()-1]} ${d.getDate()}`);
-          const dayLogs = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === getLocalDateStr(d));
+          const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i); labels.push(`${daysShort[d.getDay()===0?6:d.getDay()-1]} ${d.getDate()}`);
+          const dayLogs = baby.logs.filter(l => getLocalDateStr(l.timestamp) === getLocalDateStr(d));
           let feedsMl = 0; let diapers = 0; let sleepMins = 0;
           dayLogs.forEach(l => {
-            if (l.type === 'feeding') { let am = parseFloat(l.amount); if (!isNaN(am)) feedsMl += am; else if (l.detail && typeof l.detail==='string') { const match = l.detail.match(/(\d+)\s*ml/i); if (match) feedsMl += parseInt(match[1]); } }
+            if (l.type === 'feeding') { let am = parseFloat(l.amount); if (!isNaN(am)) feedsMl += am; else if (l.detail) { const match = l.detail.match(/(\d+)\s*ml/i); if (match) feedsMl += parseInt(match[1]); } }
             else if (l.type === 'diaper') diapers++;
-            else if (l.type === 'sleep') { let dur = parseInt(l.durationMins); if (!isNaN(dur)) sleepMins += dur; else if (l.detail && typeof l.detail==='string') { const matchH = l.detail.match(/(\d+)\s*h/i); const matchM = l.detail.match(/(\d+)\s*m/i); if (matchH) sleepMins += parseInt(matchH[1]) * 60; if (matchM) sleepMins += parseInt(matchM[1]); } }
+            else if (l.type === 'sleep') { let dur = parseInt(l.durationMins); if (!isNaN(dur)) sleepMins += dur; else if (l.detail) { const matchH = l.detail.match(/(\d+)\s*h/i); const matchM = l.detail.match(/(\d+)\s*m/i); if (matchH) sleepMins += parseInt(matchH[1]) * 60; if (matchM) sleepMins += parseInt(matchM[1]); } }
           });
           feedData.push(parseFloat((feedsMl / 1000).toFixed(2))); diaperData.push(diapers); sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
         }
       } else if (range === '6months') {
         const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
         for (let i = 5; i >= 0; i--) {
-          const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-          labels.push(monthNames[d.getMonth()]);
-          const monthLogs = baby.logs.filter(l => { if(!l) return false; const ld = new Date(l.timestamp); return ld.getFullYear() === d.getFullYear() && ld.getMonth() === d.getMonth(); });
+          const d = new Date(today.getFullYear(), today.getMonth() - i, 1); labels.push(monthNames[d.getMonth()]);
+          const monthLogs = baby.logs.filter(l => { const ld = new Date(l.timestamp); return ld.getFullYear() === d.getFullYear() && ld.getMonth() === d.getMonth(); });
           let feedsMl = 0; let diapers = 0; let sleepMins = 0;
           monthLogs.forEach(l => {
-            if (l.type === 'feeding') { let am=parseFloat(l.amount); if(!isNaN(am)) feedsMl+=am; else if(l.detail&&typeof l.detail==='string'){const m=l.detail.match(/(\d+)\s*ml/i); if(m) feedsMl+=parseInt(m[1]);} }
+            if (l.type === 'feeding') { let am=parseFloat(l.amount); if(!isNaN(am)) feedsMl+=am; else if(l.detail){const m=l.detail.match(/(\d+)\s*ml/i); if(m) feedsMl+=parseInt(m[1]);} }
             else if (l.type === 'diaper') diapers++;
-            else if (l.type === 'sleep') { let dur=parseInt(l.durationMins); if(!isNaN(dur)) sleepMins+=dur; else if(l.detail&&typeof l.detail==='string'){const mh=l.detail.match(/(\d+)\s*h/i); const mm=l.detail.match(/(\d+)\s*m/i); if(mh) sleepMins+=parseInt(mh[1])*60; if(mm) sleepMins+=parseInt(mm[1]);} }
+            else if (l.type === 'sleep') { let dur=parseInt(l.durationMins); if(!isNaN(dur)) sleepMins+=dur; else if(l.detail){const mh=l.detail.match(/(\d+)\s*h/i); const mm=l.detail.match(/(\d+)\s*m/i); if(mh) sleepMins+=parseInt(mh[1])*60; if(mm) sleepMins+=parseInt(mm[1]);} }
           });
           feedData.push(parseFloat((feedsMl / 1000).toFixed(2))); diaperData.push(diapers); sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
         }
@@ -822,12 +530,12 @@
         for (let i = 3; i >= 0; i--) {
           const mon = new Date(thisMon); mon.setDate(thisMon.getDate() - (i * 7)); const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
           labels.push(`${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} - ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short'})}`);
-          const weekLogs = baby.logs.filter(l => { if(!l) return false; const dateStr = getLocalDateStr(l.timestamp); return dateStr >= getLocalDateStr(mon) && dateStr <= getLocalDateStr(sun); });
+          const weekLogs = baby.logs.filter(l => { const dateStr = getLocalDateStr(l.timestamp); return dateStr >= getLocalDateStr(mon) && dateStr <= getLocalDateStr(sun); });
           let feedsMl = 0; let diapers = 0; let sleepMins = 0;
           weekLogs.forEach(l => {
-            if (l.type === 'feeding') { let am=parseFloat(l.amount); if(!isNaN(am)) feedsMl+=am; else if(l.detail&&typeof l.detail==='string'){const m=l.detail.match(/(\d+)\s*ml/i); if(m) feedsMl+=parseInt(m[1]);} }
+            if (l.type === 'feeding') { let am=parseFloat(l.amount); if(!isNaN(am)) feedsMl+=am; else if(l.detail){const m=l.detail.match(/(\d+)\s*ml/i); if(m) feedsMl+=parseInt(m[1]);} }
             else if (l.type === 'diaper') diapers++;
-            else if (l.type === 'sleep') { let dur=parseInt(l.durationMins); if(!isNaN(dur)) sleepMins+=dur; else if(l.detail&&typeof l.detail==='string'){const mh=l.detail.match(/(\d+)\s*h/i); const mm=l.detail.match(/(\d+)\s*m/i); if(mh) sleepMins+=parseInt(mh[1])*60; if(mm) sleepMins+=parseInt(mm[1]);} }
+            else if (l.type === 'sleep') { let dur=parseInt(l.durationMins); if(!isNaN(dur)) sleepMins+=dur; else if(l.detail){const mh=l.detail.match(/(\d+)\s*h/i); const mm=l.detail.match(/(\d+)\s*m/i); if(mh) sleepMins+=parseInt(mh[1])*60; if(mm) sleepMins+=parseInt(mm[1]);} }
           });
           feedData.push(parseFloat((feedsMl / 1000).toFixed(2))); diaperData.push(diapers); sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
         }
@@ -875,11 +583,9 @@
 
     function updateChart() {
       if (!weightChartInstance) return;
-      const growthLogs = getActiveBaby().logs.filter(l => l && l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+      const growthLogs = getActiveBaby().logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
       if (growthLogs.length > 0) {
-        const weights = growthLogs.map(l => parseFloat(l.weight)).filter(w => !isNaN(w));
-        const heights = growthLogs.map(l => parseFloat(l.height)).filter(h => !isNaN(h));
-        const heads = growthLogs.map(l => parseFloat(l.head)).filter(h => !isNaN(h));
+        const weights = growthLogs.map(l => parseFloat(l.weight)).filter(w => !isNaN(w)); const heights = growthLogs.map(l => parseFloat(l.height)).filter(h => !isNaN(h)); const heads = growthLogs.map(l => parseFloat(l.head)).filter(h => !isNaN(h));
         if (weights.length > 0) { weightChartInstance.data.datasets[0].data = weights; weightChartInstance.update(); }
         if (heights.length > 0) { heightChartInstance.data.datasets[0].data = heights; heightChartInstance.update(); }
         if (heads.length > 0) { headChartInstance.data.datasets[0].data = heads; headChartInstance.update(); }
@@ -892,15 +598,13 @@
     }
 
     function toggleVaccine(id) { getActiveBaby().vaccines[id] = !getActiveBaby().vaccines[id]; saveState(); renderVaccines(); }
-
-    function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { getActiveBaby().logs = getActiveBaby().logs.filter(l => l && String(l.id) !== String(id)); saveState(); } }
-    function editLog(id) { const log = getActiveBaby().logs.find(l => l && String(l.id) === String(id)); if (log) openFormModal(log.type, log); }
+    function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { getActiveBaby().logs = getActiveBaby().logs.filter(l => String(l.id) !== String(id)); saveState(); } }
+    function editLog(id) { const log = getActiveBaby().logs.find(l => String(l.id) === String(id)); if (log) openFormModal(log.type, log); }
 
     function openFormModal(type, existingLog = null) {
       document.getElementById('entryType').value = type; document.getElementById('editingLogId').value = existingLog ? existingLog.id : '';
       const fields = document.getElementById('dynamicFormFields'); const title = document.getElementById('modalFormTitle');
-      let nowLocal = existingLog ? new Date(existingLog.timestamp) : new Date();
-      const localIsoStr = new Date(nowLocal.getTime() - (nowLocal.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      let nowLocal = existingLog ? new Date(existingLog.timestamp) : new Date(); const localIsoStr = new Date(nowLocal.getTime() - (nowLocal.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
       document.getElementById('entryTimestamp').value = localIsoStr; document.getElementById('entryNotes').value = existingLog ? (existingLog.notes || '') : '';
       document.getElementById('groupTimestampMain').style.display = (type === 'sleep') ? 'none' : 'block';
 
@@ -911,10 +615,7 @@
       } else if (type === 'sleep') {
         title.innerText = existingLog ? "Editar Sueño 💤" : "Registrar Sueño 💤";
         let sTime = localIsoStr, eTime = localIsoStr;
-        if (existingLog && existingLog.startTimestamp && existingLog.endTimestamp) {
-          sTime = new Date(new Date(existingLog.startTimestamp).getTime() - (new Date(existingLog.startTimestamp).getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-          eTime = new Date(new Date(existingLog.endTimestamp).getTime() - (new Date(existingLog.endTimestamp).getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-        }
+        if (existingLog && existingLog.startTimestamp && existingLog.endTimestamp) { sTime = new Date(new Date(existingLog.startTimestamp).getTime() - (new Date(existingLog.startTimestamp).getTimezoneOffset() * 60000)).toISOString().slice(0, 16); eTime = new Date(new Date(existingLog.endTimestamp).getTime() - (new Date(existingLog.endTimestamp).getTimezoneOffset() * 60000)).toISOString().slice(0, 16); }
         fields.innerHTML = `<div class="form-grid-2"><div class="form-group"><label>Hora Inicio</label><input type="datetime-local" class="form-control" id="fSleepStart" value="${sTime}" onchange="calcSleepDuration()"></div><div class="form-group"><label>Hora Fin</label><input type="datetime-local" class="form-control" id="fSleepEnd" value="${eTime}" onchange="calcSleepDuration()"></div></div><div class="form-group"><label>Duración</label><input type="text" class="form-control" id="fSleepDurationDisplay" readonly placeholder="Calculando..." style="background:var(--bg-color);"></div>`;
         setTimeout(calcSleepDuration, 100);
       } else if (type === 'growth') {
@@ -929,12 +630,9 @@
     }
 
     function calcSleepDuration() {
-      const startVal = document.getElementById('fSleepStart').value; const endVal = document.getElementById('fSleepEnd').value;
-      if (!startVal || !endVal) return;
-      const diffMs = new Date(endVal) - new Date(startVal);
-      if (diffMs < 0) { document.getElementById('fSleepDurationDisplay').value = "Hora de fin anterior"; return; }
-      const totalMins = Math.floor(diffMs / 60000);
-      document.getElementById('fSleepDurationDisplay').value = `${Math.floor(totalMins / 60)}h ${totalMins % 60}m (${totalMins} mins)`;
+      const startVal = document.getElementById('fSleepStart').value; const endVal = document.getElementById('fSleepEnd').value; if (!startVal || !endVal) return;
+      const diffMs = new Date(endVal) - new Date(startVal); if (diffMs < 0) { document.getElementById('fSleepDurationDisplay').value = "Hora de fin anterior"; return; }
+      const totalMins = Math.floor(diffMs / 60000); document.getElementById('fSleepDurationDisplay').value = `${Math.floor(totalMins / 60)}h ${totalMins % 60}m (${totalMins} mins)`;
     }
 
     function closeFormModal() { closeModal('form'); }
@@ -952,57 +650,20 @@
       } else if (type === 'sleep') {
         const sVal = document.getElementById('fSleepStart').value; const eVal = document.getElementById('fSleepEnd').value;
         startTimestamp = new Date(sVal).toISOString(); endTimestamp = new Date(eVal).toISOString(); isoTimestamp = endTimestamp;
-        durationMins = Math.max(0, Math.floor((new Date(eVal) - new Date(sVal)) / 60000));
-        detail = `Siesta (${Math.floor(durationMins / 60)}h ${durationMins % 60}m)`;
+        durationMins = Math.max(0, Math.floor((new Date(eVal) - new Date(sVal)) / 60000)); detail = `Siesta (${Math.floor(durationMins / 60)}h ${durationMins % 60}m)`;
       } else if (type === 'growth') {
         weight = parseFloat(document.getElementById('fWeight').value); height = parseFloat(document.getElementById('fHeight').value); head = parseFloat(document.getElementById('fHead').value);
         detail = `Peso: ${weight}kg, Talla: ${height}cm, Cabeza: ${head}cm`;
       } else { detail = document.getElementById('fDetail').value; }
 
       const logObj = { id: editingId ? parseInt(editingId) : Date.now(), type, detail, timestamp: isoTimestamp, notes, weight, height, head, amount, startTimestamp, endTimestamp, durationMins };
-      
-      if (editingId) {
-        const idx = getActiveBaby().logs.findIndex(l => l && String(l.id) === String(editingId));
-        if (idx !== -1) getActiveBaby().logs[idx] = logObj;
-      } else { getActiveBaby().logs.push(logObj); }
+      if (editingId) { const idx = getActiveBaby().logs.findIndex(l => String(l.id) === String(editingId)); if (idx !== -1) getActiveBaby().logs[idx] = logObj; } else { getActiveBaby().logs.push(logObj); }
       saveState(); closeFormModal();
-    }
-
-    // --- FUNCIONES MANUALES DE NUBE ---
-    function uploadToCloud() {
-      if (!database) { alert("Conexión bloqueada. No se puede subir."); return; }
-      if (!confirm("¿Seguro que quieres subir los datos a la nube? Esto reemplazará los datos allí.")) return;
-      document.getElementById('btn-upload-cloud').innerText = "Subiendo...";
-      database.ref('babycare_data').set(appData).then(() => {
-        alert("¡Datos subidos con éxito! ☁️"); closeModal('sync');
-      }).catch((e) => {
-        alert("Error al subir: " + e.message);
-      }).finally(() => {
-        document.getElementById('btn-upload-cloud').innerHTML = '☁️ <span id="txt-btn-upload">Subir a la nube</span>';
-      });
-    }
-
-    function downloadFromCloud() {
-      if (!database) { alert("Conexión bloqueada. No se puede descargar."); return; }
-      if (!confirm("¿Seguro que quieres descargar los datos? Se borrarán tus datos locales actuales.")) return;
-      document.getElementById('btn-download-cloud').innerText = "Descargando...";
-      database.ref('babycare_data').once('value').then((snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          appData = data; saveState(); alert("¡Datos descargados correctamente! ⬇️"); closeModal('sync');
-        } else {
-          alert("No se encontraron datos en la nube.");
-        }
-      }).catch((e) => {
-        alert("Error al descargar: " + e.message);
-      }).finally(() => {
-        document.getElementById('btn-download-cloud').innerHTML = '⬇️ <span id="txt-btn-download">Descargar de la nube</span>';
-      });
     }
 
     function exportJSON() {
       const url = URL.createObjectURL(new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }));
-      const anchor = document.createElement('a'); anchor.href = url; anchor.download = `babycare_v1.9.1_${getActiveBaby().name}.json`;
+      const anchor = document.createElement('a'); anchor.href = url; anchor.download = `babycare_v3.0.0_${getActiveBaby().name}.json`;
       document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
     }
 
@@ -1013,25 +674,23 @@
     }
 
     function importJSON(event) {
-      const file = event.target.files[0]; if (!file) return;
-      const reader = new FileReader();
+      const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          let text = e.target.result.trim();
-          if (text.startsWith('data:')) { const commaIdx = text.indexOf(','); if (commaIdx !== -1) text = decodeURIComponent(text.substring(commaIdx + 1)); }
+          let text = e.target.result.trim(); if (text.startsWith('data:')) { const commaIdx = text.indexOf(','); if (commaIdx !== -1) text = decodeURIComponent(text.substring(commaIdx + 1)); }
           if (text.startsWith('%7B')) text = decodeURIComponent(text);
-          const firstBrace = text.indexOf('{'); const lastBrace = text.lastIndexOf('}');
-          if (firstBrace !== -1 && lastBrace !== -1) text = text.substring(firstBrace, lastBrace + 1);
+          const firstBrace = text.indexOf('{'); const lastBrace = text.lastIndexOf('}'); if (firstBrace !== -1 && lastBrace !== -1) text = text.substring(firstBrace, lastBrace + 1);
           
           const imported = JSON.parse(text);
           if (imported.babies || imported.logs || (imported.baby && imported.logs)) {
-            if (imported.babies) { appData = imported; } 
+            if (imported.babies) { appData = sanitizeData(imported); } 
             else {
                if (!appData.babies || appData.babies.length === 0) appData.babies = [{ id: 1, name: 'Léo', dob: '2026-07-19', gender: 'male', photo: null, logs: [], vaccines: {}, alarms: [] }];
                appData.babies[0].logs = imported.logs || []; appData.babies[0].vaccines = imported.vaccines || {};
                if (imported.baby) { appData.babies[0].name = imported.baby.name || 'Léo'; appData.babies[0].dob = imported.baby.dob || '2026-07-19'; appData.babies[0].gender = imported.baby.gender || 'male'; }
+               appData = sanitizeData(appData);
             }
-            saveState(); closeModal('syncModal'); alert("¡Datos restaurados!");
+            saveState(); closeModal('syncModal'); alert("¡Datos locales restaurados!");
           } else { alert("El archivo no contiene registros válidos."); }
         } catch(err) { alert("Error al leer el archivo JSON."); }
       };
@@ -1041,18 +700,16 @@
     function addAlarm() {
       const type = document.getElementById('newAlarmType').value; const timeStr = document.getElementById('newAlarmTime').value; const sound = document.getElementById('newAlarmSound').value;
       if (!timeStr) { alert("Selecciona una hora válida"); return; }
-      const [hours, minutes] = timeStr.split(':');
-      let targetTime = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), parseInt(hours), parseInt(minutes), 0).getTime();
+      const [hours, minutes] = timeStr.split(':'); let targetTime = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), parseInt(hours), parseInt(minutes), 0).getTime();
       if (targetTime < new Date().getTime()) targetTime += 86400000;
-      getActiveBaby().alarms.push({ id: Date.now(), title: type, time: targetTime, sound: sound, triggered: false });
-      saveState(); renderAlarms(); alert(`Alarma añadida para las ${timeStr}.`);
+      getActiveBaby().alarms.push({ id: Date.now(), title: type, time: targetTime, sound: sound, triggered: false }); saveState(); renderAlarms(); alert(`Alarma añadida para las ${timeStr}.`);
     }
 
-    function deleteAlarm(id) { getActiveBaby().alarms = getActiveBaby().alarms.filter(a => a && String(a.id) !== String(id)); saveState(); renderAlarms(); }
+    function deleteAlarm(id) { getActiveBaby().alarms = getActiveBaby().alarms.filter(a => String(a.id) !== String(id)); saveState(); renderAlarms(); }
 
     function renderAlarms() {
       const container = document.getElementById('alarmsContainer'); if (!container) return; container.innerHTML = '';
-      const activeAlarms = getActiveBaby().alarms.filter(a => a && !a.triggered).sort((a,b) => a.time - b.time);
+      const activeAlarms = getActiveBaby().alarms.filter(a => !a.triggered).sort((a,b) => a.time - b.time);
       if (activeAlarms.length === 0) { container.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:var(--text-muted);">No hay alarmas pendientes.</p>`; return; }
       activeAlarms.forEach(al => {
         container.innerHTML += `<div class="alarm-item"><div><strong style="font-size:0.85rem;">${al.title}</strong><div style="font-size:0.75rem; color:var(--text-muted);">${new Date(al.time).toLocaleDateString([], { day: 'numeric', month: 'short' })}, a las ${new Date(al.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div></div><button onclick="deleteAlarm(${al.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i data-lucide="trash-2" style="width:16px;"></i></button></div>`;
@@ -1060,16 +717,12 @@
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    function playAlarmSound(soundKey) {
-      new Audio(soundKey === 'chime' ? 'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg' : 'https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg').play().catch(()=>{});
-    }
-
     setInterval(() => {
       const now = Date.now(); let changed = false;
       appData.babies.forEach(baby => {
         if (baby && baby.alarms) {
           baby.alarms.forEach(al => {
-            if (al && !al.triggered && now >= al.time) { al.triggered = true; changed = true; playAlarmSound(al.sound); alert(`⏰ ¡Aviso para ${baby.name}!\n\n🔔 ${al.title}`); }
+            if (al && !al.triggered && now >= al.time) { al.triggered = true; changed = true; new Audio(al.sound === 'chime' ? 'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg' : 'https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg').play().catch(()=>{}); alert(`⏰ ¡Aviso para ${baby.name}!\n\n🔔 ${al.title}`); }
           });
         }
       });

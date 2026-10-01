@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare 2.0.8 - Sincronización Automática</title>
+  <title>BabyCare 2.0.9 - Sincronización Automática</title>
+  
   <meta name="theme-color" content="#FDE6E3">
+  
   <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/emoji/192/baby-emoji.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/baby-emoji.png">
+  
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BabyCare%22%2C%22short_name%22%3A%22BabyCare%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FDFBF7%22%2C%22theme_color%22%3A%22%23FDE6E3%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F192%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Femoji%2F512%2Fbaby-emoji.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- La librería de Gráficas que ahora esperaremos pacientemente -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- LIBRERÍAS DE FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -22,7 +29,7 @@
 
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.8</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v2.0.9</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -114,19 +121,20 @@
 
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:8px;">
-          <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis de Frecuencias y Hábitos</h3>
-          <select class="form-control" id="barRangeSelect" style="width:auto; padding:0.3rem 0.6rem; font-size:0.78rem;" onchange="updateBarChartRange(this.value)">
+          <h3 style="font-size:1rem; font-weight:800;" id="txt-bar-chart-title">Análisis Semanal</h3>
+          <select class="form-control" id="barRangeSelect" style="width:auto; padding:0.3rem 0.6rem; font-size:0.78rem;" onchange="updateBarChart()">
             <option value="7days" id="opt-7days" selected>Últimos 7 días</option>
             <option value="4weeks" id="opt-4weeks">Últimas 4 semanas</option>
             <option value="6months" id="opt-6months">Últimos 6 meses</option>
           </select>
         </div>
+        <!-- Aquí está el canvas que tu móvil pintaba en blanco -->
         <canvas id="barRoutinesChart" height="180"></canvas>
       </div>
 
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:6px;">
-          <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz Semanal de 24 Horas</h3>
+          <h3 style="font-size:1.05rem; font-weight:800;" id="txt-weekly-matrix-title">Matriz 24 Horas</h3>
           <select class="form-control" id="matrixFilterSelect" onchange="renderWeeklyMatrix24h()" style="width:auto; padding:0.3rem 0.6rem; font-size:0.75rem;">
             <option value="all" id="opt-filter-all" selected>Mostrar Todos</option>
             <option value="feeding" id="opt-filter-feed">Solo Tomas</option>
@@ -150,11 +158,11 @@
     </div>
 
     <div class="tab-content" id="tab-charts">
-      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Evolución de Peso (kg) vs Percentil 50 OMS</h3><canvas id="weightChart" height="180"></canvas></div>
-      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-height-chart">2. Evolución de Talla / Longitud (cm) vs OMS</h3><canvas id="heightChart" height="180"></canvas></div>
-      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-head-chart">3. Perímetro Cefálico (cm) vs OMS</h3><canvas id="headChart" height="180"></canvas></div>
+      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Peso (kg) vs OMS</h3><canvas id="weightChart" height="180"></canvas></div>
+      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-height-chart">2. Talla (cm) vs OMS</h3><canvas id="heightChart" height="180"></canvas></div>
+      <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-head-chart">3. Perímetro Cefálico vs OMS</h3><canvas id="headChart" height="180"></canvas></div>
       <div class="card">
-        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Control Diario de Tomas y Pañales</h3>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Tomas y Pañales</h3>
         <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias normales recomendadas según etapa OMS:</p>
         <div class="who-indicator-card">
           <p id="lbl-who-feeds">🍼 <strong>Tomas/día:</strong> <span id="val-feed-count">0 hoy</span> (Rango OMS: 6 - 10 tomas en lactantes)</p>
@@ -165,7 +173,7 @@
 
     <div class="tab-content" id="tab-vaccinesList">
       <div class="card">
-        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-vaccine-title">Calendario Vacunal Recomendado</h3>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-vaccine-title">Calendario Vacunal</h3>
         <div id="vaccinesListContainer"></div>
       </div>
     </div>
@@ -173,7 +181,7 @@
     <div class="tab-content" id="tab-manual">
       <div class="card">
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px;" id="txt-manual-header">
-          <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
+          <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso
         </h3>
         <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil</h4><p id="mstep1-desc">Pulsa sobre el avatar para subir la foto de tu bebé y editar su nombre.</p></div></div>
         <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido</h4><p id="mstep2-desc">Pulsa sobre cualquier botón de la cuadrícula superior para registrar un evento.</p></div></div>
@@ -189,6 +197,7 @@
     <div class="nav-item" id="bnav-item-sync" onclick="openModal('sync')"><i data-lucide="cloud-lightning"></i><span id="bnav-share">Nube</span></div>
   </nav>
 
+  <!-- Modales -->
   <div class="modal-overlay" id="formModal">
     <div class="modal">
       <form id="logForm" onsubmit="saveLogEntry(event)" style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
@@ -277,6 +286,7 @@
   </script>
 
   <script>
+    // --- CONEXIÓN FIREBASE ---
     let database = null;
     let isSyncing = false; 
 
@@ -376,7 +386,7 @@
             if (data) {
               isSyncing = true;
               appData = sanitizeData(data); 
-              try { localStorage.setItem('babycare_data_v2_0_8', JSON.stringify(appData)); } catch(e){}
+              try { localStorage.setItem('babycare_data_v2_0_9', JSON.stringify(appData)); } catch(e){}
               triggerFullRender();
               isSyncing = false; 
             }
@@ -448,7 +458,7 @@
 
     function loadLocalStorageWithMigration() {
       try {
-        const keys = ['babycare_data_v2_0_8', 'babycare_data_v2_0_7', 'babycare_data_v2_0_6', 'babycare_data_v2_0_5', 'babycare_data_v2_0_4'];
+        const keys = ['babycare_data_v2_0_9', 'babycare_data_v2_0_8', 'babycare_data_v2_0_7', 'babycare_data_v2_0_6', 'babycare_data_v2_0_5', 'babycare_data_v2_0_4'];
         let loaded = false;
         for (let key of keys) {
           try {
@@ -465,7 +475,7 @@
     }
     
     function saveState() { 
-      try { localStorage.setItem('babycare_data_v2_0_8', JSON.stringify(appData)); } catch(e) {}
+      try { localStorage.setItem('babycare_data_v2_0_9', JSON.stringify(appData)); } catch(e) {}
       if (database && !isSyncing) { try { database.ref('babycare_data').set(appData).catch(()=>{}); } catch(e) {} }
       triggerFullRender();
     }
@@ -507,7 +517,7 @@
       try {
         appData.lang = lang; const t = i18n[lang] || i18n['es'];
         ['menuTitle','menuProfile','menuScan','menuManual','menuExport','menuImport','langLabel','themeLabel','themeBtn','quickActions','actFeed','actDiaper','actSleep','actGrowth','actHealth','actBath','tabLogs','tabCal','tabCharts','tabVac','sumFeed','sumSleep','sumDiaper','recentLogs','barChartTitle','weightChart','heightChart','headChart','weeklyMatrixTitle','vaccineTitle','bnavHome','bnavAdd','bnavShare','lblTimestamp','lblNotes','lblBabyName','lblBabyDob','lblBabyGender','optMale','optFemale'].forEach(k => {
-          if(document.getElementById(k === 'menuTitle' ? 'txt-menu-title' : (k.startsWith('opt') ? 'opt-'+k.replace('opt','').toLowerCase() : (k.startsWith('tab') ? 'tab-'+k.replace('tab','').toLowerCase()+'-btn' : (k.startsWith('bnav') ? 'bnav-'+k.replace('bnav','').toLowerCase() : (k.startsWith('lbl') ? 'lbl-'+k.replace('lbl','').toLowerCase().replace('babydob','baby-dob').replace('babyname','baby-name').replace('babygender','baby-gender') : 'txt-'+k.replace(/([A-Z])/g, '-$1').toLowerCase())))))) setElText(document.getElementById(k === 'menuTitle' ? 'txt-menu-title' : (k.startsWith('opt') ? 'opt-'+k.replace('opt','').toLowerCase() : (k.startsWith('tab') ? 'tab-'+k.replace('tab','').toLowerCase()+'-btn' : (k.startsWith('bnav') ? 'bnav-'+k.replace('bnav','').toLowerCase() : (k.startsWith('lbl') ? 'lbl-'+k.replace('lbl','').toLowerCase().replace('babydob','baby-dob').replace('babyname','baby-name').replace('babygender','baby-gender') : 'txt-'+k.replace(/([A-Z])/g, '-$1').toLowerCase()))))).id, t[k]);
+          if(document.getElementById(k === 'menuTitle' ? 'txt-menu-title' : (k.startsWith('opt') ? 'opt-'+k.replace('opt','').toLowerCase() : (k.startsWith('tab') ? 'tab-'+k.replace('tab','').toLowerCase()+'-btn' : (k.startsWith('bnav') ? 'bnav-'+k.replace('bnav','').toLowerCase() : (k.startsWith('lbl') ? 'lbl-'+k.replace('lbl','').toLowerCase().replace('babydob','baby-dob').replace('babyname','baby-name').replace('babygender','baby-gender') : 'txt-'+k.replace(/([A-Z])/g, '-$1').toLowerCase())))))) setElText(document.getElementById(k === 'menuTitle' ? 'txt-menu-title' : (k.startsWith('opt') ? 'opt-'+k.replace('opt','').toLowerCase() : (k.startsWith('tab') ? 'tab-'+k.replace('tab','').toLowerCase()+'-btn' : (k.startsWith('bnav') ? 'bnav-'+k.replace('bnav','').toLowerCase() : (k.startsWith('lbl') ? 'lbl-'+k.replace('lbl','').toLowerCase().replace('babydob','baby-dob').replace('babyname','baby-name').replace('babygender','baby-gender') : 'txt-'+k.replace(/([A-Z])/g, '-$1').toLowerCase())))).id, t[k]);
         });
         setElText('btn-save-entry', `✓ ${t.saveEntry}`); setElText('btn-save-header', `✓ ${t.saveEntry}`); setElText('btn-save-profile', t.saveProfile); setElText('btn-save-prof-header', `✓ ${t.saveEntry}`);
         setElText('txt-sync-title', t.scanTitle); if(database) setElText('txt-sync-desc', t.scanDesc); setElText('txt-btn-export', t.btnExport); setElText('txt-btn-import', t.btnImport); setElText('txt-sync-import-title', t.syncImportTitle);
@@ -590,8 +600,14 @@
 
         let ml = 0, sleepM = 0, diapers = 0;
         filtered.forEach(log => {
-          if (log.type === 'feeding') { ml += log.amount ? parseFloat(log.amount) : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
-          else if (log.type === 'sleep') { sleepM += log.durationMins ? parseInt(log.durationMins) : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
+          if (log.type === 'feeding') { 
+            let parsedAm = parseFloat(log.amount); 
+            ml += !isNaN(parsedAm) ? parsedAm : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); 
+          }
+          else if (log.type === 'sleep') { 
+            let parsedDur = parseInt(log.durationMins);
+            sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); 
+          }
           else if (log.type === 'diaper') { diapers++; }
         });
 
@@ -714,6 +730,9 @@
       alert(`${{feeding:'Alimentación 🍼', sleep:'Sueño 💤', diaper:'Pañal 💩', growth:'Crecimiento 📏', bath:'Baño 🧼'}[log.type]||'Evento'}\n• Hora: ${new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n• Detalle: ${log.detail || '-'}\n• Notas: ${log.notes || 'Sin observaciones'}`);
     }
 
+    // =========================================================================
+    // GRÁFICAS SEGURAS: Cálculos blindados contra valores NaN y variables rotas
+    // =========================================================================
     function getBarChartRealData(range) {
       try {
         const today = new Date(); let labels = []; let feedData = []; let diaperData = []; let sleepData = [];
@@ -726,9 +745,52 @@
             const dayLogs = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === getLocalDateStr(d));
             let feedsMl = 0; let diapers = 0; let sleepMins = 0;
             dayLogs.forEach(l => {
-              if (l.type === 'feeding') feedsMl += l.amount ? parseFloat(l.amount) : (l.detail&&typeof l.detail==='string'&&l.detail.match(/(\d+)\s*ml/i) ? parseInt(l.detail.match(/(\d+)\s*ml/i)[1]) : 0);
+              if (l.type === 'feeding') {
+                let am = parseFloat(l.amount);
+                if (!isNaN(am)) feedsMl += am;
+                else if (l.detail && typeof l.detail==='string') {
+                  const match = l.detail.match(/(\d+)\s*ml/i);
+                  if (match) feedsMl += parseInt(match[1]);
+                }
+              }
               else if (l.type === 'diaper') diapers++;
-              else if (l.type === 'sleep') sleepMins += l.durationMins ? parseInt(l.durationMins) : (l.detail&&typeof l.detail==='string' ? ((l.detail.match(/(\d+)\s*h/i)?parseInt(l.detail.match(/(\d+)\s*h/i)[1])*60:0) + (l.detail.match(/(\d+)\s*m/i)?parseInt(l.detail.match(/(\d+)\s*m/i)[1]):0)) : 0);
+              else if (l.type === 'sleep') {
+                let dur = parseInt(l.durationMins);
+                if (!isNaN(dur)) sleepMins += dur;
+                else if (l.detail && typeof l.detail==='string') {
+                  const matchH = l.detail.match(/(\d+)\s*h/i); const matchM = l.detail.match(/(\d+)\s*m/i);
+                  if (matchH) sleepMins += parseInt(matchH[1]) * 60;
+                  if (matchM) sleepMins += parseInt(matchM[1]);
+                }
+              }
+            });
+            feedData.push(parseFloat((feedsMl / 1000).toFixed(2))); diaperData.push(diapers); sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+          }
+        } else if (range === '6months') {
+          const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+          for (let i = 5; i >= 0; i--) {
+            const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            labels.push(monthNames[d.getMonth()]);
+            const monthLogs = baby.logs.filter(l => { if(!l) return false; const ld = new Date(l.timestamp); return ld.getFullYear() === d.getFullYear() && ld.getMonth() === d.getMonth(); });
+            let feedsMl = 0; let diapers = 0; let sleepMins = 0;
+            monthLogs.forEach(l => {
+              if (l.type === 'feeding') { let am=parseFloat(l.amount); if(!isNaN(am)) feedsMl+=am; else if(l.detail&&typeof l.detail==='string'){const m=l.detail.match(/(\d+)\s*ml/i); if(m) feedsMl+=parseInt(m[1]);} }
+              else if (l.type === 'diaper') diapers++;
+              else if (l.type === 'sleep') { let dur=parseInt(l.durationMins); if(!isNaN(dur)) sleepMins+=dur; else if(l.detail&&typeof l.detail==='string'){const mh=l.detail.match(/(\d+)\s*h/i); const mm=l.detail.match(/(\d+)\s*m/i); if(mh) sleepMins+=parseInt(mh[1])*60; if(mm) sleepMins+=parseInt(mm[1]);} }
+            });
+            feedData.push(parseFloat((feedsMl / 1000).toFixed(2))); diaperData.push(diapers); sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
+          }
+        } else {
+          const currentDay = today.getDay(); const thisMon = new Date(today); thisMon.setDate(today.getDate() + (currentDay === 0 ? -6 : 1 - currentDay));
+          for (let i = 3; i >= 0; i--) {
+            const mon = new Date(thisMon); mon.setDate(thisMon.getDate() - (i * 7)); const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+            labels.push(`${mon.getDate()} ${mon.toLocaleDateString('es-ES',{month:'short'})} - ${sun.getDate()} ${sun.toLocaleDateString('es-ES',{month:'short'})}`);
+            const weekLogs = baby.logs.filter(l => { if(!l) return false; const dateStr = getLocalDateStr(l.timestamp); return dateStr >= getLocalDateStr(mon) && dateStr <= getLocalDateStr(sun); });
+            let feedsMl = 0; let diapers = 0; let sleepMins = 0;
+            weekLogs.forEach(l => {
+              if (l.type === 'feeding') { let am=parseFloat(l.amount); if(!isNaN(am)) feedsMl+=am; else if(l.detail&&typeof l.detail==='string'){const m=l.detail.match(/(\d+)\s*ml/i); if(m) feedsMl+=parseInt(m[1]);} }
+              else if (l.type === 'diaper') diapers++;
+              else if (l.type === 'sleep') { let dur=parseInt(l.durationMins); if(!isNaN(dur)) sleepMins+=dur; else if(l.detail&&typeof l.detail==='string'){const mh=l.detail.match(/(\d+)\s*h/i); const mm=l.detail.match(/(\d+)\s*m/i); if(mh) sleepMins+=parseInt(mh[1])*60; if(mm) sleepMins+=parseInt(mm[1]);} }
             });
             feedData.push(parseFloat((feedsMl / 1000).toFixed(2))); diaperData.push(diapers); sleepData.push(parseFloat((sleepMins / 60).toFixed(1)));
           }
@@ -737,14 +799,36 @@
       } catch(e) { return { labels:[], feedData:[], diaperData:[], sleepData:[] }; }
     }
 
+    // =========================================================================
+    // INICIALIZADOR DE GRÁFICAS CON REINTENTO AUTOMÁTICO (ESPERA A LA LIBRERÍA)
+    // =========================================================================
     function initBarChart() {
       try {
-        if (typeof Chart === 'undefined' || !document.getElementById('barRoutinesChart')) return;
-        const realData = getBarChartRealData(document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days');
+        if (typeof Chart === 'undefined') {
+          setTimeout(initBarChart, 500); 
+          return;
+        }
+        const canvas = document.getElementById('barRoutinesChart');
+        if (!canvas) return;
+        
+        if (barRoutinesChartInstance) {
+          barRoutinesChartInstance.destroy();
+        }
+        
+        const selVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days';
+        const realData = getBarChartRealData(selVal);
         const t = i18n[appData.lang] || i18n['es'];
-        barRoutinesChartInstance = new Chart(document.getElementById('barRoutinesChart').getContext('2d'), {
+
+        barRoutinesChartInstance = new Chart(canvas.getContext('2d'), {
           type: 'bar',
-          data: { labels: realData.labels, datasets: [{ label: `${t.legFeed} (L) 🍼`, data: realData.feedData, backgroundColor: '#FFE599', borderRadius: 6, yAxisID: 'y1' }, { label: `${t.legDiaper} 💩`, data: realData.diaperData, backgroundColor: '#C5E1A5', borderRadius: 6, yAxisID: 'y' }, { label: `${t.legSleep} (h) 💤`, data: realData.sleepData, backgroundColor: '#D7BCE8', borderRadius: 6, yAxisID: 'y' }] },
+          data: {
+            labels: realData.labels,
+            datasets: [
+              { label: `${t.legFeed} (L) 🍼`, data: realData.feedData, backgroundColor: '#FFE599', borderRadius: 6, yAxisID: 'y1' },
+              { label: `${t.legDiaper} 💩`, data: realData.diaperData, backgroundColor: '#C5E1A5', borderRadius: 6, yAxisID: 'y' },
+              { label: `${t.legSleep} (h) 💤`, data: realData.sleepData, backgroundColor: '#D7BCE8', borderRadius: 6, yAxisID: 'y' }
+            ]
+          },
           options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { type: 'linear', display: true, position: 'left' }, y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } } } }
         });
       } catch(err) {}
@@ -752,8 +836,12 @@
 
     function updateBarChart() {
       try {
-        if (!barRoutinesChartInstance) return;
-        const realData = getBarChartRealData(document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days');
+        if (!barRoutinesChartInstance) {
+            initBarChart();
+            return;
+        }
+        const selVal = document.getElementById('barRangeSelect') ? document.getElementById('barRangeSelect').value : '7days';
+        const realData = getBarChartRealData(selVal);
         barRoutinesChartInstance.data.labels = realData.labels;
         barRoutinesChartInstance.data.datasets[0].data = realData.feedData;
         barRoutinesChartInstance.data.datasets[1].data = realData.diaperData;
@@ -764,27 +852,36 @@
 
     function initChart() {
       try {
-        if (typeof Chart === 'undefined') return;
+        if (typeof Chart === 'undefined') {
+            setTimeout(initChart, 500);
+            return;
+        }
         ['weight','height','head'].forEach((type, idx) => {
-          if (document.getElementById(`${type}Chart`)) {
-            window[`${type}ChartInstance`] = new Chart(document.getElementById(`${type}Chart`).getContext('2d'), {
+          const canvas = document.getElementById(`${type}Chart`);
+          if (canvas) {
+            if (window[`${type}ChartInstance`]) window[`${type}ChartInstance`].destroy();
+            window[`${type}ChartInstance`] = new Chart(canvas.getContext('2d'), {
               type: 'line',
               data: { labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'], datasets: [{ label: `Léo`, data: [null, null, null, null, null, null, null], borderColor: ['#FF8B94','#779ECB','#B2AC88'][idx], borderWidth: 3 }, { label: 'OMS (P50)', data: [[3.3,4.5,5.6,6.4,7.0,7.5,7.9],[49.9,54.7,58.4,61.4,63.9,65.9,67.6],[34.5,36.9,38.3,39.5,40.5,41.3,42.0]][idx], borderColor: '#AEC6CF', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }] },
               options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
           }
         });
+        updateChart();
       } catch(e) {}
     }
 
     function updateChart() {
       try {
-        if (!weightChartInstance) return;
-        const growthLogs = getActiveBaby().logs.filter(l => l && l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(a.timestamp));
+        if (!weightChartInstance) { initChart(); return; }
+        const growthLogs = getActiveBaby().logs.filter(l => l && l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
         if (growthLogs.length > 0) {
-          if (growthLogs.map(l=>l.weight).filter(w=>w).length > 0) { weightChartInstance.data.datasets[0].data = growthLogs.map(l=>l.weight).filter(w=>w); weightChartInstance.update(); }
-          if (growthLogs.map(l=>l.height).filter(w=>w).length > 0) { heightChartInstance.data.datasets[0].data = growthLogs.map(l=>l.height).filter(w=>w); heightChartInstance.update(); }
-          if (growthLogs.map(l=>l.head).filter(w=>w).length > 0) { headChartInstance.data.datasets[0].data = growthLogs.map(l=>l.head).filter(w=>w); headChartInstance.update(); }
+          const weights = growthLogs.map(l => parseFloat(l.weight)).filter(w => !isNaN(w));
+          const heights = growthLogs.map(l => parseFloat(l.height)).filter(h => !isNaN(h));
+          const heads = growthLogs.map(l => parseFloat(l.head)).filter(h => !isNaN(h));
+          if (weights.length > 0) { weightChartInstance.data.datasets[0].data = weights; weightChartInstance.update(); }
+          if (heights.length > 0) { heightChartInstance.data.datasets[0].data = heights; heightChartInstance.update(); }
+          if (heads.length > 0) { headChartInstance.data.datasets[0].data = heads; headChartInstance.update(); }
         }
       } catch(err) {}
     }
@@ -882,7 +979,7 @@
     function exportJSON() {
       try {
         const url = URL.createObjectURL(new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }));
-        const anchor = document.createElement('a'); anchor.href = url; anchor.download = `babycare_v2.0.8_${getActiveBaby().name}.json`;
+        const anchor = document.createElement('a'); anchor.href = url; anchor.download = `babycare_v2.0.9_${getActiveBaby().name}.json`;
         document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
       } catch(e) { alert("Error al descargar archivo."); }
     }

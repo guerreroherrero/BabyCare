@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- Restaurando botones de meses -->
+<!-- Corrigiendo navegación desde Csalandario -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BabyCare 3.0.0 - Cloud Native Sync</title>
@@ -412,19 +412,25 @@
       const isToday = targetKey === getLocalDateStr(new Date());
       const t = i18n[appData.lang] || i18n['es'];
 
+      // Cambiamos el título dinámicamente: "Actividad Reciente" hoy, "Registro Diario" en el pasado
       setElText('txt-recent-logs', isToday ? t.recentLogs : (appData.lang === 'en' ? 'Daily Log' : (appData.lang === 'fr' ? 'Journal Quotidien' : 'Registro Diario')));
       setElText('currentDateText', selectedDate.toLocaleDateString(appData.lang === 'en' ? 'en-US' : (appData.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' }));
       setElText('todayTag', isToday ? t.today : (appData.lang === 'en' ? 'Go to Today' : 'Ir a Hoy'));
 
-      const baby = getActiveBaby(); const filtered = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const baby = getActiveBaby(); 
+      const filtered = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
       let ml = 0, sleepM = 0, diapers = 0;
       filtered.forEach(log => {
-        if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
-        else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
-        else if (log.type === 'diaper') { diapers++; }
+        try {
+          if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
+          else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
+          else if (log.type === 'diaper') { diapers++; }
+        } catch(e) {}
       });
 
       setElText('val-sum-feed', `${(ml/1000).toFixed(2)} L`); setElText('val-sum-sleep', `${Math.floor(sleepM/60)}h ${sleepM%60}m`); setElText('val-sum-diaper', `${diapers} t`);
+      
       if (filtered.length === 0) { container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`; return; }
 
       let html = '';
@@ -434,9 +440,9 @@
         const [icon, bg, title] = typeData[log.type] || ['baby','#FFE599','Evento'];
         html += `<div class="timeline-item"><div class="timeline-point" style="background:${bg}; border-color:${bg};"></div><div class="timeline-content"><div class="timeline-main-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div><div class="log-actions"><span class="log-time">${timeStr}</span>${getTimeAgoString(log.timestamp) ? `<span class="time-ago-badge">${getTimeAgoString(log.timestamp)}</span>` : ''}<button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div></div>`;
       });
-      container.innerHTML = html; if (typeof lucide !== 'undefined') lucide.createIcons();
+      container.innerHTML = html; 
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
-
  function renderCalendar() {
       const grid = document.getElementById('calendarGrid'); if(!grid) return;
       const year = calDate.getFullYear(); const month = calDate.getMonth();

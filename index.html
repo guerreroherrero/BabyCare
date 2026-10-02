@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- Corrigiendo navegación desde Csalandario -->
+<!-- Corrigiendo definitivamente la navegación desde Csalandario -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BabyCare 3.0.0 - Cloud Native Sync</title>
@@ -406,13 +406,13 @@
       if (hours === 0) return `Hace ${mins}m`; if (hours < 24) return `Hace ${hours}h ${mins}m`; return `Hace ${Math.floor(hours / 24)}d`;
     }
 
-   function renderLogs() {
+  function renderLogs() {
       const container = document.getElementById('logsContainer'); if (!container) return;
       const targetKey = getLocalDateStr(selectedDate);
       const isToday = targetKey === getLocalDateStr(new Date());
       const t = i18n[appData.lang] || i18n['es'];
 
-      // Cambiamos el título dinámicamente: "Actividad Reciente" hoy, "Registro Diario" en el pasado
+      // Cambiamos el título dinámicamente
       setElText('txt-recent-logs', isToday ? t.recentLogs : (appData.lang === 'en' ? 'Daily Log' : (appData.lang === 'fr' ? 'Journal Quotidien' : 'Registro Diario')));
       setElText('currentDateText', selectedDate.toLocaleDateString(appData.lang === 'en' ? 'en-US' : (appData.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' }));
       setElText('todayTag', isToday ? t.today : (appData.lang === 'en' ? 'Go to Today' : 'Ir a Hoy'));
@@ -438,7 +438,9 @@
         const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const typeData = { feeding:['baby','#FFE599',t.actFeed], diaper:['sparkles','#C5E1A5',t.actDiaper], sleep:['moon','#D7BCE8',t.actSleep], growth:['ruler','#AEC6CF',t.actGrowth], health:['thermometer','#FFB3BA',t.actHealth], bath:['shower-head','#B2EBF2',t.actBath] };
         const [icon, bg, title] = typeData[log.type] || ['baby','#FFE599','Evento'];
-        html += `<div class="timeline-item"><div class="timeline-point" style="background:${bg}; border-color:${bg};"></div><div class="timeline-content"><div class="timeline-main-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div><div class="log-actions"><span class="log-time">${timeStr}</span>${getTimeAgoString(log.timestamp) ? `<span class="time-ago-badge">${getTimeAgoString(log.timestamp)}</span>` : ''}<button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div></div>`;
+        
+        // Código seguro sin llamar a funciones inexistentes
+        html += `<div class="timeline-item"><div class="timeline-point" style="background:${bg}; border-color:${bg};"></div><div class="timeline-content"><div class="timeline-main-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div><div class="log-actions"><span class="log-time">${timeStr}</span><button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div></div>`;
       });
       container.innerHTML = html; 
       if (typeof lucide !== 'undefined') lucide.createIcons();

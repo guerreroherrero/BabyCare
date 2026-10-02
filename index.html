@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Forzando nuevo despliegue de GitHub Pages -->
+  <!-- Fix del calendario -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BabyCare 3.0.0 - Cloud Native Sync</title>
@@ -406,18 +406,21 @@
       if (hours === 0) return `Hace ${mins}m`; if (hours < 24) return `Hace ${hours}h ${mins}m`; return `Hace ${Math.floor(hours / 24)}d`;
     }
 
-    function renderLogs() {
+   function renderLogs() {
       const container = document.getElementById('logsContainer'); if (!container) return;
       const targetKey = getLocalDateStr(selectedDate);
-      setElText('currentDateText', selectedDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }));
-      setElText('todayTag', targetKey === getLocalDateStr(new Date()) ? "Hoy" : "Ir a Hoy");
-      const baby = getActiveBaby();
-      const filtered = baby.logs.filter(l => getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const isToday = targetKey === getLocalDateStr(new Date());
+      const t = i18n[appData.lang] || i18n['es'];
 
+      setElText('txt-recent-logs', isToday ? t.recentLogs : (appData.lang === 'en' ? 'Daily Log' : (appData.lang === 'fr' ? 'Journal Quotidien' : 'Registro Diario')));
+      setElText('currentDateText', selectedDate.toLocaleDateString(appData.lang === 'en' ? 'en-US' : (appData.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' }));
+      setElText('todayTag', isToday ? t.today : (appData.lang === 'en' ? 'Go to Today' : 'Ir a Hoy'));
+
+      const baby = getActiveBaby(); const filtered = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
       let ml = 0, sleepM = 0, diapers = 0;
       filtered.forEach(log => {
-        if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
-        else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
+        if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
+        else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
         else if (log.type === 'diaper') { diapers++; }
       });
 
@@ -427,12 +430,11 @@
       let html = '';
       filtered.forEach(log => {
         const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const typeData = { feeding:['baby','#FFE599','Alimentación'], diaper:['sparkles','#C5E1A5','Pañal'], sleep:['moon','#D7BCE8','Sueño'], growth:['ruler','#AEC6CF','Crecimiento'], health:['thermometer','#FFB3BA','Salud'], bath:['shower-head','#B2EBF2','Baño / Ducha'] };
+        const typeData = { feeding:['baby','#FFE599',t.actFeed], diaper:['sparkles','#C5E1A5',t.actDiaper], sleep:['moon','#D7BCE8',t.actSleep], growth:['ruler','#AEC6CF',t.actGrowth], health:['thermometer','#FFB3BA',t.actHealth], bath:['shower-head','#B2EBF2',t.actBath] };
         const [icon, bg, title] = typeData[log.type] || ['baby','#FFE599','Evento'];
         html += `<div class="timeline-item"><div class="timeline-point" style="background:${bg}; border-color:${bg};"></div><div class="timeline-content"><div class="timeline-main-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div><div class="log-actions"><span class="log-time">${timeStr}</span>${getTimeAgoString(log.timestamp) ? `<span class="time-ago-badge">${getTimeAgoString(log.timestamp)}</span>` : ''}<button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div></div>`;
       });
-      container.innerHTML = html;
-      if (typeof lucide !== 'undefined') lucide.createIcons();
+      container.innerHTML = html; if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function renderCalendar() {
@@ -460,10 +462,12 @@
       grid.innerHTML = html;
     }
 
-    function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
-    function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
-    function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
-    function changeMatrixWeek(weeksOffset) { selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7)); renderWeeklyMatrix24h(); }
+    function selectCalendarDate(y, m, d) { 
+      selectedDate = new Date(y, m, d); 
+      switchTab('logs'); 
+      try { window.scrollTo(0, 0); } catch(e) {} 
+      renderLogs(); 
+    }
 
     function renderWeeklyMatrix24h() {
       const grid = document.getElementById('routine24hGrid'); if (!grid) return;

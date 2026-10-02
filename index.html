@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Fix del calendario -->
+<!-- Restaurando botones de meses -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BabyCare 3.0.0 - Cloud Native Sync</title>
@@ -437,18 +437,24 @@
       container.innerHTML = html; if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    function renderCalendar() {
+ function renderCalendar() {
       const grid = document.getElementById('calendarGrid'); if(!grid) return;
       const year = calDate.getFullYear(); const month = calDate.getMonth();
-      setElText('calMonthTitle', `${["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][month]} ${year}`);
-      let html = ''; ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
-      const firstDay = new Date(year, month, 1).getDay(); const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
+      const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+      setElText('calMonthTitle', `${meses[month]} ${year}`);
+      
+      let html = ''; 
+      const diasSemana = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+      diasSemana.forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
+      
+      const firstDay = new Date(year, month, 1).getDay(); 
+      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
       for (let i = 0; i < startingPos; i++) html += `<div></div>`;
       
       const today = new Date(); const baby = getActiveBaby();
       for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
-        const dateKey = getLocalDateStr(new Date(year, month, day));
-        const dayLogs = baby.logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
+        const dateKey = getLocalDateStr(new Date(year, month, day)); 
+        const dayLogs = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === dateKey);
         let dotsHtml = '';
         if (dayLogs.length > 0) {
           dotsHtml = '<div class="cal-dots">';
@@ -465,10 +471,13 @@
     function selectCalendarDate(y, m, d) { 
       selectedDate = new Date(y, m, d); 
       switchTab('logs'); 
-      try { window.scrollTo(0, 0); } catch(e) {} 
+      window.scrollTo(0, 0); 
       renderLogs(); 
     }
 
+    function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
+    
+    function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
     function renderWeeklyMatrix24h() {
       const grid = document.getElementById('routine24hGrid'); if (!grid) return;
       const filterVal = document.getElementById('matrixFilterSelect') ? document.getElementById('matrixFilterSelect').value : 'all';

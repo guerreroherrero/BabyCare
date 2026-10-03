@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- Corrigiendo  la navegación desde Csalandario -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BabyCare 3.0.0 - Cloud Native Sync</title>
@@ -406,63 +405,47 @@
       if (hours === 0) return `Hace ${mins}m`; if (hours < 24) return `Hace ${hours}h ${mins}m`; return `Hace ${Math.floor(hours / 24)}d`;
     }
 
-  function renderLogs() {
+    function renderLogs() {
       const container = document.getElementById('logsContainer'); if (!container) return;
       const targetKey = getLocalDateStr(selectedDate);
-      const isToday = targetKey === getLocalDateStr(new Date());
-      const t = i18n[appData.lang] || i18n['es'];
+      setElText('currentDateText', selectedDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }));
+      setElText('todayTag', targetKey === getLocalDateStr(new Date()) ? "Hoy" : "Ir a Hoy");
+      const baby = getActiveBaby();
+      const filtered = baby.logs.filter(l => getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-      // Cambiamos el título dinámicamente
-      setElText('txt-recent-logs', isToday ? t.recentLogs : (appData.lang === 'en' ? 'Daily Log' : (appData.lang === 'fr' ? 'Journal Quotidien' : 'Registro Diario')));
-      setElText('currentDateText', selectedDate.toLocaleDateString(appData.lang === 'en' ? 'en-US' : (appData.lang === 'fr' ? 'fr-FR' : 'es-ES'), { day: 'numeric', month: 'short', year: 'numeric' }));
-      setElText('todayTag', isToday ? t.today : (appData.lang === 'en' ? 'Go to Today' : 'Ir a Hoy'));
-
-      const baby = getActiveBaby(); 
-      const filtered = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === targetKey).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-      
       let ml = 0, sleepM = 0, diapers = 0;
       filtered.forEach(log => {
-        try {
-          if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && typeof log.detail==='string' && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
-          else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail && typeof log.detail==='string' ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
-          else if (log.type === 'diaper') { diapers++; }
-        } catch(e) {}
+        if (log.type === 'feeding') { let parsedAm = parseFloat(log.amount); ml += !isNaN(parsedAm) ? parsedAm : (log.detail && log.detail.match(/(\d+)\s*ml/i) ? parseInt(log.detail.match(/(\d+)\s*ml/i)[1]) : 0); }
+        else if (log.type === 'sleep') { let parsedDur = parseInt(log.durationMins); sleepM += !isNaN(parsedDur) ? parsedDur : (log.detail ? ((log.detail.match(/(\d+)\s*h/i)?parseInt(log.detail.match(/(\d+)\s*h/i)[1])*60:0) + (log.detail.match(/(\d+)\s*m/i)?parseInt(log.detail.match(/(\d+)\s*m/i)[1]):0)) : 0); }
+        else if (log.type === 'diaper') { diapers++; }
       });
 
       setElText('val-sum-feed', `${(ml/1000).toFixed(2)} L`); setElText('val-sum-sleep', `${Math.floor(sleepM/60)}h ${sleepM%60}m`); setElText('val-sum-diaper', `${diapers} t`);
-      
       if (filtered.length === 0) { container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text-muted);">Sin registros para este día.</p>`; return; }
 
       let html = '';
       filtered.forEach(log => {
         const timeStr = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const typeData = { feeding:['baby','#FFE599',t.actFeed], diaper:['sparkles','#C5E1A5',t.actDiaper], sleep:['moon','#D7BCE8',t.actSleep], growth:['ruler','#AEC6CF',t.actGrowth], health:['thermometer','#FFB3BA',t.actHealth], bath:['shower-head','#B2EBF2',t.actBath] };
+        const typeData = { feeding:['baby','#FFE599','Alimentación'], diaper:['sparkles','#C5E1A5','Pañal'], sleep:['moon','#D7BCE8','Sueño'], growth:['ruler','#AEC6CF','Crecimiento'], health:['thermometer','#FFB3BA','Salud'], bath:['shower-head','#B2EBF2','Baño / Ducha'] };
         const [icon, bg, title] = typeData[log.type] || ['baby','#FFE599','Evento'];
-        
-        // Código seguro sin llamar a funciones inexistentes
-        html += `<div class="timeline-item"><div class="timeline-point" style="background:${bg}; border-color:${bg};"></div><div class="timeline-content"><div class="timeline-main-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div><div class="log-actions"><span class="log-time">${timeStr}</span><button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div></div>`;
+        html += `<div class="timeline-item"><div class="timeline-point" style="background:${bg}; border-color:${bg};"></div><div class="timeline-content"><div class="timeline-main-info"><h4>${title} - ${log.detail || ''}</h4><p>${log.notes || ''}</p></div><div class="log-actions"><span class="log-time">${timeStr}</span>${getTimeAgoString(log.timestamp) ? `<span class="time-ago-badge">${getTimeAgoString(log.timestamp)}</span>` : ''}<button class="icon-btn edit" onclick="editLog(${log.id})"><i data-lucide="edit-2" style="width:16px;"></i></button><button class="icon-btn delete" onclick="deleteLog(${log.id})"><i data-lucide="trash-2" style="width:16px;"></i></button></div></div></div>`;
       });
-      container.innerHTML = html; 
+      container.innerHTML = html;
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
- function renderCalendar() {
+
+    function renderCalendar() {
       const grid = document.getElementById('calendarGrid'); if(!grid) return;
       const year = calDate.getFullYear(); const month = calDate.getMonth();
-      const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-      setElText('calMonthTitle', `${meses[month]} ${year}`);
-      
-      let html = ''; 
-      const diasSemana = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-      diasSemana.forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
-      
-      const firstDay = new Date(year, month, 1).getDay(); 
-      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
+      setElText('calMonthTitle', `${["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][month]} ${year}`);
+      let html = ''; ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
+      const firstDay = new Date(year, month, 1).getDay(); const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
       for (let i = 0; i < startingPos; i++) html += `<div></div>`;
       
       const today = new Date(); const baby = getActiveBaby();
       for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
-        const dateKey = getLocalDateStr(new Date(year, month, day)); 
-        const dayLogs = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === dateKey);
+        const dateKey = getLocalDateStr(new Date(year, month, day));
+        const dayLogs = baby.logs.filter(l => getLocalDateStr(l.timestamp) === dateKey);
         let dotsHtml = '';
         if (dayLogs.length > 0) {
           dotsHtml = '<div class="cal-dots">';
@@ -476,49 +459,11 @@
       grid.innerHTML = html;
     }
 
-    // 1. Forzamos la función a nivel global para que el clic del calendario no falle
-    window.selectCalendarDate = function(y, m, d) { 
-      selectedDate = new Date(y, m, d, 12, 0, 0); 
-      switchTab('logs'); 
-      renderLogs(); 
-      setTimeout(() => { try { window.scrollTo(0, 0); } catch(e){} }, 50);
-    };
-
+    function selectCalendarDate(y, m, d) { selectedDate = new Date(y, m, d); switchTab('logs'); renderLogs(); }
     function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); }
-    
     function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); }
+    function changeMatrixWeek(weeksOffset) { selectedMatrixWeekDate.setDate(selectedMatrixWeekDate.getDate() + (weeksOffset * 7)); renderWeeklyMatrix24h(); }
 
-    function renderCalendar() {
-      const grid = document.getElementById('calendarGrid'); if(!grid) return;
-      const year = calDate.getFullYear(); const month = calDate.getMonth();
-      const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-      setElText('calMonthTitle', `${meses[month]} ${year}`);
-      
-      let html = ''; 
-      const diasSemana = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-      diasSemana.forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
-      
-      const firstDay = new Date(year, month, 1).getDay(); 
-      const startingPos = (firstDay === 0 ? 6 : firstDay - 1);
-      for (let i = 0; i < startingPos; i++) html += `<div></div>`;
-      
-      const today = new Date(); const baby = getActiveBaby();
-      for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
-        const dateKey = getLocalDateStr(new Date(year, month, day)); 
-        const dayLogs = baby.logs.filter(l => l && getLocalDateStr(l.timestamp) === dateKey);
-        let dotsHtml = '';
-        if (dayLogs.length > 0) {
-          dotsHtml = '<div class="cal-dots">';
-          if (dayLogs.some(l => l.type === 'feeding')) dotsHtml += '<div class="cal-dot" style="background:#FFE599"></div>';
-          if (dayLogs.some(l => l.type === 'diaper')) dotsHtml += '<div class="cal-dot" style="background:#C5E1A5"></div>';
-          if (dayLogs.some(l => l.type === 'sleep')) dotsHtml += '<div class="cal-dot" style="background:#D7BCE8"></div>';
-          dotsHtml += '</div>';
-        }
-        // 2. Aquí llamamos a la función global al tocar un día
-        html += `<div class="cal-cell ${(today.getFullYear()===year && today.getMonth()===month && today.getDate()===day) ? 'today' : ''}" onclick="window.selectCalendarDate(${year}, ${month}, ${day})"><span>${day}</span>${dotsHtml}</div>`;
-      }
-      grid.innerHTML = html;
-    }
     function renderWeeklyMatrix24h() {
       const grid = document.getElementById('routine24hGrid'); if (!grid) return;
       const filterVal = document.getElementById('matrixFilterSelect') ? document.getElementById('matrixFilterSelect').value : 'all';

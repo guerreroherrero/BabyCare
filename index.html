@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BabyCare - v3.1</title>
+  <title>BabyCare - v3.2</title>
   
   <meta name="theme-color" content="#FDE6E3">
   
@@ -61,13 +61,21 @@
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 0.6rem 0; z-index: 90; } .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 800; cursor: pointer; text-decoration: none; } .nav-item.active { color: var(--primary); }
     .vaccine-item { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: var(--bg-color); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); } .checkbox-custom { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; } .vaccine-item.done .checkbox-custom { background: var(--primary); color: white; }
     .who-indicator-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 0.9rem 1.1rem; margin-top: 1rem; font-size: 0.88rem; } .manual-step { display: flex; gap: 1rem; margin-bottom: 1.2rem; } .step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; } .step-content h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; } .step-content p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; } .alarm-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.8rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;}
+    
+    /* Nuevos estilos para el historial de crecimiento */
+    .history-card { background: var(--card-bg); border-radius: 14px; padding: 0.85rem; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .hist-icon-box { border: 2px solid var(--primary); border-radius: 10px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0; }
+    .hist-value { font-size: 1.4rem; font-weight: 900; color: var(--primary); flex-grow: 1; text-align: center; }
+    .hist-value small { font-size: 0.8rem; color: var(--text-muted); font-weight: 800; margin-left: 2px; }
+    .hist-date { text-align: right; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; line-height: 1.3; margin-right: 8px; }
+    .hist-date span { color: var(--text-color); font-size: 0.85rem; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="brand">
-      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v3.1</small></div>
+      <div class="brand-title">BabyCare <small style="font-size:0.8rem; color:#8E94A2; font-weight:800; margin-left:4px;">v3.2</small></div>
     </div>
     <button class="burger-btn" onclick="openDrawer()"><i data-lucide="menu"></i></button>
   </header>
@@ -188,6 +196,13 @@
       <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-weight-chart">1. Peso (kg) vs OMS</h3><canvas id="weightChart" height="180"></canvas></div>
       <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-height-chart">2. Talla (cm) vs OMS</h3><canvas id="heightChart" height="180"></canvas></div>
       <div class="card"><h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-head-chart">3. Perímetro Cefálico vs OMS</h3><canvas id="headChart" height="180"></canvas></div>
+      
+      <!-- NUEVO: HISTORIAL DE CRECIMIENTO -->
+      <div class="card">
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:1rem;" id="txt-growth-history">Historial de Mediciones</h3>
+        <div id="growthHistoryList"></div>
+      </div>
+
       <div class="card">
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;" id="txt-who-routines">4. Tomas y Pañales</h3>
         <p style="font-size:0.83rem; color:var(--text-muted);" id="txt-who-routines-desc">Frecuencias recomendadas:</p>
@@ -210,7 +225,7 @@
           <i data-lucide="book-open" style="color:var(--primary);"></i> Manual de Uso Paso a Paso
         </h3>
         <div class="manual-step"><div class="step-number">1</div><div class="step-content"><h4 id="mstep1-title">Personalizar Perfil</h4><p id="mstep1-desc">Pulsa sobre la foto circular para subir la foto real de tu bebé. Toca el icono del lápiz para editar su nombre.</p></div></div>
-        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido</h4><p id="mstep2-desc">Pulsa cualquier botón de la cuadrícula superior.</p></div></div>
+        <div class="manual-step"><div class="step-number">2</div><div class="step-content"><h4 id="mstep2-title">Registro Rápido</h4><p id="mstep2-desc">Pulsa cualquier botón de la cuadrícula superior. La hora actual se selecciona por defecto.</p></div></div>
         <div class="manual-step"><div class="step-number">3</div><div class="step-content"><h4 id="mstep3-title">Registro de Sueño</h4><p id="mstep3-desc">Indica la 'Hora Inicio' y 'Hora Fin'.</p></div></div>
         <div class="manual-step"><div class="step-number">4</div><div class="step-content"><h4 id="mstep4-title">Diario y Totales</h4><p id="mstep4-desc">Navega con las flechas día a día.</p></div></div>
         <div class="manual-step"><div class="step-number">5</div><div class="step-content"><h4 id="mstep5-title">Calendario y Matriz 24h</h4><p id="mstep5-desc">Consulta el calendario mensual y matriz.</p></div></div>
@@ -235,11 +250,18 @@
       });
     }
 
-    const LOCAL_KEY = 'babycare_data_v3_1';
+    const LOCAL_KEY = 'babycare_data_v3_2';
     let weightChartInstance = null; let heightChartInstance = null; let headChartInstance = null; let barRoutinesChartInstance = null;
     let database = null; let isSyncing = false; 
     let appData = { lang: 'es', theme: 'light', activeBabyId: 1, babies: [] };
     let selectedDate = new Date(); let selectedMatrixWeekDate = new Date(); let calDate = new Date(); 
+
+    // Datos OMS P50 para niños (0 a 24 meses)
+    const OMS_DATA = {
+        w: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9, 8.3, 8.6, 8.9, 9.2, 9.4, 9.6, 9.9, 10.1, 10.3, 10.5, 10.7, 10.9, 11.1, 11.3, 11.5, 11.8, 12.0, 12.2],
+        h: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6, 69.2, 70.6, 72.0, 73.3, 74.5, 75.7, 76.9, 78.0, 79.1, 80.2, 81.2, 82.3, 83.2, 84.2, 85.1, 86.0, 86.9, 87.8],
+        hc: [34.5, 36.9, 38.3, 39.5, 40.5, 41.3, 42.0, 42.7, 43.2, 43.7, 44.2, 44.6, 45.0, 45.4, 45.8, 46.1, 46.4, 46.7, 47.0, 47.2, 47.5, 47.7, 48.0, 48.2, 48.4]
+    };
 
     const standardVaccines = [ { id: 'v1', age: '2 Meses', name: 'Hexavalente, Neumococo' }, { id: 'v2', age: '4 Meses', name: 'Hexavalente, Neumococo, Meningococo C' }, { id: 'v3', age: '11 Meses', name: 'Hexavalente, Neumococo' }, { id: 'v4', age: '12 Meses', name: 'Triple Vírica, Meningococo ACWY' }, { id: 'v5', age: '15 Meses', name: 'Varicela' }, { id: 'v6', age: '4 Años', name: 'Triple Vírica, Varicela' }, { id: 'v7', age: '6 Años', name: 'DTPa-VPI' }, { id: 'v8', age: '12 Años', name: 'Meningococo ACWY, VPH' }, { id: 'v9', age: '14 Años', name: 'Tétanos, Difteria' } ];
     const i18n = {
@@ -319,7 +341,7 @@
       checkAlerts(); 
       if (!weightChartInstance) initChart(); else updateChart(); 
       if (!barRoutinesChartInstance) initBarChart(); else updateBarChart(); 
-      renderWeeklyMatrix24h(); renderAlarms(); renderVaccines();
+      renderWeeklyMatrix24h(); renderAlarms(); renderVaccines(); renderGrowthHistory();
     }
 
     function saveState() { 
@@ -616,18 +638,26 @@
     function initChart() {
       if (typeof Chart === 'undefined') { setTimeout(initChart, 500); return; }
       
+      const formatDataWHO = (arr) => arr.map((val, idx) => ({ x: idx, y: val }));
       const getConfig = (idx) => {
         const color = ['#FF8B94','#779ECB','#B2AC88'][idx];
+        const omsDataArr = [OMS_DATA.w, OMS_DATA.h, OMS_DATA.hc][idx];
+        
         return {
           type: 'line',
           data: { 
-            labels: ['Nacimiento', '1m', '2m', '3m', '4m', '5m', '6m'], 
             datasets: [
-              { label: getActiveBaby().name, data: [null, null, null, null, null, null, null], borderColor: color, backgroundColor: color, borderWidth: 3, pointRadius: 5, pointBackgroundColor: color, spanGaps: true }, 
-              { label: 'OMS (P50)', data: [[3.3,4.5,5.6,6.4,7.0,7.5,7.9],[49.9,54.7,58.4,61.4,63.9,65.9,67.6],[34.5,36.9,38.3,39.5,40.5,41.3,42.0]][idx], borderColor: '#AEC6CF', backgroundColor: 'transparent', borderDash: [5, 5], borderWidth: 2, pointRadius: 0 }
+              { label: getActiveBaby().name, data: [], borderColor: color, backgroundColor: color, borderWidth: 3, pointRadius: 5, pointBackgroundColor: color, spanGaps: true, tension: 0.2 }, 
+              { label: 'OMS (P50)', data: formatDataWHO(omsDataArr), borderColor: '#AEC6CF', backgroundColor: 'transparent', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, tension: 0.2 }
             ] 
           },
-          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+          options: { 
+            responsive: true, 
+            plugins: { legend: { position: 'bottom' } },
+            scales: {
+              x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Edad (meses)', font: {size: 11} }, min: 0, suggestedMax: 6, ticks: { stepSize: 1 } }
+            }
+          }
         };
       };
 
@@ -658,9 +688,7 @@
       const baby = getActiveBaby();
       const growthLogs = baby.logs.filter(l => l.type === 'growth').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
       
-      let wData = [null, null, null, null, null, null, null];
-      let hData = [null, null, null, null, null, null, null];
-      let hcData = [null, null, null, null, null, null, null];
+      let wData = [], hData = [], hcData = [];
       
       let dobDate = new Date(baby.dob);
       if (isNaN(dobDate.getTime())) {
@@ -670,18 +698,48 @@
 
       growthLogs.forEach(l => {
          const logDate = new Date(l.timestamp);
-         let diffMonths = Math.max(0, Math.round((logDate - dobDate) / (1000 * 60 * 60 * 24 * 30.4368)));
+         let exactMonths = (logDate - dobDate) / (1000 * 60 * 60 * 24 * 30.4368);
          
-         if (diffMonths >= 0 && diffMonths <= 6) {
-           if(l.weight !== null && l.weight !== undefined && !isNaN(parseFloat(l.weight))) wData[diffMonths] = parseFloat(l.weight);
-           if(l.height !== null && l.height !== undefined && !isNaN(parseFloat(l.height))) hData[diffMonths] = parseFloat(l.height);
-           if(l.head !== null && l.head !== undefined && !isNaN(parseFloat(l.head))) hcData[diffMonths] = parseFloat(l.head);
+         if (exactMonths >= 0) {
+           if(l.weight !== null && l.weight !== undefined && !isNaN(parseFloat(l.weight))) wData.push({x: exactMonths, y: parseFloat(l.weight)});
+           if(l.height !== null && l.height !== undefined && !isNaN(parseFloat(l.height))) hData.push({x: exactMonths, y: parseFloat(l.height)});
+           if(l.head !== null && l.head !== undefined && !isNaN(parseFloat(l.head))) hcData.push({x: exactMonths, y: parseFloat(l.head)});
          }
       });
       
       weightChartInstance.data.datasets[0].data = wData; weightChartInstance.update();
       heightChartInstance.data.datasets[0].data = hData; heightChartInstance.update();
       headChartInstance.data.datasets[0].data = hcData; headChartInstance.update();
+    }
+
+    function renderGrowthHistory() {
+      const container = document.getElementById('growthHistoryList'); if (!container) return;
+      const baby = getActiveBaby();
+      const growthLogs = baby.logs.filter(l => l.type === 'growth').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      if (growthLogs.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 1rem 0;">No hay registros de crecimiento todavía.</p>';
+          return;
+      }
+
+      let html = '';
+      growthLogs.forEach(l => {
+        const d = new Date(l.timestamp);
+        const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        if (l.weight) {
+          html += `<div class="history-card"><div class="hist-icon-box"><i data-lucide="scale"></i></div><div class="hist-value">${parseFloat(l.weight).toFixed(2)} <small>kg</small></div><div class="hist-date"><span>${dateStr}</span><br>${timeStr}</div><button class="icon-btn edit" onclick="editLog(${l.id})"><i data-lucide="edit-2" style="width:16px;"></i></button></div>`;
+        }
+        if (l.height) {
+          html += `<div class="history-card"><div class="hist-icon-box" style="border-color:#779ECB; color:#779ECB;"><i data-lucide="ruler"></i></div><div class="hist-value" style="color:#779ECB;">${parseFloat(l.height).toFixed(1)} <small>cm</small></div><div class="hist-date"><span>${dateStr}</span><br>${timeStr}</div><button class="icon-btn edit" onclick="editLog(${l.id})"><i data-lucide="edit-2" style="width:16px;"></i></button></div>`;
+        }
+        if (l.head) {
+          html += `<div class="history-card"><div class="hist-icon-box" style="border-color:#B2AC88; color:#B2AC88;"><i data-lucide="circle"></i></div><div class="hist-value" style="color:#B2AC88;">${parseFloat(l.head).toFixed(1)} <small>cm</small></div><div class="hist-date"><span>${dateStr}</span><br>${timeStr}</div><button class="icon-btn edit" onclick="editLog(${l.id})"><i data-lucide="edit-2" style="width:16px;"></i></button></div>`;
+        }
+      });
+      container.innerHTML = html;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function renderVaccines() {
@@ -691,7 +749,14 @@
 
     function toggleVaccine(id) { getActiveBaby().vaccines[id] = !getActiveBaby().vaccines[id]; saveState(); renderVaccines(); }
     function deleteLog(id) { if (confirm("¿Estás seguro de eliminar este registro?")) { getActiveBaby().logs = getActiveBaby().logs.filter(l => String(l.id) !== String(id)); saveState(); } }
-    function editLog(id) { const log = getActiveBaby().logs.find(l => String(l.id) === String(id)); if (log) openFormModal(log.type, log); }
+    
+    function editLog(id) { 
+      const log = getActiveBaby().logs.find(l => String(l.id) === String(id)); 
+      if (log) {
+        if(document.getElementById('drawer').classList.contains('open')) closeDrawer();
+        openFormModal(log.type, log); 
+      }
+    }
 
     function openFormModal(type, existingLog = null) {
       document.getElementById('entryType').value = type; document.getElementById('editingLogId').value = existingLog ? existingLog.id : '';
@@ -765,7 +830,7 @@
 
     function exportJSON() {
       const url = URL.createObjectURL(new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }));
-      const anchor = document.createElement('a'); anchor.href = url; anchor.download = `babycare_v3.1.0_${getActiveBaby().name}.json`;
+      const anchor = document.createElement('a'); anchor.href = url; anchor.download = `babycare_v3.2.0_${getActiveBaby().name}.json`;
       document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
     }
 
